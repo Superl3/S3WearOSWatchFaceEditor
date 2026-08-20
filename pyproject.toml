@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photo2wff"
+version = "0.1.0"
+description = "Deterministic image-to-Wear OS Watch Face Format reconstruction pipeline"
+requires-python = ">=3.11"
+dependencies = ["Pillow>=10.0", "jsonschema>=4.20"]
+
+[project.scripts]
+photo2wff = "photo2wff.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]

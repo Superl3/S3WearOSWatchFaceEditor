@@ -1,0 +1,45 @@
+# Human-editable projection of scene.json
+canvas:
+  width: 438
+  height: 438
+elements:
+  time_primary:
+    type: TIME
+    dynamic: true
+    x: 111
+    y: 140
+    width: 222
+    height: 82
+    fontFamily: Pretendard
+    fontWeight: 400
+    fontSize: 82
+    letterSpacing: 0
+    alignment: center
+    color: #FFFFFF
+    format: hh:mm
+  date_secondary:
+    type: DATE
+    dynamic: true
+    x: 192
+    y: 267
+    width: 52
+    height: 16
+    fontFamily: Pretendard
+    fontWeight: 400
+    fontSize: 21
+    alignment: center
+    color: #FFFFFF
+    format: MM.dd
+  weekday_secondary:
+    type: WEEKDAY
+    dynamic: true
+    x: 202
+    y: 302
+    width: 32
+    height: 12
+    fontFamily: Pretendard
+    fontWeight: 400
+    fontSize: 16
+    alignment: center
+    color: #FFFFFF
+    format: EEE

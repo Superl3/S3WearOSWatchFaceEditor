@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0",
+  "canvas": {
+    "width": 438,
+    "height": 438,
+    "shape": "circle"
+  },
+  "background": {
+    "type": "solid",
+    "color": "#000000"
+  },
+  "reference": {
+    "path": "reference.png",
+    "normalized": true,
+    "sourceSize": [
+      438,
+      438
+    ]
+  },
+  "preview": {
+    "time": "10:08",
+    "date": "08.20",
+    "weekday": "THU",
+    "battery": 82,
+    "steps": 5240,
+    "heartRate": 68
+  },
+  "elements": [
+    {
+      "id": "time_primary",
+      "type": "TIME",
+      "dynamic": true,
+      "bbox": {
+        "x": 111,
+        "y": 140,
+        "width": 222,
+        "height": 82
+      },
+      "format": "hh:mm",
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 82,
+        "letterSpacing": 0,
+        "alignment": "center",
+        "color": "#FFFFFF"
+      },
+      "confidence": 0.86,
+      "inference": "large centered high-contrast horizontal band"
+    },
+    {
+      "id": "date_secondary",
+      "type": "DATE",
+      "dynamic": true,
+      "bbox": {
+        "x": 192,
+        "y": 267,
+        "width": 52,
+        "height": 16
+      },
+      "format": "MM.dd",
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 21,
+        "color": "#FFFFFF",
+        "alignment": "center"
+      },
+      "confidence": 0.52,
+      "inference": "secondary high-contrast line below primary time"
+    },
+    {
+      "id": "weekday_secondary",
+      "type": "WEEKDAY",
+      "dynamic": true,
+      "bbox": {
+        "x": 202,
+        "y": 302,
+        "width": 32,
+        "height": 12
+      },
+      "format": "EEE",
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 16,
+        "color": "#FFFFFF",
+        "alignment": "center"
+      },
+      "confidence": 0.52,
+      "inference": "secondary high-contrast line below primary time"
+    }
+  ],
+  "analysis": {
+    "method": "dominant-corner-background + connected-components + horizontal-band heuristic",
+    "componentCount": 14,
+    "groupCount": 5
+  }
+}

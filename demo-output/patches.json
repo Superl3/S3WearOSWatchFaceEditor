@@ -1,0 +1,10 @@
+{
+  "patches": [
+    {
+      "element": "time_primary",
+      "property": "bbox.y",
+      "delta": -2,
+      "reason": "foreground centroid alignment"
+    }
+  ]
+}

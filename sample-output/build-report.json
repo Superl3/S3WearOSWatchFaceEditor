@@ -1,0 +1,5 @@
+{
+  "scene": "samples\\minimal.scene.json",
+  "compiler": "photo2wff",
+  "visionAnalyzerUsed": false
+}

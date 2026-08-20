@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="10:08"/>
+  <Scene backgroundColor="#000000">
+    <PartImage x="0" y="0" width="438" height="438">
+      <Image resource="display_reference"/>
+    </PartImage>
+  </Scene>
+</WatchFace>

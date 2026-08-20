@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="10:08"/>
+  <Scene backgroundColor="#000000">
+    <DigitalClock x="80" y="140" width="278" height="100">
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="278" height="100" alpha="255">
+        <Variant mode="AMBIENT" target="alpha" value="0"/>
+        <Font family="pretendard" size="92" weight="NORMAL" slant="NORMAL" color="#FFFFFF"/>
+      </TimeText>
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="278" height="100" alpha="0">
+        <Variant mode="AMBIENT" target="alpha" value="255"/>
+        <Font family="pretendard" size="92" weight="LIGHT" slant="NORMAL" color="#FFFFFF"/>
+      </TimeText>
+    </DigitalClock>
+    <PartText x="160" y="255" width="118" height="32">
+      <Text align="CENTER">
+        <Font family="pretendard" size="22" weight="NORMAL" slant="NORMAL" color="#9EA4AD">
+          <Template>
+            %s.%s
+            <Parameter expression="[MONTH_Z]"/>
+            <Parameter expression="[DAY_Z]"/>
+          </Template>
+        </Font>
+      </Text>
+    </PartText>
+  </Scene>
+</WatchFace>

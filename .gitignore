@@ -1,0 +1,12 @@
+**/build/
+**/.gradle/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+env/
+
+# Generated APKs and intermediate reports
+**/*.apk
+**/comparison.json
+

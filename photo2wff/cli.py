@@ -1,0 +1,148 @@
+from __future__ import annotations
+
+import argparse
+import json
+import shutil
+from pathlib import Path
+
+from .analyzer import analyze_image, analyze_product_photo
+from .compare import compare_images, save_report, suggest_patches
+from .compiler import compile_project
+from .model import apply_patches, editable_yaml, load_scene, save_scene, validate_scene
+from .render import render_scene
+from .wff_validate import validate_wff_xml
+
+
+def _copy_wrapper(output_project: Path) -> None:
+    template = Path(__file__).resolve().parent.parent / "templates" / "gradle"
+    if not template.exists():
+        return
+    for source in (template / "gradlew", template / "gradlew.bat"):
+        if source.exists():
+            destination = output_project / source.name
+            shutil.copy2(source, destination)
+    if (template / "wrapper").exists():
+        shutil.copytree(template / "wrapper", output_project / "gradle/wrapper", dirs_exist_ok=True)
+
+
+def _copy_default_font(output: Path) -> None:
+    packaged = Path(__file__).resolve().parent.parent / "assets/fonts/pretendard.ttf"
+    if packaged.exists():
+        destination = output / "assets/fonts/pretendard.ttf"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(packaged, destination)
+
+
+def quick(reference: Path, output: Path) -> None:
+    if output.exists() and any(output.iterdir()):
+        raise SystemExit(f"output directory is not empty: {output}")
+    output.mkdir(parents=True, exist_ok=True)
+    _copy_default_font(output)
+    scene = analyze_image(reference, output)
+    save_scene(scene, output / "scene.initial.json")
+    save_scene(scene, output / "scene.json")
+    (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
+    render_scene(scene, output / "preview_initial.png", output)
+    project = output / "project"
+    compile_project(scene, project, output)
+    _copy_wrapper(project)
+    report = compare_images(output / "reference.png", output / "preview_initial.png")
+    patches = suggest_patches(scene, output / "reference.png", output / "preview_initial.png")
+    (output / "patches.json").write_text(json.dumps({"patches": patches}, indent=2) + "\n", encoding="utf-8", newline="\n")
+    if patches:
+        scene = apply_patches(scene, patches)
+        save_scene(scene, output / "scene.json")
+        (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
+        compile_project(scene, project, output)
+    render_scene(scene, output / "preview.png", output)
+    report["corrected"] = compare_images(output / "reference.png", output / "preview.png")
+    save_report(report, output / "comparison.json")
+
+
+def refine(output: Path) -> None:
+    scene = load_scene(output / "scene.json")
+    render_scene(scene, output / "preview_before_refine.png", output)
+    patches = suggest_patches(scene, output / "reference.png", output / "preview_before_refine.png")
+    (output / "patches.refine.json").write_text(json.dumps({"patches": patches}, indent=2) + "\n", encoding="utf-8", newline="\n")
+    if patches:
+        scene = apply_patches(scene, patches)
+        save_scene(scene, output / "scene.json")
+        (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
+        compile_project(scene, output / "project", output)
+    render_scene(scene, output / "preview.png", output)
+    save_report(compare_images(output / "reference.png", output / "preview.png"), output / "comparison.json")
+
+
+def render(output: Path) -> None:
+    scene = load_scene(output / "scene.json")
+    render_scene(scene, output / "preview.png", output)
+    save_report(compare_images(output / "reference.png", output / "preview.png"), output / "comparison.json")
+
+
+def build(scene_path: Path, output: Path) -> None:
+    """Build a fixed scene without invoking the Vision Analyzer."""
+    if output.exists() and any(output.iterdir()):
+        raise SystemExit(f"output directory is not empty: {output}")
+    output.mkdir(parents=True, exist_ok=True)
+    _copy_default_font(output)
+    scene = load_scene(scene_path)
+    save_scene(scene, output / "scene.json")
+    (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
+    render_scene(scene, output / "preview.png", output)
+    compile_project(scene, output / "project", output)
+    _copy_wrapper(output / "project")
+    (output / "build-report.json").write_text(json.dumps({"scene": str(scene_path), "compiler": "photo2wff", "visionAnalyzerUsed": False}, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+
+def product_photo(reference: Path, output: Path) -> None:
+    """Analyze a product photograph without pretending it is a clean digital screenshot."""
+    if output.exists() and any(output.iterdir()):
+        raise SystemExit(f"output directory is not empty: {output}")
+    output.mkdir(parents=True, exist_ok=True)
+    _copy_default_font(output)
+    scene = analyze_product_photo(reference, output)
+    save_scene(scene, output / "scene.json")
+    (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
+    render_scene(scene, output / "preview.png", output)
+    compile_project(scene, output / "project", output)
+    _copy_wrapper(output / "project")
+    save_report(compare_images(output / "reference.png", output / "preview.png"), output / "comparison.json")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(prog="photo2wff")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    quick_parser = subparsers.add_parser("quick")
+    quick_parser.add_argument("reference", type=Path)
+    quick_parser.add_argument("--out", type=Path, default=Path("output"))
+    refine_parser = subparsers.add_parser("refine")
+    refine_parser.add_argument("output", type=Path)
+    render_parser = subparsers.add_parser("render")
+    render_parser.add_argument("output", type=Path)
+    validate_parser = subparsers.add_parser("validate")
+    validate_parser.add_argument("scene", type=Path)
+    wff_parser = subparsers.add_parser("validate-wff")
+    wff_parser.add_argument("xml", type=Path)
+    wff_parser.add_argument("--jar", type=Path)
+    build_parser = subparsers.add_parser("build")
+    build_parser.add_argument("scene", type=Path)
+    build_parser.add_argument("--out", type=Path, default=Path("sample-output"))
+    photo_parser = subparsers.add_parser("product-photo")
+    photo_parser.add_argument("reference", type=Path)
+    photo_parser.add_argument("--out", type=Path, default=Path("product-photo-output"))
+    args = parser.parse_args()
+    if args.command == "quick":
+        quick(args.reference, args.out)
+    elif args.command == "refine":
+        refine(args.output)
+    elif args.command == "render":
+        render(args.output)
+    elif args.command == "validate":
+        validate_scene(json.loads(args.scene.read_text(encoding="utf-8")))
+        print(f"valid: {args.scene}")
+    elif args.command == "validate-wff":
+        print(validate_wff_xml(args.xml, validator_jar=args.jar))
+    elif args.command == "build":
+        build(args.scene, args.out)
+    elif args.command == "product-photo":
+        product_photo(args.reference, args.out)

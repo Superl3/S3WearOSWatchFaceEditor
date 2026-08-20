@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="10:08"/>
+  <Scene backgroundColor="#E6E3DB">
+    <DigitalClock x="140" y="59" width="201" height="317">
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="201" height="317" alpha="255">
+        <Variant mode="AMBIENT" target="alpha" value="0"/>
+        <Font family="pretendard" size="132" weight="NORMAL" slant="NORMAL" color="#FFFFFF"/>
+      </TimeText>
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="201" height="317" alpha="0">
+        <Variant mode="AMBIENT" target="alpha" value="255"/>
+        <Font family="pretendard" size="132" weight="LIGHT" slant="NORMAL" color="#FFFFFF"/>
+      </TimeText>
+    </DigitalClock>
+  </Scene>
+</WatchFace>

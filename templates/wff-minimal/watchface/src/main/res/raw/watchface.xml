@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL" />
+  <Metadata key="PREVIEW_TIME" value="10:08" />
+  <Scene backgroundColor="#000000">
+    <DigitalClock x="80" y="140" width="278" height="100">
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="278" height="100">
+        <Font family="SYNC_TO_DEVICE" size="92" color="#FFFFFF" />
+      </TimeText>
+    </DigitalClock>
+  </Scene>
+</WatchFace>

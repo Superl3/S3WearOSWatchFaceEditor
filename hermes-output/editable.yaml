@@ -1,0 +1,13 @@
+# Human-editable projection of scene.json
+canvas:
+  width: 438
+  height: 438
+elements:
+  analog_reference_face:
+    type: STATIC_IMAGE
+    dynamic: false
+    x: 0
+    y: 0
+    width: 438
+    height: 438
+    asset: assets/display_reference.png

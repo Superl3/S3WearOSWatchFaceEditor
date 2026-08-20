@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "canvas": {
+    "width": 438,
+    "height": 438,
+    "shape": "CIRCLE",
+    "centerX": 219,
+    "centerY": 219
+  },
+  "normalization": {
+    "inputType": "CROPPED_SCREEN",
+    "rotationDegrees": 0.0,
+    "confidence": 0.86,
+    "requiresPerspectiveCorrection": false,
+    "sourceSize": [
+      1000,
+      1000
+    ]
+  },
+  "background": {
+    "type": "SOLID",
+    "color": "#E6E3DB"
+  },
+  "preview": {
+    "time": "10:08",
+    "date": "08.20",
+    "weekday": "THU",
+    "battery": 82,
+    "steps": 5240,
+    "heartRate": 68
+  },
+  "elements": [
+    {
+      "id": "time_primary",
+      "type": "TIME",
+      "dynamic": true,
+      "bbox": {
+        "x": 140,
+        "y": 59,
+        "width": 201,
+        "height": 317
+      },
+      "format": "HH:mm",
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 132,
+        "letterSpacing": 0,
+        "alignment": "center",
+        "color": "#FFFFFF"
+      },
+      "confidence": 0.86,
+      "relationships": {
+        "centeredToCanvas": true,
+        "group": "primary_time_cluster"
+      },
+      "rotation": 0
+    }
+  ],
+  "analysis": {
+    "watchFaceCategory": "MINIMAL_DIGITAL",
+    "overallConfidence": 0.86,
+    "requiresStaticAssetExtraction": false,
+    "requiresHumanReview": false,
+    "method": "dominant-corner-background + connected-components + horizontal-band heuristic",
+    "componentCount": 1,
+    "groupCount": 1
+  }
+}

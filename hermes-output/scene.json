@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0",
+  "canvas": {
+    "width": 438,
+    "height": 438,
+    "shape": "CIRCLE",
+    "centerX": 219,
+    "centerY": 219
+  },
+  "normalization": {
+    "inputType": "PHOTOGRAPH",
+    "rotationDegrees": 0.0,
+    "confidence": 0.78,
+    "requiresPerspectiveCorrection": false,
+    "sourceSize": [
+      1000,
+      1000
+    ],
+    "displayBounds": {
+      "x": 362,
+      "y": 308,
+      "width": 352,
+      "height": 378
+    }
+  },
+  "background": {
+    "type": "SOLID",
+    "color": "#000000"
+  },
+  "preview": {
+    "time": "10:08",
+    "date": "08.20",
+    "weekday": "THU",
+    "battery": 82,
+    "steps": 5240,
+    "heartRate": 68
+  },
+  "elements": [
+    {
+      "id": "analog_reference_face",
+      "type": "STATIC_IMAGE",
+      "dynamic": false,
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 438,
+        "height": 438
+      },
+      "asset": "assets/display_reference.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "confidence": 0.82,
+      "rotation": 0,
+      "uncertainty": [
+        "The source is an Apple Watch product photograph, not a Galaxy Watch screenshot",
+        "Analog hands, date window, numerals, logo, and center graphics are preserved as static pixels",
+        "Native dynamic analog reconstruction is not inferred from this first pass"
+      ]
+    }
+  ],
+  "analysis": {
+    "watchFaceCategory": "MINIMAL_ANALOG",
+    "overallConfidence": 0.78,
+    "requiresStaticAssetExtraction": true,
+    "requiresHumanReview": true,
+    "method": "dark-display connected-component + chrome-margin crop + fit-height normalization",
+    "componentCount": 1,
+    "groupCount": 1
+  }
+}

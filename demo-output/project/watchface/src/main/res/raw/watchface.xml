@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="10:08"/>
+  <Scene backgroundColor="#000000">
+    <DigitalClock x="111" y="140" width="222" height="82">
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="222" height="82" alpha="255">
+        <Variant mode="AMBIENT" target="alpha" value="0"/>
+        <Font family="pretendard" size="82" weight="NORMAL" slant="NORMAL" color="#FFFFFF"/>
+      </TimeText>
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="0" width="222" height="82" alpha="0">
+        <Variant mode="AMBIENT" target="alpha" value="255"/>
+        <Font family="pretendard" size="82" weight="LIGHT" slant="NORMAL" color="#FFFFFF"/>
+      </TimeText>
+    </DigitalClock>
+    <PartText x="192" y="267" width="52" height="16">
+      <Text align="CENTER">
+        <Font family="pretendard" size="21" weight="NORMAL" slant="NORMAL" color="#FFFFFF">
+          <Template>
+            %s.%s
+            <Parameter expression="[MONTH_Z]"/>
+            <Parameter expression="[DAY_Z]"/>
+          </Template>
+        </Font>
+      </Text>
+    </PartText>
+    <PartText x="202" y="302" width="32" height="12">
+      <Text align="CENTER">
+        <Font family="pretendard" size="16" weight="NORMAL" slant="NORMAL" color="#FFFFFF">
+          <Template>
+            %s
+            <Parameter expression="[DAY_OF_WEEK_S]"/>
+          </Template>
+        </Font>
+      </Text>
+    </PartText>
+  </Scene>
+</WatchFace>
