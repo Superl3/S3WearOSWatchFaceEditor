@@ -41,6 +41,38 @@ def _rgba(style: dict[str, Any]) -> tuple[int, int, int, int]:
     return red, green, blue, int(alpha * float(style.get("alpha", 255)) / 255)
 
 
+def _clock_seconds(value: str) -> tuple[int, int, int]:
+    parts = [int(part) for part in str(value).split(":")[:3]]
+    while len(parts) < 3:
+        parts.append(0)
+    return parts[0] % 24, parts[1] % 60, parts[2] % 60
+
+
+def _analog_angle(role: str, hour: int, minute: int, second: int) -> float:
+    if role == "HOUR":
+        return ((hour % 12) + minute / 60 + second / 3600) * 30
+    if role == "MINUTE":
+        return (minute + second / 60) * 6
+    return second * 6
+
+
+def _render_analog_hand(base: Image.Image, element: dict[str, Any], scene_root: Path, angle: float) -> None:
+    asset_path = element.get("asset")
+    if not asset_path:
+        return
+    source_path = scene_root / asset_path
+    if not source_path.exists():
+        return
+    bbox = element["bbox"]
+    hand = Image.open(source_path).convert("RGBA")
+    if hand.size != (bbox["width"], bbox["height"]):
+        hand = hand.resize((bbox["width"], bbox["height"]), Image.Resampling.LANCZOS)
+    layer = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    layer.alpha_composite(hand, (bbox["x"], bbox["y"]))
+    rotated = layer.rotate(-angle, resample=Image.Resampling.BICUBIC, center=(219, 219))
+    base.alpha_composite(rotated)
+
+
 def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mode: str = "interactive") -> None:
     background = scene["background"]
     if str(background["type"]).upper() == "IMAGE":
@@ -52,8 +84,9 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
         base = Image.new("RGBA", (CANVAS_SIZE, CANVAS_SIZE), tuple(int(color[i:i + 2], 16) for i in (0, 2, 4)) + (255,))
     draw = ImageDraw.Draw(base)
     preview = scene.get("preview", {})
-    sample_time = preview.get("time", "10:08")
+    sample_time = preview.get("time", "10:08:00")
     time_parts = str(sample_time).split(":")
+    sample_hour, sample_minute, sample_second = _clock_seconds(str(sample_time))
     sample_date = preview.get("date", "08.20")
     sample_weekday = preview.get("weekday", "THU")
     dynamic_values = {
@@ -61,7 +94,8 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
         "STEPS": str(preview.get("steps", 5240)),
         "HEART_RATE": str(preview.get("heartRate", 68)),
     }
-    for element in scene["elements"]:
+    ordered_elements = sorted(scene["elements"], key=lambda element: int(element.get("zIndex", 0)))
+    for element in ordered_elements:
         element_type = element["type"]
         bbox = element["bbox"]
         style = element.get("style", {})
@@ -94,6 +128,8 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
                 if overlay.size != (bbox["width"], bbox["height"]):
                     overlay = overlay.resize((bbox["width"], bbox["height"]), Image.Resampling.LANCZOS)
                 base.alpha_composite(overlay, (bbox["x"], bbox["y"]))
+        elif element_type == "ANALOG_HAND":
+            _render_analog_hand(base, element, scene_root, _analog_angle(element["role"], sample_hour, sample_minute, sample_second))
         elif element_type == "RECTANGLE":
             draw.rectangle((bbox["x"], bbox["y"], bbox["x"] + bbox["width"], bbox["y"] + bbox["height"]), fill=fill, outline=fill, width=max(1, int(style.get("strokeWidth", 1))))
         elif element_type == "CIRCLE":

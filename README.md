@@ -42,7 +42,16 @@ For a frontal product photograph, use the conservative analog fallback:
 python -m photo2wff product-photo path\to\product-photo.webp --out product-photo-output
 ```
 
-This crops the dark display region, removes remaining bezel fragments, normalizes it to 438×438, and emits a `MINIMAL_ANALOG` `STATIC_IMAGE` scene. It is intentionally a static reference build; native analog hands are the next refinement step.
+This crops the dark display region, removes remaining bezel fragments, normalizes it to 438×438, and emits a `MINIMAL_ANALOG` scene. The A1a path keeps the cleaned dial static and emits native `AnalogClock` hand elements with adjustable geometry metadata. Hand detection is conservative and explicitly marked for A1b refinement.
+
+For the A1a functional analog vertical slice:
+
+```powershell
+python -m photo2wff product-photo path\to\product-photo.webp --out hermes-a1-output
+python -m photo2wff render-wff hermes-a1-output\project\watchface\src\main\res\raw\watchface.xml --out hermes-a1-output\wff-rendered.png --time 10:08:30
+```
+
+`render-wff` reads the compiled WFF XML and its drawable resources, then renders the fixed `PREVIEW_TIME` independently of the scene preview. It is a deterministic format-level renderer for CI; a Wear OS device/emulator screenshot is a separate verification tier.
 
 `quick` creates:
 

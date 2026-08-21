@@ -22,6 +22,7 @@ SUPPORTED_TYPES = {
     "ICON",
     "IMAGE",
     "STATIC_IMAGE",
+    "ANALOG_HAND",
     "BATTERY",
     "STEPS",
     "HEART_RATE",
@@ -91,6 +92,15 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
     for key, expected in (("centerX", 219), ("centerY", 219)):
         if canvas.get(key, expected) != expected:
             _fail(f"canvas.{key}", f"must be {expected}")
+
+    clock = scene.get("clock")
+    if clock is not None:
+        if not isinstance(clock, dict) or clock.get("type") != "ANALOG":
+            _fail("clock", "must be an ANALOG clock object")
+        for key in ("centerX", "centerY", "confidence"):
+            _number(clock.get(key), f"clock.{key}")
+        if not 0 <= float(clock["confidence"]) <= 1:
+            _fail("clock.confidence", "must be between 0 and 1")
 
     normalization = scene["normalization"]
     if not isinstance(normalization, dict):
@@ -166,6 +176,19 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
                 _fail(f"{path}.dynamic", f"{element_type} must be dynamic")
             if element_type == "TIME" and element.get("format", "hh:mm") not in {"hh:mm", "HH:mm", "hh:mm:ss"}:
                 _fail(f"{path}.format", "supported values are hh:mm, HH:mm, hh:mm:ss")
+        if element_type == "ANALOG_HAND":
+            if not element["dynamic"]:
+                _fail(f"{path}.dynamic", "ANALOG_HAND must be dynamic")
+            if element.get("role") not in {"HOUR", "MINUTE", "SECOND"}:
+                _fail(f"{path}.role", "must be HOUR, MINUTE, or SECOND")
+            for number_key in ("observedAngleDeg", "length", "thickness", "pivotX", "pivotY"):
+                if number_key not in element:
+                    _fail(f"{path}.{number_key}", "is required for ANALOG_HAND")
+                _number(element[number_key], f"{path}.{number_key}")
+            if not 0 <= float(element["pivotX"]) <= 1 or not 0 <= float(element["pivotY"]) <= 1:
+                _fail(f"{path}.pivot", "pivotX and pivotY must be between 0 and 1")
+            if not isinstance(element.get("asset"), str) or not element["asset"]:
+                _fail(f"{path}.asset", "ANALOG_HAND requires a canonical transparent asset")
         if element_type in {"IMAGE", "ICON", "STATIC_IMAGE"} and not isinstance(element.get("asset"), str) and not isinstance(element.get("assetInstruction"), dict):
             _fail(f"{path}", f"{element_type} requires asset or assetInstruction")
         if element_type == "TEXT" and not isinstance(element.get("text", ""), str):

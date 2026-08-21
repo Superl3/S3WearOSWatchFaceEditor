@@ -65,6 +65,50 @@ class Photo2WFFTests(unittest.TestCase):
         xml = compile_watchface_xml(scene, {})
         self.assertIn("[HOUR_0_23_Z]", xml)
 
+    def test_analog_clock_compiles_native_hands(self):
+        scene = basic_scene()
+        scene["clock"] = {"type": "ANALOG", "centerX": 219, "centerY": 219, "confidence": 1.0}
+        scene["elements"] = [
+            {"id": "dial", "type": "STATIC_IMAGE", "dynamic": False, "bbox": {"x": 0, "y": 0, "width": 438, "height": 438}, "asset": "assets/dial_clean.png", "confidence": 1},
+            {"id": "hour", "type": "ANALOG_HAND", "role": "HOUR", "dynamic": True, "bbox": {"x": 207, "y": 142, "width": 24, "height": 89}, "asset": "assets/hour_hand.png", "observedAngleDeg": 306, "length": 77, "thickness": 8, "pivotX": 0.5, "pivotY": 0.865, "zIndex": 10, "confidence": 1},
+            {"id": "minute", "type": "ANALOG_HAND", "role": "MINUTE", "dynamic": True, "bbox": {"x": 209, "y": 77, "width": 20, "height": 152}, "asset": "assets/minute_hand.png", "observedAngleDeg": 54, "length": 142, "thickness": 8, "pivotX": 0.5, "pivotY": 0.934, "zIndex": 20, "confidence": 1},
+            {"id": "second", "type": "ANALOG_HAND", "role": "SECOND", "dynamic": True, "bbox": {"x": 215, "y": 41, "width": 8, "height": 187}, "asset": "assets/second_hand.png", "observedAngleDeg": 180, "length": 178, "thickness": 3, "pivotX": 0.5, "pivotY": 0.952, "zIndex": 30, "confidence": 1},
+        ]
+        resources = {"assets/dial_clean.png": "dial_clean", "assets/hour_hand.png": "hour_hand", "assets/minute_hand.png": "minute_hand", "assets/second_hand.png": "second_hand"}
+        xml = compile_watchface_xml(scene, resources)
+        root = ET.fromstring(xml)
+        self.assertEqual(root.find(".//Metadata[@key='CLOCK_TYPE']").attrib["value"], "ANALOG")
+        self.assertEqual([node.tag for node in root.findall(".//AnalogClock/*")], ["HourHand", "MinuteHand", "SecondHand"])
+
+    def test_analog_preview_changes_with_fixed_time(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            scene = {
+                "schemaVersion": "1.0",
+                "canvas": {"width": 438, "height": 438, "shape": "CIRCLE", "centerX": 219, "centerY": 219},
+                "normalization": {"inputType": "SCREENSHOT", "rotationDegrees": 0, "confidence": 1, "requiresPerspectiveCorrection": False},
+                "background": {"type": "SOLID", "color": "#000000"},
+                "preview": {"time": "10:08:30"},
+                "clock": {"type": "ANALOG", "centerX": 219, "centerY": 219, "confidence": 1},
+                "elements": [],
+                "analysis": {"watchFaceCategory": "MINIMAL_ANALOG", "overallConfidence": 1, "requiresStaticAssetExtraction": False, "requiresHumanReview": False},
+            }
+            for role, asset, bbox, observed, length, thickness in [
+                ("HOUR", "hour.png", {"x": 207, "y": 142, "width": 24, "height": 89}, 306, 77, 8),
+                ("MINUTE", "minute.png", {"x": 209, "y": 77, "width": 20, "height": 152}, 54, 142, 8),
+                ("SECOND", "second.png", {"x": 215, "y": 41, "width": 8, "height": 187}, 180, 178, 3),
+            ]:
+                image = Image.new("RGBA", (bbox["width"], bbox["height"]), (0, 0, 0, 0))
+                ImageDraw.Draw(image).line((bbox["width"] // 2, 0, bbox["width"] // 2, bbox["height"] - 1), fill="white", width=thickness)
+                image.save(root / asset)
+                scene["elements"].append({"id": role.lower(), "type": "ANALOG_HAND", "role": role, "dynamic": True, "bbox": bbox, "asset": asset, "observedAngleDeg": observed, "length": length, "thickness": thickness, "pivotX": 0.5, "pivotY": 0.9, "zIndex": len(scene["elements"]) + 1, "confidence": 1})
+            first = root / "first.png"
+            render_scene(scene, first, root)
+            scene["preview"]["time"] = "10:08:31"
+            second = root / "second.png"
+            render_scene(scene, second, root)
+            self.assertNotEqual(first.read_bytes(), second.read_bytes())
+
     def test_render_and_compare(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

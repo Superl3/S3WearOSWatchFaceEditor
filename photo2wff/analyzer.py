@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import deque
+import math
 from pathlib import Path
 from typing import Any
 
@@ -328,6 +329,77 @@ def _largest_dark_component(image: Image.Image, threshold: int = 75) -> tuple[in
     return None if best is None else best[1:]
 
 
+def _clock_endpoint(center: tuple[float, float], angle_degrees: float, length: float) -> tuple[int, int]:
+    radians = math.radians(angle_degrees)
+    return (
+        round(center[0] + math.sin(radians) * length),
+        round(center[1] - math.cos(radians) * length),
+    )
+
+
+def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> dict[str, dict[str, Any]]:
+    """Create conservative, adjustable A1 hand assets from the normalized reference.
+
+    The geometry is deliberately explicit for A1a. A1b can replace these values with
+    detected masks without changing the scene or compiler contract.
+    """
+    center = (219.0, 219.0)
+    hands = {
+        "HOUR": {"angle": 306.0, "length": 77.0, "thickness": 8.0, "tail": 12.0, "width": 24, "color": (244, 238, 235, 255)},
+        "MINUTE": {"angle": 54.0, "length": 142.0, "thickness": 8.0, "tail": 10.0, "width": 20, "color": (245, 245, 245, 255)},
+        "SECOND": {"angle": 180.0, "length": 178.0, "thickness": 3.0, "tail": 9.0, "width": 8, "color": (175, 18, 45, 255)},
+    }
+    assets_dir.mkdir(parents=True, exist_ok=True)
+    dial_clean = canvas.convert("RGBA")
+    dial_draw = ImageDraw.Draw(dial_clean)
+    for hand in hands.values():
+        endpoint = _clock_endpoint(center, hand["angle"], hand["length"])
+        erase_width = round(hand["thickness"] + (6 if hand["thickness"] >= 8 else 3))
+        dial_draw.line((center[0], center[1], endpoint[0], endpoint[1]), fill=(0, 0, 0, 255), width=erase_width)
+        tail_endpoint = _clock_endpoint(center, (hand["angle"] + 180.0) % 360.0, hand["tail"])
+        dial_draw.line((tail_endpoint[0], tail_endpoint[1], center[0], center[1]), fill=(0, 0, 0, 255), width=erase_width)
+    dial_clean.save(assets_dir / "dial_clean.png")
+
+    cap_size = 24
+    left = round(center[0] - cap_size / 2)
+    top = round(center[1] - cap_size / 2)
+    cap = canvas.crop((left, top, left + cap_size, top + cap_size)).convert("RGBA")
+    cap_alpha = Image.new("L", cap.size, 0)
+    ImageDraw.Draw(cap_alpha).ellipse((2, 2, cap_size - 3, cap_size - 3), fill=255)
+    cap.putalpha(cap_alpha)
+    cap.save(assets_dir / "center_cap.png")
+
+    metadata: dict[str, dict[str, Any]] = {}
+    for role, hand in hands.items():
+        width = int(hand["width"])
+        height = round(hand["length"] + hand["tail"])
+        image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(image)
+        pivot_x = width / 2
+        pivot_y = hand["length"]
+        tip_y = 1
+        tail_y = min(height - 1, round(pivot_y + hand["tail"]))
+        if role == "SECOND":
+            draw.line((pivot_x, tip_y, pivot_x, tail_y), fill=hand["color"], width=round(hand["thickness"]))
+        else:
+            outer_width = round(hand["thickness"] + 5)
+            draw.line((pivot_x, tip_y, pivot_x, tail_y), fill=(0, 0, 0, 255), width=outer_width)
+            draw.line((pivot_x, tip_y, pivot_x, tail_y), fill=hand["color"], width=round(hand["thickness"]))
+            draw.line((pivot_x, tip_y + 2, pivot_x, tail_y - 2), fill=(0, 0, 0, 255), width=max(2, round(hand["thickness"] / 2)))
+        asset_name = f"{role.lower()}_hand.png"
+        image.save(assets_dir / asset_name)
+        metadata[role] = {
+            "asset": f"assets/{asset_name}",
+            "bbox": {"x": round(center[0] - width / 2), "y": round(center[1] - hand["length"]), "width": width, "height": height},
+            "pivotX": 0.5,
+            "pivotY": round(hand["length"] / height, 6),
+            "observedAngleDeg": hand["angle"],
+            "length": hand["length"],
+            "thickness": hand["thickness"],
+        }
+    return metadata
+
+
 def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, Any]:
     """Extract a frontal dark display from a product photo and preserve it as static artwork."""
     source = Image.open(reference_path).convert("RGB")
@@ -366,6 +438,55 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
     canvas.save(output_dir / "reference.png")
     canvas.save(assets_dir / "display_reference.png")
     crop.save(assets_dir / "display_crop.png")
+    hand_metadata = _write_a1_assets(canvas, assets_dir)
+    elements: list[dict[str, Any]] = [
+        {
+            "id": "dial_clean",
+            "type": "STATIC_IMAGE",
+            "dynamic": False,
+            "bbox": {"x": 0, "y": 0, "width": 438, "height": 438},
+            "asset": "assets/dial_clean.png",
+            "assetInstruction": {"operation": "extract_from_reference"},
+            "confidence": 0.68,
+            "zIndex": 0,
+            "uncertainty": ["A1a uses a conservative geometric hand mask; automatic segmentation is deferred to A1b"],
+        }
+    ]
+    role_ids = {"HOUR": "hour_hand", "MINUTE": "minute_hand", "SECOND": "second_hand"}
+    for role, metadata in hand_metadata.items():
+        elements.append(
+            {
+                "id": role_ids[role],
+                "type": "ANALOG_HAND",
+                "role": role,
+                "dynamic": True,
+                "bbox": metadata["bbox"],
+                "asset": metadata["asset"],
+                "observedAngleDeg": metadata["observedAngleDeg"],
+                "length": metadata["length"],
+                "thickness": metadata["thickness"],
+                "pivotX": metadata["pivotX"],
+                "pivotY": metadata["pivotY"],
+                "confidence": 0.61 if role != "SECOND" else 0.74,
+                "zIndex": {"HOUR": 10, "MINUTE": 20, "SECOND": 30}[role],
+                "uncertainty": ["Hand geometry is manually adjustable in A1a", "Observed angle is from the supplied product photograph"],
+            }
+        )
+        if role == "SECOND":
+            elements[-1]["sweepFrequency"] = 15
+    elements.append(
+        {
+            "id": "center_cap",
+            "type": "STATIC_IMAGE",
+            "dynamic": False,
+            "bbox": {"x": 207, "y": 207, "width": 24, "height": 24},
+            "asset": "assets/center_cap.png",
+            "assetInstruction": {"operation": "extract_from_reference"},
+            "confidence": 0.72,
+            "zIndex": 100,
+            "uncertainty": ["Center cap is preserved as a static foreground layer"],
+        }
+    )
     scene = {
         "schemaVersion": "1.0",
         "canvas": {"width": 438, "height": 438, "shape": "CIRCLE", "centerX": 219, "centerY": 219},
@@ -378,32 +499,17 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
             "displayBounds": {"x": crop_box[0], "y": crop_box[1], "width": crop_box[2] - crop_box[0], "height": crop_box[3] - crop_box[1]},
         },
         "background": {"type": "SOLID", "color": "#000000"},
-        "preview": {"time": "10:08", "date": "08.20", "weekday": "THU", "battery": 82, "steps": 5240, "heartRate": 68},
-        "elements": [
-            {
-                "id": "analog_reference_face",
-                "type": "STATIC_IMAGE",
-                "dynamic": False,
-                "bbox": {"x": 0, "y": 0, "width": 438, "height": 438},
-                "asset": "assets/display_reference.png",
-                "assetInstruction": {"operation": "extract_from_reference"},
-                "confidence": 0.82,
-                "rotation": 0,
-                "uncertainty": [
-                    "The source is an Apple Watch product photograph, not a Galaxy Watch screenshot",
-                    "Analog hands, date window, numerals, logo, and center graphics are preserved as static pixels",
-                    "Native dynamic analog reconstruction is not inferred from this first pass",
-                ],
-            }
-        ],
+        "preview": {"time": "10:08:30", "date": "08.20", "weekday": "THU", "battery": 82, "steps": 5240, "heartRate": 68},
+        "clock": {"type": "ANALOG", "centerX": 219, "centerY": 219, "confidence": 0.97, "method": "A1a fixed pivot from normalized display"},
+        "elements": elements,
         "analysis": {
             "watchFaceCategory": "MINIMAL_ANALOG",
-            "overallConfidence": 0.78,
+            "overallConfidence": 0.68,
             "requiresStaticAssetExtraction": True,
             "requiresHumanReview": True,
-            "method": "dark-display connected-component + chrome-margin crop + fit-height normalization",
+            "method": "A1a dark-display crop + explicit clock pivot + adjustable hand assets",
             "componentCount": 1,
-            "groupCount": 1,
+            "groupCount": 4,
         },
     }
     return scene

@@ -11,6 +11,7 @@ from .compiler import compile_project
 from .model import apply_patches, editable_yaml, load_scene, save_scene, validate_scene
 from .render import render_scene
 from .wff_validate import validate_wff_xml
+from .wff_render import render_wff_xml
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -106,7 +107,11 @@ def product_photo(reference: Path, output: Path) -> None:
     render_scene(scene, output / "preview.png", output)
     compile_project(scene, output / "project", output)
     _copy_wrapper(output / "project")
-    save_report(compare_images(output / "reference.png", output / "preview.png"), output / "comparison.json")
+    xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
+    render_metadata = render_wff_xml(xml_path, output / "wff-rendered.png", fixed_time=scene["preview"]["time"])
+    comparison = compare_images(output / "reference.png", output / "wff-rendered.png")
+    comparison["render"] = render_metadata
+    save_report(comparison, output / "comparison.json")
 
 
 def main() -> None:
@@ -119,6 +124,10 @@ def main() -> None:
     refine_parser.add_argument("output", type=Path)
     render_parser = subparsers.add_parser("render")
     render_parser.add_argument("output", type=Path)
+    wff_render_parser = subparsers.add_parser("render-wff")
+    wff_render_parser.add_argument("xml", type=Path)
+    wff_render_parser.add_argument("--out", type=Path, default=Path("wff-rendered.png"))
+    wff_render_parser.add_argument("--time", type=str)
     validate_parser = subparsers.add_parser("validate")
     validate_parser.add_argument("scene", type=Path)
     wff_parser = subparsers.add_parser("validate-wff")
@@ -137,6 +146,8 @@ def main() -> None:
         refine(args.output)
     elif args.command == "render":
         render(args.output)
+    elif args.command == "render-wff":
+        print(render_wff_xml(args.xml, args.out, fixed_time=args.time))
     elif args.command == "validate":
         validate_scene(json.loads(args.scene.read_text(encoding="utf-8")))
         print(f"valid: {args.scene}")

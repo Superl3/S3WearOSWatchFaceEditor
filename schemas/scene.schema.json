@@ -11,6 +11,7 @@
     "canvas": { "$ref": "#/$defs/canvas" },
     "normalization": { "$ref": "#/$defs/normalization" },
     "background": { "$ref": "#/$defs/background" },
+    "clock": { "$ref": "#/$defs/clock" },
     "reference": {
       "type": "object",
       "additionalProperties": false,
@@ -73,6 +74,18 @@
         "shape": { "const": "CIRCLE" },
         "centerX": { "const": 219 },
         "centerY": { "const": 219 }
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "centerX", "centerY", "confidence"],
+      "properties": {
+        "type": { "const": "ANALOG" },
+        "centerX": { "type": "number", "minimum": 0, "maximum": 438 },
+        "centerY": { "type": "number", "minimum": 0, "maximum": 438 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "method": { "type": "string" }
       }
     },
     "normalization": {
@@ -155,7 +168,7 @@
       "required": ["id", "type", "dynamic", "bbox", "confidence"],
       "properties": {
         "id": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
-        "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
+        "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "ANALOG_HAND", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
         "dynamic": { "type": "boolean" },
         "bbox": { "$ref": "#/$defs/bbox" },
         "rotation": { "type": "number", "minimum": -360, "maximum": 360 },
@@ -170,6 +183,14 @@
           "properties": { "operation": { "const": "extract_from_reference" } }
         },
         "dataSource": { "type": "string" },
+        "role": { "enum": ["HOUR", "MINUTE", "SECOND"] },
+        "observedAngleDeg": { "type": "number", "minimum": -360, "maximum": 360 },
+        "length": { "type": "number", "exclusiveMinimum": 0 },
+        "thickness": { "type": "number", "exclusiveMinimum": 0 },
+        "pivotX": { "type": "number", "minimum": 0, "maximum": 1 },
+        "pivotY": { "type": "number", "minimum": 0, "maximum": 1 },
+        "zIndex": { "type": "integer" },
+        "sweepFrequency": { "type": "number", "exclusiveMinimum": 0 },
         "launch": { "type": "string" },
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
         "relationships": { "type": "object" },

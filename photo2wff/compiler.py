@@ -93,13 +93,14 @@ def _pretty_xml(root: ET.Element) -> str:
 def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str]) -> str:
     scene = validate_scene(scene)
     root = ET.Element("WatchFace", {"width": "438", "height": "438"})
-    ET.SubElement(root, "Metadata", {"key": "CLOCK_TYPE", "value": "DIGITAL"})
+    is_analog = any(element["type"] == "ANALOG_HAND" for element in scene["elements"])
+    ET.SubElement(root, "Metadata", {"key": "CLOCK_TYPE", "value": "ANALOG" if is_analog else "DIGITAL"})
     ET.SubElement(root, "Metadata", {"key": "PREVIEW_TIME", "value": str(scene.get("preview", {}).get("time", "10:08:32"))})
     background = scene["background"]
     if str(background.get("type", "")).upper() not in {"SOLID", "UNKNOWN", "IMAGE"}:
         raise ValueError(f"background type '{background.get('type')}' needs a rasterized background asset before WFF compilation")
     scene_node = ET.SubElement(root, "Scene", {"backgroundColor": _xml_color(background.get("color", "#000000"))})
-    for element in scene["elements"]:
+    def append_element(element: dict[str, Any]) -> None:
         element_type = element["type"]
         if element_type == "TIME":
             scene_node.append(_time_clock(element))
@@ -133,6 +134,8 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
             if asset not in resource_names:
                 raise ValueError(f"element '{element['id']}' references missing asset '{asset}'")
             scene_node.append(_asset_part(element, resource_names[asset]))
+        elif element_type == "ANALOG_HAND":
+            raise AssertionError("ANALOG_HAND elements are emitted inside AnalogClock")
         elif element_type in {"RECTANGLE", "CIRCLE", "LINE", "RING"}:
             resource = resource_names[element["id"]]
             scene_node.append(_asset_part(element, resource))
@@ -140,6 +143,47 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
             raise ValueError(f"element '{element['id']}' is COMPLICATION; explicit complication slots are deferred until their WFF schema is selected")
         else:
             raise ValueError(f"element '{element['id']}' has no compiler mapping")
+
+    ordered = sorted(scene["elements"], key=lambda element: int(element.get("zIndex", 0)))
+    hand_elements = [element for element in ordered if element["type"] == "ANALOG_HAND"]
+    if not hand_elements:
+        for element in ordered:
+            append_element(element)
+        return _pretty_xml(root)
+
+    first_hand_z = min(int(element.get("zIndex", 0)) for element in hand_elements)
+    for element in ordered:
+        if element["type"] != "ANALOG_HAND" and int(element.get("zIndex", 0)) < first_hand_z:
+            append_element(element)
+
+    clock_meta = scene.get("clock", {})
+    analog = ET.Element("AnalogClock", {"x": "0", "y": "0", "width": "438", "height": "438", "pivotX": "0.5", "pivotY": "0.5"})
+    for element in hand_elements:
+        bbox = element["bbox"]
+        role = element["role"].title() + "Hand"
+        asset = element["asset"]
+        if asset not in resource_names:
+            raise ValueError(f"element '{element['id']}' references missing asset '{asset}'")
+        hand = ET.SubElement(
+            analog,
+            role,
+            {
+                "resource": resource_names[asset],
+                "x": str(bbox["x"]),
+                "y": str(bbox["y"]),
+                "width": str(bbox["width"]),
+                "height": str(bbox["height"]),
+                "pivotX": str(element["pivotX"]),
+                "pivotY": str(element["pivotY"]),
+            },
+        )
+        if element["role"] == "SECOND" and element.get("sweepFrequency"):
+            ET.SubElement(hand, "Sweep", {"frequency": str(element["sweepFrequency"])})
+    scene_node.append(analog)
+
+    for element in ordered:
+        if element["type"] != "ANALOG_HAND" and int(element.get("zIndex", 0)) >= first_hand_z:
+            append_element(element)
     return _pretty_xml(root)
 
 
