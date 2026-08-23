@@ -8,6 +8,7 @@ from pathlib import Path
 from .analyzer import analyze_image, analyze_product_photo
 from .compare import compare_images, save_report, suggest_patches
 from .compiler import compile_project
+from .analog_validate import validate_dynamic_renders
 from .model import apply_patches, editable_yaml, load_scene, save_scene, validate_scene
 from .render import render_scene
 from .wff_validate import validate_wff_xml
@@ -109,8 +110,16 @@ def product_photo(reference: Path, output: Path) -> None:
     _copy_wrapper(output / "project")
     xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
     render_metadata = render_wff_xml(xml_path, output / "wff-rendered.png", fixed_time=scene["preview"]["time"])
+    render_dir = output / "renders"
+    render_times = ["10:08:30", "03:15:45", "06:30:00"]
+    render_paths = {time: render_dir / f"{time.replace(':', '-')}.png" for time in render_times}
+    for time, path in render_paths.items():
+        render_wff_xml(xml_path, path, fixed_time=time)
+    dynamic_validation = validate_dynamic_renders(scene, render_paths)
+    (output / "dynamic-validation.json").write_text(json.dumps(dynamic_validation, indent=2) + "\n", encoding="utf-8", newline="\n")
     comparison = compare_images(output / "reference.png", output / "wff-rendered.png")
     comparison["render"] = render_metadata
+    comparison["dynamicValidation"] = dynamic_validation
     save_report(comparison, output / "comparison.json")
 
 

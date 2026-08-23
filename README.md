@@ -53,6 +53,8 @@ python -m photo2wff render-wff hermes-a1-output\project\watchface\src\main\res\r
 
 `render-wff` reads the compiled WFF XML and its drawable resources, then renders the fixed `PREVIEW_TIME` independently of the scene preview. It is a deterministic format-level renderer for CI; a Wear OS device/emulator screenshot is a separate verification tier.
 
+The A1a.1 validation renders `10:08:30`, `03:15:45`, and `06:30:00`. It checks pairwise changes inside dynamic hand ROIs and scans the original source-angle corridors for persistent hand ghosts. Global MAE is not sufficient for this gate. The compiler and renderer are frozen at the A1a implementation; A1b is limited to reference-to-`dial_clean`/hand-assets/pivot-angle extraction and delegates WFF generation to the frozen pipeline.
+
 `quick` creates:
 
 ```text

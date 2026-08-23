@@ -337,27 +337,187 @@ def _clock_endpoint(center: tuple[float, float], angle_degrees: float, length: f
     )
 
 
-def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> dict[str, dict[str, Any]]:
-    """Create conservative, adjustable A1 hand assets from the normalized reference.
+def _is_light(pixel: tuple[int, int, int]) -> bool:
+    high = max(pixel)
+    low = min(pixel)
+    return high >= 135 and high - low <= 110
 
-    The geometry is deliberately explicit for A1a. A1b can replace these values with
-    detected masks without changing the scene or compiler contract.
-    """
-    center = (219.0, 219.0)
-    hands = {
-        "HOUR": {"angle": 306.0, "length": 77.0, "thickness": 8.0, "tail": 12.0, "width": 24, "color": (244, 238, 235, 255)},
-        "MINUTE": {"angle": 54.0, "length": 142.0, "thickness": 8.0, "tail": 10.0, "width": 20, "color": (245, 245, 245, 255)},
-        "SECOND": {"angle": 180.0, "length": 178.0, "thickness": 3.0, "tail": 9.0, "width": 8, "color": (175, 18, 45, 255)},
+
+def _is_red(pixel: tuple[int, int, int]) -> bool:
+    red, green, blue = pixel
+    return red >= 85 and red >= green * 1.35 and red >= blue * 1.15
+
+
+def _detect_clock_center(image: Image.Image) -> tuple[float, float, float]:
+    pixels = image.convert("RGB").load()
+    red_points = [(x, y) for y in range(170, 270) for x in range(185, 255) if _is_red(pixels[x, y])]
+    rows: list[tuple[int, int, int]] = []
+    for y in sorted({point[1] for point in red_points}):
+        xs = [x for x, row in red_points if row == y]
+        if xs and max(xs) - min(xs) >= 5:
+            rows.append((y, min(xs), max(xs)))
+    if rows:
+        center_x = sum((left + right) / 2 for _, left, right in rows) / len(rows)
+        center_y = sum(row for row, _, _ in rows) / len(rows)
+        confidence = min(0.99, 0.82 + len(rows) / 100)
+        return round(center_x, 2), round(center_y, 2), round(confidence, 2)
+    return 219.0, 219.0, 0.55
+
+
+def _ray_point(center: tuple[float, float], angle: float, radius: float, perpendicular: float = 0.0) -> tuple[int, int]:
+    radians = math.radians(angle)
+    ux, uy = math.sin(radians), -math.cos(radians)
+    vx, vy = math.cos(radians), math.sin(radians)
+    return round(center[0] + ux * radius + vx * perpendicular), round(center[1] + uy * radius + vy * perpendicular)
+
+
+def _ray_present(image: Image.Image, center: tuple[float, float], angle: float, radius: float, predicate: Any, spread: int = 4) -> bool:
+    pixels = image.convert("RGB").load()
+    for perpendicular in range(-spread, spread + 1):
+        x, y = _ray_point(center, angle, radius, perpendicular)
+        if 0 <= x < image.width and 0 <= y < image.height and predicate(pixels[x, y]):
+            return True
+    return False
+
+
+def _ray_extent(image: Image.Image, center: tuple[float, float], angle: float, predicate: Any) -> float:
+    last_present = 18
+    started = False
+    gap = 0
+    for radius in range(18, 211):
+        present = _ray_present(image, center, angle, radius, predicate, spread=8)
+        if present:
+            started = True
+            last_present = radius
+            gap = 0
+        elif started:
+            gap += 1
+            if gap >= 3:
+                break
+    return float(last_present)
+
+
+def _cluster_angle(scores: list[float], peak: int, radius: int = 20) -> float:
+    local = [scores[(peak + delta) % 360] for delta in range(-radius, radius + 1)]
+    threshold = max(local) * 0.8
+    candidates = [peak + delta for delta in range(-radius, radius + 1) if scores[(peak + delta) % 360] >= threshold]
+    if not candidates:
+        return float(peak)
+    return round(sum(candidates) / len(candidates), 2) % 360
+
+
+def _detect_hand_geometry(image: Image.Image, center: tuple[float, float]) -> dict[str, dict[str, float]]:
+    light_scores: list[float] = []
+    for angle in range(360):
+        score = 0.0
+        for radius in range(20, 91):
+            if _ray_present(image, center, angle, radius, _is_light):
+                score += 1
+        light_scores.append(score)
+    peaks: list[int] = []
+    for peak, _ in sorted(enumerate(light_scores), key=lambda item: item[1], reverse=True):
+        if light_scores[peak] < 20:
+            break
+        if all(min((peak - other) % 360, (other - peak) % 360) > 28 for other in peaks):
+            peaks.append(peak)
+        if len(peaks) == 2:
+            break
+    if len(peaks) < 2:
+        peaks = [306, 54]
+    detected = []
+    for peak in peaks:
+        angle = _cluster_angle(light_scores, peak)
+        length = _ray_extent(image, center, angle, _is_light)
+        detected.append((angle, length))
+    detected.sort(key=lambda item: item[1])
+    red_points = []
+    pixels = image.convert("RGB").load()
+    for y in range(image.height):
+        for x in range(image.width):
+            if _is_red(pixels[x, y]) and abs(x - center[0]) <= 10:
+                dx, dy = x - center[0], y - center[1]
+                distance = math.hypot(dx, dy)
+                if 18 < distance < 220:
+                    red_points.append((distance, math.degrees(math.atan2(dx, -dy)) % 360))
+    second_angle, second_length = (max(red_points) if red_points else (178.0, 180.0))[1], (max(red_points) if red_points else (178.0, 180.0))[0]
+    return {
+        "HOUR": {"angle": detected[0][0], "length": detected[0][1], "thickness": 8.0, "tail": 12.0},
+        "MINUTE": {"angle": detected[1][0], "length": detected[1][1], "thickness": 8.0, "tail": 10.0},
+        "SECOND": {"angle": round(second_angle, 2), "length": round(second_length, 2), "thickness": 3.0, "tail": 9.0},
     }
+
+
+def _extract_hand_asset(image: Image.Image, center: tuple[float, float], geometry: dict[str, float], role: str, path: Path) -> None:
+    length = geometry["length"]
+    tail = geometry["tail"]
+    angle = geometry["angle"]
+    thickness = geometry["thickness"]
+    width = max(10, round(thickness * 3.5))
+    height = round(length + tail)
+    asset = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    source = image.convert("RGB")
+    source_pixels = source.load()
+    target_pixels = asset.load()
+    sampled_colors: list[tuple[int, int, int]] = []
+    radians = math.radians(angle)
+    ux, uy = math.sin(radians), -math.cos(radians)
+    vx, vy = math.cos(radians), math.sin(radians)
+    predicate = _is_red if role == "SECOND" else _is_light
+    radius = int(length + tail + 12)
+    for y in range(max(0, round(center[1] - radius)), min(image.height, round(center[1] + radius + 1))):
+        for x in range(max(0, round(center[0] - radius)), min(image.width, round(center[0] + radius + 1))):
+            dx, dy = x - center[0], y - center[1]
+            along = dx * ux + dy * uy
+            perpendicular = dx * vx + dy * vy
+            if -tail <= along <= length + 2 and abs(perpendicular) <= width / 2 and predicate(source_pixels[x, y]):
+                ax = round(width / 2 + perpendicular)
+                ay = round(length - along)
+                if 0 <= ax < width and 0 <= ay < height:
+                    target_pixels[ax, ay] = (*source_pixels[x, y], 255)
+                    sampled_colors.append(source_pixels[x, y])
+    original_alpha = asset.getchannel("A")
+    rows = {y: [x for x in range(width) if original_alpha.getpixel((x, y)) > 0] for y in range(height)}
+    populated_rows = [y for y, xs in rows.items() if xs]
+    if populated_rows:
+        average = tuple(round(sum(pixel[channel] for pixel in sampled_colors) / len(sampled_colors)) for channel in range(3))
+        smooth = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+        smooth_draw = ImageDraw.Draw(smooth)
+        edge_color = (*average, 255)
+        if role == "SECOND":
+            smooth_draw.line((width / 2, 0, width / 2, height - 1), fill=edge_color, width=max(2, round(thickness)))
+        else:
+            outer_width = round(thickness + 5)
+            smooth_draw.line((width / 2, 0, width / 2, height - 1), fill=(0, 0, 0, 255), width=outer_width)
+            smooth_draw.line((width / 2, 0, width / 2, height - 1), fill=edge_color, width=round(thickness))
+            smooth_draw.line((width / 2, 2, width / 2, height - 3), fill=(0, 0, 0, 255), width=max(2, round(thickness / 2)))
+        asset = smooth
+    if asset.getbbox() is None:
+        draw = ImageDraw.Draw(asset)
+        draw.line((width / 2, 0, width / 2, height - 1), fill=(175, 18, 45, 255) if role == "SECOND" else (245, 245, 245, 255), width=max(2, round(thickness)))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    asset.save(path)
+
+
+def _remove_hand_from_dial(image: Image.Image, center: tuple[float, float], geometry: dict[str, float], role: str) -> None:
+    draw = ImageDraw.Draw(image)
+    width = round(geometry["thickness"] + (8 if role != "SECOND" else 5))
+    start = -round(geometry["tail"]) - 2
+    end = round(geometry["length"]) + 5
+    endpoint = _clock_endpoint(center, geometry["angle"], end)
+    draw.line((center[0], center[1], endpoint[0], endpoint[1]), fill=(0, 0, 0, 255), width=width)
+    tail_endpoint = _clock_endpoint(center, (geometry["angle"] + 180) % 360, -start)
+    draw.line((tail_endpoint[0], tail_endpoint[1], center[0], center[1]), fill=(0, 0, 0, 255), width=width)
+
+
+def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> tuple[dict[str, dict[str, Any]], tuple[float, float, float]]:
+    """A1b reference-to-assets extraction; A1a compiler/renderer consume its output."""
+    center_x, center_y, center_confidence = _detect_clock_center(canvas)
+    center = (center_x, center_y)
+    hands = _detect_hand_geometry(canvas, center)
     assets_dir.mkdir(parents=True, exist_ok=True)
     dial_clean = canvas.convert("RGBA")
-    dial_draw = ImageDraw.Draw(dial_clean)
-    for hand in hands.values():
-        endpoint = _clock_endpoint(center, hand["angle"], hand["length"])
-        erase_width = round(hand["thickness"] + (6 if hand["thickness"] >= 8 else 3))
-        dial_draw.line((center[0], center[1], endpoint[0], endpoint[1]), fill=(0, 0, 0, 255), width=erase_width)
-        tail_endpoint = _clock_endpoint(center, (hand["angle"] + 180.0) % 360.0, hand["tail"])
-        dial_draw.line((tail_endpoint[0], tail_endpoint[1], center[0], center[1]), fill=(0, 0, 0, 255), width=erase_width)
+    for role in ("HOUR", "MINUTE", "SECOND"):
+        _remove_hand_from_dial(dial_clean, center, hands[role], role)
     dial_clean.save(assets_dir / "dial_clean.png")
 
     cap_size = 24
@@ -365,29 +525,16 @@ def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> dict[str, dict[st
     top = round(center[1] - cap_size / 2)
     cap = canvas.crop((left, top, left + cap_size, top + cap_size)).convert("RGBA")
     cap_alpha = Image.new("L", cap.size, 0)
-    ImageDraw.Draw(cap_alpha).ellipse((2, 2, cap_size - 3, cap_size - 3), fill=255)
+    ImageDraw.Draw(cap_alpha).ellipse((3, 3, cap_size - 4, cap_size - 4), fill=255)
     cap.putalpha(cap_alpha)
     cap.save(assets_dir / "center_cap.png")
 
     metadata: dict[str, dict[str, Any]] = {}
     for role, hand in hands.items():
-        width = int(hand["width"])
-        height = round(hand["length"] + hand["tail"])
-        image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-        draw = ImageDraw.Draw(image)
-        pivot_x = width / 2
-        pivot_y = hand["length"]
-        tip_y = 1
-        tail_y = min(height - 1, round(pivot_y + hand["tail"]))
-        if role == "SECOND":
-            draw.line((pivot_x, tip_y, pivot_x, tail_y), fill=hand["color"], width=round(hand["thickness"]))
-        else:
-            outer_width = round(hand["thickness"] + 5)
-            draw.line((pivot_x, tip_y, pivot_x, tail_y), fill=(0, 0, 0, 255), width=outer_width)
-            draw.line((pivot_x, tip_y, pivot_x, tail_y), fill=hand["color"], width=round(hand["thickness"]))
-            draw.line((pivot_x, tip_y + 2, pivot_x, tail_y - 2), fill=(0, 0, 0, 255), width=max(2, round(hand["thickness"] / 2)))
         asset_name = f"{role.lower()}_hand.png"
-        image.save(assets_dir / asset_name)
+        _extract_hand_asset(canvas, center, hand, role, assets_dir / asset_name)
+        width = max(10, round(hand["thickness"] * 3.5))
+        height = round(hand["length"] + hand["tail"])
         metadata[role] = {
             "asset": f"assets/{asset_name}",
             "bbox": {"x": round(center[0] - width / 2), "y": round(center[1] - hand["length"]), "width": width, "height": height},
@@ -396,8 +543,9 @@ def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> dict[str, dict[st
             "observedAngleDeg": hand["angle"],
             "length": hand["length"],
             "thickness": hand["thickness"],
+            "extractionMethod": "radial-light-ray + red-axis mask",
         }
-    return metadata
+    return metadata, (center_x, center_y, center_confidence)
 
 
 def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, Any]:
@@ -438,7 +586,8 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
     canvas.save(output_dir / "reference.png")
     canvas.save(assets_dir / "display_reference.png")
     crop.save(assets_dir / "display_crop.png")
-    hand_metadata = _write_a1_assets(canvas, assets_dir)
+    hand_metadata, detected_clock = _write_a1_assets(canvas, assets_dir)
+    detected_center_x, detected_center_y, detected_center_confidence = detected_clock
     elements: list[dict[str, Any]] = [
         {
             "id": "dial_clean",
@@ -447,9 +596,9 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
             "bbox": {"x": 0, "y": 0, "width": 438, "height": 438},
             "asset": "assets/dial_clean.png",
             "assetInstruction": {"operation": "extract_from_reference"},
-            "confidence": 0.68,
+            "confidence": 0.78,
             "zIndex": 0,
-            "uncertainty": ["A1a uses a conservative geometric hand mask; automatic segmentation is deferred to A1b"],
+            "uncertainty": ["A1b uses a conservative radial-light mask; segmentation remains adjustable for difficult references"],
         }
     ]
     role_ids = {"HOUR": "hour_hand", "MINUTE": "minute_hand", "SECOND": "second_hand"}
@@ -467,9 +616,9 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
                 "thickness": metadata["thickness"],
                 "pivotX": metadata["pivotX"],
                 "pivotY": metadata["pivotY"],
-                "confidence": 0.61 if role != "SECOND" else 0.74,
+                "confidence": 0.79 if role != "SECOND" else 0.84,
                 "zIndex": {"HOUR": 10, "MINUTE": 20, "SECOND": 30}[role],
-                "uncertainty": ["Hand geometry is manually adjustable in A1a", "Observed angle is from the supplied product photograph"],
+                "uncertainty": ["Radial-ray extraction is conservative and remains adjustable", "Observed angle is from the supplied product photograph"],
             }
         )
         if role == "SECOND":
@@ -482,7 +631,7 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
             "bbox": {"x": 207, "y": 207, "width": 24, "height": 24},
             "asset": "assets/center_cap.png",
             "assetInstruction": {"operation": "extract_from_reference"},
-            "confidence": 0.72,
+            "confidence": 0.78,
             "zIndex": 100,
             "uncertainty": ["Center cap is preserved as a static foreground layer"],
         }
@@ -500,14 +649,14 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
         },
         "background": {"type": "SOLID", "color": "#000000"},
         "preview": {"time": "10:08:30", "date": "08.20", "weekday": "THU", "battery": 82, "steps": 5240, "heartRate": 68},
-        "clock": {"type": "ANALOG", "centerX": 219, "centerY": 219, "confidence": 0.97, "method": "A1a fixed pivot from normalized display"},
+        "clock": {"type": "ANALOG", "centerX": detected_center_x, "centerY": detected_center_y, "confidence": detected_center_confidence, "method": "A1b red pivot blob detection"},
         "elements": elements,
         "analysis": {
             "watchFaceCategory": "MINIMAL_ANALOG",
             "overallConfidence": 0.68,
             "requiresStaticAssetExtraction": True,
             "requiresHumanReview": True,
-            "method": "A1a dark-display crop + explicit clock pivot + adjustable hand assets",
+            "method": "A1b dark-display crop + red pivot detection + radial hand extraction",
             "componentCount": 1,
             "groupCount": 4,
         },

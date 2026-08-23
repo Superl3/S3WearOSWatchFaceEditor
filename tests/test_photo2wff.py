@@ -9,6 +9,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from photo2wff.analyzer import analyze_image
+from photo2wff.analog_validate import validate_dynamic_renders
 from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
@@ -108,6 +109,17 @@ class Photo2WFFTests(unittest.TestCase):
             second = root / "second.png"
             render_scene(scene, second, root)
             self.assertNotEqual(first.read_bytes(), second.read_bytes())
+
+            render_paths = {}
+            for fixed_time in ("10:08:30", "03:15:45", "06:30:00"):
+                scene["preview"]["time"] = fixed_time
+                path = root / f"{fixed_time.replace(':', '-')}.png"
+                render_scene(scene, path, root)
+                render_paths[fixed_time] = path
+            validation = validate_dynamic_renders(scene, render_paths)
+            self.assertTrue(validation["dynamicHandROI"]["passed"])
+            self.assertTrue(validation["sourceAngleGhost"]["passed"])
+            self.assertTrue(validation["passed"])
 
     def test_render_and_compare(self):
         with tempfile.TemporaryDirectory() as temp:
