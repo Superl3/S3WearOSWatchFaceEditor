@@ -140,6 +140,15 @@ class Photo2WFFTests(unittest.TestCase):
         self.assertFalse(status["available"])
         self.assertEqual(status["reason"], "external synthesis unavailable")
 
+    def test_dial_orientation_keeps_lower_arc_decimal_glyphs_readable(self):
+        from photo2wff.glyphs import _dial_orientation
+
+        self.assertEqual(_dial_orientation(60), 60)
+        self.assertEqual(_dial_orientation(150), -30)
+        self.assertEqual(_dial_orientation(180), 0)
+        self.assertEqual(_dial_orientation(210), 30)
+        self.assertEqual(_dial_orientation(270), 270)
+
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:
             xml_path = Path(temp) / "watchface.xml"
