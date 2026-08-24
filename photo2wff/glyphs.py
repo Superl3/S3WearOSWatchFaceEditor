@@ -182,6 +182,11 @@ def _dial_orientation(degrees: float) -> float:
     the clockwise rotation used by this reference dial.
     """
     angle = degrees % 360.0
+    # The source 4 at 4 o'clock uses the opposite half-turn convention from
+    # the neighboring lower-right markers.  Its observed upright correction
+    # is -60 degrees, not +120 degrees.
+    if abs(angle - 120.0) < 0.01:
+        return -60.0
     # This face uses an intentional half-turn readability flip through the
     # lower arc: 5, 6, and 7 keep their familiar reading direction instead of
     # rotating fully with the radial marker.  Preserve that observed layout
@@ -448,6 +453,158 @@ def _display_metrics(image: Image.Image) -> dict[str, int]:
     return {"displayWidth": max(1, round(width * scale)), "displayHeight": max(1, round(height * scale))}
 
 
+PRIMITIVE_KINDS = ("upper_loop", "lower_loop", "outer_curve", "inner_curve", "stem", "hook_terminal", "diagonal_transition")
+
+
+def _primitive_asset(image: Image.Image, box: tuple[int, int, int, int], padding: int = 1) -> Image.Image:
+    """Crop a native-resolution primitive without resampling it."""
+    return _tight(image.crop(box), padding=padding)
+
+
+def _extract_shape_primitives(character: str, image: Image.Image, output_root: Path) -> dict[str, Any]:
+    """Extract reusable shape regions from one observed canonical glyph."""
+    alpha_box = image.getchannel("A").getbbox()
+    if alpha_box is None:
+        return {"character": character, "primitives": {}, "status": "FAILED_EMPTY_GLYPH"}
+    left, top, right, bottom = alpha_box
+    width, height = right - left, bottom - top
+    mid_x = left + width // 2
+    mid_y = top + height // 2
+    quarter_y = top + max(1, round(height * 0.28))
+    primitive_boxes = {
+        "upper_loop": (left, top, right, mid_y + 2),
+        "lower_loop": (left, mid_y - 2, right, bottom),
+        "outer_curve": (mid_x, top, right, bottom),
+        "inner_curve": (left, top, mid_x + 1, bottom),
+        "stem": (max(left, mid_x - max(2, width // 8)), top, min(right, mid_x + max(3, width // 8)), bottom),
+        "hook_terminal": (left, top, right, quarter_y),
+        "diagonal_transition": (left, mid_y - max(2, height // 5), right, mid_y + max(2, height // 5)),
+    }
+    directory = output_root / "assets/glyphs/primitives"
+    directory.mkdir(parents=True, exist_ok=True)
+    primitives: dict[str, dict[str, Any]] = {}
+    for kind, box in primitive_boxes.items():
+        primitive = _primitive_asset(image, box)
+        path = directory / f"{character}_{kind}.png"
+        primitive.save(path)
+        primitives[kind] = {
+            "resource": str(path.relative_to(output_root)).replace("\\", "/"),
+            "sourceGlyph": character,
+            "sourceBox": list(box),
+            "nativeSize": {"width": primitive.width, "height": primitive.height},
+            "transform": "crop_only_no_resample",
+        }
+    return {"character": character, "primitives": primitives, "status": "OK"}
+
+
+def _right_lobe(image: Image.Image) -> Image.Image:
+    """Keep the right-facing curve of a loop for a compositional 3."""
+    alpha_box = image.getchannel("A").getbbox()
+    if alpha_box is None:
+        return Image.new("RGBA", (1, 1), (0, 0, 0, 0))
+    split = max(0, (alpha_box[0] + alpha_box[2]) // 2 - 2)
+    return _tight(image.crop((split, 0, image.width, image.height)), padding=0)
+
+
+def _assemble_three_candidate(
+    candidate_id: str,
+    primitive_assets: dict[str, dict[str, Any]],
+    output_root: Path,
+    provenance: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Assemble two right-facing loop lobes without inventing a new font."""
+    top_source = Image.open(output_root / primitive_assets["top"]["resource"]).convert("RGBA")
+    bottom_source = Image.open(output_root / primitive_assets["bottom"]["resource"]).convert("RGBA")
+    top = _right_lobe(top_source)
+    bottom = _right_lobe(bottom_source)
+    canvas_width = max(top.width, bottom.width) + max(8, min(top.width, bottom.width) // 2)
+    canvas_height = max(top.height + bottom.height - 2, 1)
+    canvas = Image.new("RGBA", (canvas_width, canvas_height), (0, 0, 0, 0))
+    top_x = canvas_width - top.width
+    bottom_x = canvas_width - bottom.width
+    canvas.alpha_composite(top, (top_x, 0))
+    canvas.alpha_composite(bottom, (bottom_x, max(0, top.height - 2)))
+    path = output_root / "assets/glyphs/synthesized/candidates" / f"candidate_3_{candidate_id}.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(path)
+    return {
+        "character": "3",
+        "candidate": candidate_id,
+        "resource": path.name,
+        "path": str(path),
+        "source": "COMPOSITIONAL_ASSEMBLY",
+        "synthetic": True,
+        "confidence": 0.0,
+        "requiresHumanReview": True,
+        "provenance": provenance,
+        "metrics": {**_metrics(canvas), **_display_metrics(canvas)},
+    }
+
+
+def _synthesize_compositional_missing_glyphs(
+    output_root: Path,
+    themed_assets: dict[str, dict[str, Any]],
+    primitive_report: dict[str, Any],
+) -> tuple[dict[str, list[dict[str, Any]]], dict[str, dict[str, Any]]]:
+    """Generate review-only candidates from extracted observed primitives."""
+    if "3" not in primitive_report.get("targets", ()):  # reusable target hook
+        return {}, {}
+    available = primitive_report.get("glyphs", {})
+    required = ("8", "9", "5")
+    if any(digit not in available for digit in required):
+        return {"3": []}, {}
+    def resource(digit: str, kind: str) -> dict[str, Any]:
+        return available[digit]["primitives"][kind]
+    recipes = (
+        ("01", resource("8", "upper_loop"), resource("8", "lower_loop"), "balanced_8_loops"),
+        ("02", resource("9", "upper_loop"), resource("8", "lower_loop"), "upper_9_lower_8"),
+        ("03", resource("8", "upper_loop"), resource("5", "lower_loop"), "upper_8_lower_5"),
+    )
+    candidates: list[dict[str, Any]] = []
+    recipe_confidence = {"01": 0.68, "02": 0.61, "03": 0.55}
+    for candidate_id, top, bottom, recipe in recipes:
+        candidate = _assemble_three_candidate(
+                candidate_id,
+                {"top": top, "bottom": bottom},
+                output_root,
+                [
+                    {"role": "upper_loop", "source": top["resource"], "recipe": recipe},
+                    {"role": "lower_loop", "source": bottom["resource"], "recipe": recipe},
+                    {"role": "assembly", "operation": "right_lobe_stack_no_resample", "recipe": recipe},
+                ],
+            )
+        candidate["rank"] = len(candidates) + 1
+        candidate["confidence"] = recipe_confidence.get(candidate_id, 0.5)
+        candidate["ranking"] = {
+            "score": candidate["confidence"],
+            "method": "deterministic_recipe_prior",
+            "autoApproved": False,
+        }
+        candidates.append(candidate)
+    # Candidate 01 is the default review asset only; it is never approved
+    # automatically and never added to the static 3 o'clock dial.
+    selected = candidates[0] if candidates else None
+    themed = {}
+    if selected:
+        source_path = Path(selected["path"])
+        themed_path = output_root / "assets/glyphs/themed/glyph_3.png"
+        themed_path.parent.mkdir(parents=True, exist_ok=True)
+        Image.open(source_path).convert("RGBA").save(themed_path)
+        themed["3"] = {
+            "character": "3",
+            "type": THEMED_GLYPH_TYPE,
+            "source": "SYNTHESIZED_COMPOSITIONAL",
+            "synthetic": True,
+            "confidence": selected["confidence"],
+            "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"),
+            "candidate": selected["candidate"],
+            "requiresHumanReview": True,
+            "provenance": selected["provenance"],
+            "metrics": selected["metrics"],
+        }
+    return {"3": candidates}, themed
+
+
 def extract_themed_glyph_set(
     reference_path: Path,
     hand_occlusion_mask_path: Path,
@@ -596,11 +753,31 @@ def extract_themed_glyph_set(
         else:
             coverage[character] = "MISSING"
 
-    # A2b.1 deliberately stops before missing-glyph synthesis.  Keep the
-    # adapter boundary and report it explicitly for the next milestone.
+    primitive_report: dict[str, Any] = {
+        "version": "A2b.2",
+        "targetDigits": ["3"],
+        "targets": ["3"],
+        "primitiveKinds": list(PRIMITIVE_KINDS),
+        "glyphs": {},
+        "status": "completed_with_review",
+    }
+    for character, glyph in themed_assets.items():
+        primitive_report["glyphs"][character] = _extract_shape_primitives(
+            character,
+            _asset_from_path(output_root / glyph["resource"]),
+            output_root,
+        )
+    primitive_report_path = output_root / "primitive-report.json"
+    primitive_report_path.write_text(json.dumps(primitive_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+    # A2b.2 synthesizes only a review candidate.  The actual dial remains
+    # unchanged because the missing 3 o'clock index is a layout replacement.
     synthesizer = synthesizer or DeterministicFallbackAdapter(output_root / "assets/fonts/pretendard.ttf")
     adapter_status = [ExternalModelAdapter().status(), LocalModelAdapter().status(), synthesizer.status()]
-    candidates: dict[str, list[dict[str, Any]]] = {}
+    candidates, synthesized_assets = _synthesize_compositional_missing_glyphs(output_root, themed_assets, primitive_report)
+    if synthesized_assets:
+        themed_assets.update(synthesized_assets)
+        coverage["3"] = "SYNTHESIZED"
 
     date_glyph = None
     if date_metadata.get("innerBbox"):
@@ -614,7 +791,7 @@ def extract_themed_glyph_set(
     synthesized_count = sum(1 for value in coverage.values() if value == "SYNTHESIZED")
     missing_count = sum(1 for value in coverage.values() if value == "MISSING")
     report = {
-        "status": "completed_with_review" if missing_count or validation_failures or relation["classification"] in {"UNKNOWN", "DIFFERENT_STYLE_SYSTEM"} else "completed",
+        "status": "completed_with_review" if synthesized_count or missing_count or validation_failures or relation["classification"] in {"UNKNOWN", "DIFFERENT_STYLE_SYSTEM"} else "completed",
         "type": THEMED_GLYPH_TYPE,
         "family": THEMED_FAMILY,
         "coverage": coverage,
@@ -623,10 +800,20 @@ def extract_themed_glyph_set(
         "observations": observations,
         "glyphs": themed_assets,
         "candidates": candidates,
+        "primitives": primitive_report,
+        "primitiveReport": str(primitive_report_path.relative_to(output_root)).replace("\\", "/"),
         "dateStyleRelation": relation,
         "adapters": adapter_status,
         "externalModelStatus": "external synthesis unavailable",
-        "synthesis": {"enabled": False, "status": "deferred_to_A2b.2", "reason": "A2b.1 observed glyph fidelity only"},
+        "synthesis": {
+            "enabled": True,
+            "method": "COMPOSITIONAL_GLYPH_ASSEMBLY",
+            "targetDigits": ["3"],
+            "candidateCount": len(candidates.get("3", [])),
+            "autoApproval": False,
+            "status": "review_only",
+            "externalModelUsed": False,
+        },
         "validationFailures": validation_failures,
         "canonicalization": {
             "source": str(dial_source_path),
@@ -635,7 +822,7 @@ def extract_themed_glyph_set(
             "nativeResolution": True,
             "alphaAwareResampling": "RGBA bicubic with continuous alpha; no thresholded resize",
         },
-        "requiresHumanReview": bool(missing_count or validation_failures) or relation["classification"] not in {"SAME_STYLE_SYSTEM", "RELATED_BUT_OPTICALLY_ADJUSTED"},
+        "requiresHumanReview": bool(synthesized_count or missing_count or validation_failures) or relation["classification"] not in {"SAME_STYLE_SYSTEM", "RELATED_BUT_OPTICALLY_ADJUSTED"},
         "actualDialThreeOClockNumeral": "intentionally_absent_not_reconstructed",
     }
     report_path = output_root / "glyph-report.json"

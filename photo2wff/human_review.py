@@ -445,9 +445,22 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
     glyph_report_path = output_root / "glyph-report.json"
     fallback_xml_path = output_root / "project-fallback/watchface/src/main/res/raw/watchface.xml"
     if date_slot is not None and glyph_report_path.exists() and fallback_xml_path.exists():
-        manifest["milestone"] = "A2b Themed Glyph Reconstruction"
+        manifest["milestone"] = "A2b.2 Compositional Glyph Synthesis"
         glyph_report = json.loads(glyph_report_path.read_text(encoding="utf-8"))
-        manifest["themedGlyph"] = generate_glyph_review_artifacts(scene, output_root, xml_path, fallback_xml_path, glyph_report)
+        candidate_xmls = {}
+        for candidate in glyph_report.get("candidates", {}).get("3", []):
+            candidate_id = str(candidate.get("candidate", "")).zfill(2)
+            candidate_xml = output_root / f"project-themed-review-candidate-{candidate_id}/watchface/src/main/res/raw/watchface.xml"
+            if candidate_xml.exists():
+                candidate_xmls[candidate_id] = candidate_xml
+        manifest["themedGlyph"] = generate_glyph_review_artifacts(
+            scene,
+            output_root,
+            xml_path,
+            fallback_xml_path,
+            glyph_report,
+            candidate_xmls=candidate_xmls,
+        )
     manifest_path = review_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest

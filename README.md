@@ -109,6 +109,18 @@ boundary contact or component loss. The review bundle additionally contains
 mask/reconstruction overlay, raw extraction, canonical asset, and source-space
 reprojection for every observed digit. Missing `3` remains deferred to A2b.2.
 
+A2b.2 adds reusable compositional glyph assembly without an external
+generator. Observed canonical glyphs are decomposed into native-resolution
+loop, curve, stem, terminal, and transition primitives. The current sample
+emits three ranked `3` recipes with provenance under
+`assets/glyphs/primitives/` and `assets/glyphs/synthesized/candidates/`.
+Candidates are exposed only through review-only themed WFF projects; ranking
+never implies approval, and no synthesized `3` is added to the static dial.
+The review bundle includes the primitive atlas, candidate provenance sheet,
+fallback-versus-candidate renders for days 1/8/11/20/31, and the observed
+fidelity review. Pretendard fallback remains the production path until a
+human selects a candidate.
+
 The external and local model adapters are optional. When unavailable, the deterministic fallback adapter emits explicit review-only candidates and reports `external synthesis unavailable`; it does not claim model output. A2b writes `glyph-report.json`, `assets/glyphs/observed/raw/`, `assets/glyphs/observed/canonical/`, `assets/glyphs/synthesized/candidates/`, `assets/glyphs/themed/`, `project/`, `project-fallback/`, and glyph review sheets for canonical coverage, provenance, candidate 3, fallback-vs-themed dates, and full-watch themed renders. An unapproved synthesized glyph keeps the milestone at `completed_with_review`.
 
 `quick` creates:

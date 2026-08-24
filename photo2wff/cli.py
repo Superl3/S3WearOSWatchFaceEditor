@@ -120,6 +120,32 @@ def product_photo(reference: Path, output: Path, generative_fallback: Path | Non
     _copy_wrapper(output / "project-fallback")
     xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
     fallback_xml_path = output / "project-fallback/watchface/src/main/res/raw/watchface.xml"
+    glyph_report = json.loads((output / "glyph-report.json").read_text(encoding="utf-8")) if (output / "glyph-report.json").exists() else {}
+    # A2b.2 review projects deliberately enable the themed BitmapFont while
+    # retaining approved=false.  They are never used as the production scene.
+    review_scene = copy.deepcopy(scene)
+    for element in review_scene.get("elements", []):
+        themed = element.get("themedGlyph")
+        if themed:
+            themed["enabled"] = True
+            themed["approved"] = False
+    review_project = output / "project-themed-review"
+    compile_project(review_scene, review_project, output)
+    _copy_wrapper(review_project)
+    candidate_xmls: dict[str, Path] = {}
+    for candidate in glyph_report.get("candidates", {}).get("3", []):
+        candidate_id = str(candidate.get("candidate", "")).zfill(2)
+        candidate_scene = copy.deepcopy(review_scene)
+        for element in candidate_scene.get("elements", []):
+            themed = element.get("themedGlyph")
+            if not themed:
+                continue
+            themed["resources"]["3"] = str(Path("assets/glyphs/synthesized/candidates") / candidate["resource"]).replace("\\", "/")
+            themed["metrics"]["3"] = candidate.get("metrics", themed["metrics"].get("3", {}))
+        candidate_project = output / f"project-themed-review-candidate-{candidate_id}"
+        compile_project(candidate_scene, candidate_project, output)
+        _copy_wrapper(candidate_project)
+        candidate_xmls[candidate_id] = candidate_project / "watchface/src/main/res/raw/watchface.xml"
     render_metadata = render_wff_xml(xml_path, output / "wff-rendered.png", fixed_time=scene["preview"]["time"])
     fallback_render_metadata = render_wff_xml(fallback_xml_path, output / "fallback-wff-rendered.png", fixed_time=scene["preview"]["time"])
     render_dir = output / "renders"
@@ -129,7 +155,8 @@ def product_photo(reference: Path, output: Path, generative_fallback: Path | Non
         render_wff_xml(xml_path, path, fixed_time=time)
     dynamic_validation = validate_dynamic_renders(scene, render_paths)
     (output / "dynamic-validation.json").write_text(json.dumps(dynamic_validation, indent=2) + "\n", encoding="utf-8", newline="\n")
-    human_review = generate_human_review_artifacts(scene, output, xml_path)
+    review_xml_path = review_project / "watchface/src/main/res/raw/watchface.xml"
+    human_review = generate_human_review_artifacts(scene, output, review_xml_path)
     comparison = compare_images(output / "reference.png", output / "wff-rendered.png")
     comparison["render"] = render_metadata
     comparison["fallbackRender"] = fallback_render_metadata
@@ -141,6 +168,9 @@ def product_photo(reference: Path, output: Path, generative_fallback: Path | Non
 def human_review(output: Path) -> None:
     scene = load_scene(output / "scene.json")
     xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
+    review_xml_path = output / "project-themed-review/watchface/src/main/res/raw/watchface.xml"
+    if review_xml_path.exists():
+        xml_path = review_xml_path
     manifest = generate_human_review_artifacts(scene, output, xml_path)
     comparison_path = output / "comparison.json"
     if comparison_path.exists():
