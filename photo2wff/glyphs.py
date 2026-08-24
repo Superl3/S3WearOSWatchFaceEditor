@@ -182,16 +182,10 @@ def _dial_orientation(degrees: float) -> float:
     the clockwise rotation used by this reference dial.
     """
     angle = degrees % 360.0
-    # The source 4 at 4 o'clock uses the opposite half-turn convention from
-    # the neighboring lower-right markers.  Its observed upright correction
-    # is -60 degrees, not +120 degrees.
-    if abs(angle - 120.0) < 0.01:
-        return -60.0
-    # This face uses an intentional half-turn readability flip through the
-    # lower arc: 5, 6, and 7 keep their familiar reading direction instead of
-    # rotating fully with the radial marker.  Preserve that observed layout
-    # convention without applying the former, incorrect global modulo fold.
-    if 150.0 <= angle <= 210.0:
+    # One fitted positional rule is used for the complete hour ring.  The
+    # lower arc is kept upright by one half-turn; there is no digit-specific
+    # exception (4 at 120 degrees follows the same rule as 5/6/7).
+    if 90.0 < angle <= 210.0:
         return angle - 180.0
     return angle
 
@@ -453,155 +447,298 @@ def _display_metrics(image: Image.Image) -> dict[str, int]:
     return {"displayWidth": max(1, round(width * scale)), "displayHeight": max(1, round(height * scale))}
 
 
-PRIMITIVE_KINDS = ("upper_loop", "lower_loop", "outer_curve", "inner_curve", "stem", "hook_terminal", "diagonal_transition")
+def _fit_global_orientation() -> dict[str, Any]:
+    """Return the single orientation model fitted across the complete ring."""
+    return {"model": "piecewise_global_hour_ring", "input": "hour_angle_deg", "rule": "if 90 < angle <= 210 then angle - 180 else angle", "digitSpecificExceptions": []}
 
 
-def _primitive_asset(image: Image.Image, box: tuple[int, int, int, int], padding: int = 1) -> Image.Image:
-    """Crop a native-resolution primitive without resampling it."""
-    return _tight(image.crop(box), padding=padding)
+def _glyph_provenance(hand_overlap: float, reconstructed_overlap: float) -> str:
+    if reconstructed_overlap >= 0.35:
+        return "RECONSTRUCTED"
+    if hand_overlap >= 0.08 or reconstructed_overlap >= 0.03:
+        return "OBSERVED_PARTIAL"
+    return "OBSERVED_CLEAN"
+
+
+TOPOLOGY_SEGMENT_KINDS = ("outer_contour", "inner_contour", "skeleton", "terminal", "junction", "curvature_extrema")
+
+
+def _binary_alpha(image: Image.Image, threshold: int = 20) -> list[list[bool]]:
+    alpha = image.getchannel("A")
+    return [[alpha.getpixel((x, y)) > threshold for x in range(image.width)] for y in range(image.height)]
+
+
+def _neighbors(binary: list[list[bool]], x: int, y: int) -> list[tuple[int, int]]:
+    height = len(binary)
+    width = len(binary[0]) if height else 0
+    return [
+        (nx, ny)
+        for nx, ny in ((x - 1, y - 1), (x, y - 1), (x + 1, y - 1), (x - 1, y), (x + 1, y), (x - 1, y + 1), (x, y + 1), (x + 1, y + 1))
+        if 0 <= nx < width and 0 <= ny < height and binary[ny][nx]
+    ]
+
+
+def _thin(binary: list[list[bool]]) -> list[list[bool]]:
+    """Zhang-Suen thinning, kept local to avoid a raster/vector dependency."""
+    if not binary or not binary[0]:
+        return binary
+    height, width = len(binary), len(binary[0])
+    pixels = [row[:] for row in binary]
+    changed = True
+    while changed:
+        changed = False
+        for phase in (0, 1):
+            remove: list[tuple[int, int]] = []
+            for y in range(1, height - 1):
+                for x in range(1, width - 1):
+                    if not pixels[y][x]:
+                        continue
+                    ordered = [pixels[y - 1][x], pixels[y - 1][x + 1], pixels[y][x + 1], pixels[y + 1][x + 1], pixels[y + 1][x], pixels[y + 1][x - 1], pixels[y][x - 1], pixels[y - 1][x - 1]]
+                    count = sum(ordered)
+                    transitions = sum(not ordered[index] and ordered[(index + 1) % 8] for index in range(8))
+                    if count < 2 or count > 6 or transitions != 1:
+                        continue
+                    if phase == 0:
+                        keep = ordered[0] and ordered[2] and ordered[4]
+                        keep = keep or ordered[2] and ordered[4] and ordered[6]
+                    else:
+                        keep = ordered[0] and ordered[2] and ordered[6]
+                        keep = keep or ordered[0] and ordered[4] and ordered[6]
+                    if not keep:
+                        remove.append((x, y))
+            if remove:
+                changed = True
+                for x, y in remove:
+                    pixels[y][x] = False
+    return pixels
+
+
+def _contours(binary: list[list[bool]]) -> tuple[list[list[int]], list[list[int]]]:
+    outer: list[list[int]] = []
+    inner: list[list[int]] = []
+    height = len(binary)
+    width = len(binary[0]) if height else 0
+    for y in range(height):
+        for x in range(width):
+            adjacent_ink = any(0 <= nx < width and 0 <= ny < height and binary[ny][nx] for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)))
+            if binary[y][x] and not all(0 <= nx < width and 0 <= ny < height and binary[ny][nx] for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))):
+                outer.append([x, y])
+            elif not binary[y][x] and adjacent_ink:
+                inner.append([x, y])
+    return outer, inner
+
+
+def _topology_segments(skeleton: list[list[bool]]) -> tuple[list[dict[str, Any]], list[list[int]], list[list[int]]]:
+    points = {(x, y) for y, row in enumerate(skeleton) for x, value in enumerate(row) if value}
+    degree = {point: len([(nx, ny) for nx, ny in _neighbors(skeleton, *point)]) for point in points}
+    endpoints = [[x, y] for (x, y), count in degree.items() if count == 1]
+    junctions = [[x, y] for (x, y), count in degree.items() if count >= 3]
+    anchors = set(tuple(point) for point in endpoints + junctions)
+    visited: set[tuple[tuple[int, int], tuple[int, int]]] = set()
+    segments: list[dict[str, Any]] = []
+    for start in sorted(anchors or points):
+        for neighbor in _neighbors(skeleton, *start):
+            edge = tuple(sorted((start, neighbor)))
+            if edge in visited:
+                continue
+            chain = [start]
+            previous, current = start, neighbor
+            visited.add(edge)
+            while True:
+                chain.append(current)
+                if current in anchors and current != start:
+                    break
+                next_points = [point for point in _neighbors(skeleton, *current) if point != previous]
+                if not next_points:
+                    break
+                next_point = next_points[0]
+                next_edge = tuple(sorted((current, next_point)))
+                if next_edge in visited:
+                    break
+                visited.add(next_edge)
+                previous, current = current, next_point
+            if len(chain) >= 2:
+                length = sum(math.dist(chain[index], chain[index + 1]) for index in range(len(chain) - 1))
+                turns = []
+                for index in range(1, len(chain) - 1):
+                    first = math.atan2(chain[index][1] - chain[index - 1][1], chain[index][0] - chain[index - 1][0])
+                    second = math.atan2(chain[index + 1][1] - chain[index][1], chain[index + 1][0] - chain[index][0])
+                    turns.append(abs((second - first + math.pi) % (2 * math.pi) - math.pi))
+                segments.append({
+                    "points": [[int(x), int(y)] for x, y in chain],
+                    "tangentStartDeg": round(math.degrees(math.atan2(chain[1][1] - chain[0][1], chain[1][0] - chain[0][0])), 3),
+                    "tangentEndDeg": round(math.degrees(math.atan2(chain[-1][1] - chain[-2][1], chain[-1][0] - chain[-2][0])), 3),
+                    "curvature": round(sum(turns) / max(1, length), 5),
+                    "curvatureExtrema": [chain[index] for index, value in enumerate(turns, start=1) if value >= 0.65],
+                    "length": round(length, 3),
+                    "strokeWidth": 2.0,
+                    "capStart": "junction" if tuple(chain[0]) in anchors and degree.get(tuple(chain[0]), 0) >= 3 else "terminal",
+                    "capEnd": "junction" if tuple(chain[-1]) in anchors and degree.get(tuple(chain[-1]), 0) >= 3 else "terminal",
+                })
+    return segments, endpoints, junctions
+
+
+def _topology_overlay(geometry: dict[str, Any], output_root: Path, character: str) -> str:
+    image = Image.new("RGBA", (int(geometry["width"]), int(geometry["height"])), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+    draw.point([tuple(point) for point in geometry["outerContour"]], fill=(255, 190, 90, 220))
+    draw.point([tuple(point) for point in geometry["innerContour"]], fill=(100, 180, 255, 220))
+    for segment in geometry["segments"]:
+        draw.line([tuple(point) for point in segment["points"]], fill=(80, 255, 180, 255), width=1)
+    for point in geometry["endpoints"]:
+        draw.ellipse((point[0] - 2, point[1] - 2, point[0] + 2, point[1] + 2), fill=(255, 80, 80, 255))
+    path = output_root / "assets/glyphs/topology" / f"{character}_topology.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(path)
+    return str(path.relative_to(output_root)).replace("\\", "/")
+
+
+def _extract_topology(character: str, image: Image.Image, output_root: Path) -> dict[str, Any]:
+    """Extract full-mask topology; no fixed primitive crop is performed."""
+    binary = _binary_alpha(image)
+    box = image.getchannel("A").getbbox()
+    if box is None:
+        return {"character": character, "status": "FAILED_EMPTY_GLYPH", "geometry": {}}
+    outer, inner = _contours(binary)
+    skeleton = _thin(binary)
+    segments, endpoints, junctions = _topology_segments(skeleton)
+    geometry = {
+        "width": image.width,
+        "height": image.height,
+        "bbox": list(box),
+        "outerContour": outer,
+        "innerContour": inner,
+        "skeleton": [[x, y] for y, row in enumerate(skeleton) for x, value in enumerate(row) if value],
+        "segments": segments,
+        "endpoints": endpoints,
+        "junctions": junctions,
+        "holes": 1 if inner else 0,
+    }
+    geometry["topologyAsset"] = _topology_overlay(geometry, output_root, character)
+    return {"character": character, "status": "OK", "geometry": geometry, "transform": "topology_contour_skeleton_no_intermediate_resample"}
 
 
 def _extract_shape_primitives(character: str, image: Image.Image, output_root: Path) -> dict[str, Any]:
-    """Extract reusable shape regions from one observed canonical glyph."""
-    alpha_box = image.getchannel("A").getbbox()
-    if alpha_box is None:
-        return {"character": character, "primitives": {}, "status": "FAILED_EMPTY_GLYPH"}
-    left, top, right, bottom = alpha_box
-    width, height = right - left, bottom - top
-    mid_x = left + width // 2
-    mid_y = top + height // 2
-    quarter_y = top + max(1, round(height * 0.28))
-    primitive_boxes = {
-        "upper_loop": (left, top, right, mid_y + 2),
-        "lower_loop": (left, mid_y - 2, right, bottom),
-        "outer_curve": (mid_x, top, right, bottom),
-        "inner_curve": (left, top, mid_x + 1, bottom),
-        "stem": (max(left, mid_x - max(2, width // 8)), top, min(right, mid_x + max(3, width // 8)), bottom),
-        "hook_terminal": (left, top, right, quarter_y),
-        "diagonal_transition": (left, mid_y - max(2, height // 5), right, mid_y + max(2, height // 5)),
-    }
-    directory = output_root / "assets/glyphs/primitives"
-    directory.mkdir(parents=True, exist_ok=True)
-    primitives: dict[str, dict[str, Any]] = {}
-    for kind, box in primitive_boxes.items():
-        primitive = _primitive_asset(image, box)
-        path = directory / f"{character}_{kind}.png"
-        primitive.save(path)
-        primitives[kind] = {
-            "resource": str(path.relative_to(output_root)).replace("\\", "/"),
-            "sourceGlyph": character,
-            "sourceBox": list(box),
-            "nativeSize": {"width": primitive.width, "height": primitive.height},
-            "transform": "crop_only_no_resample",
-        }
-    return {"character": character, "primitives": primitives, "status": "OK"}
+    """Compatibility entry point now backed by topology-first grammar."""
+    return _extract_topology(character, image, output_root)
 
 
-def _right_lobe(image: Image.Image) -> Image.Image:
-    """Keep the right-facing curve of a loop for a compositional 3."""
-    alpha_box = image.getchannel("A").getbbox()
-    if alpha_box is None:
-        return Image.new("RGBA", (1, 1), (0, 0, 0, 0))
-    split = max(0, (alpha_box[0] + alpha_box[2]) // 2 - 2)
-    return _tight(image.crop((split, 0, image.width, image.height)), padding=0)
+def _rasterize_geometry(geometry: dict[str, Any], size: tuple[int, int], rotation: float = 0.0) -> Image.Image:
+    result = Image.new("RGBA", size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(result)
+    box = geometry.get("bbox", [0, 0, geometry.get("width", 1), geometry.get("height", 1)])
+    source_width = max(1.0, box[2] - box[0])
+    source_height = max(1.0, box[3] - box[1])
+    center = ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2)
+    radians = math.radians(rotation)
+    def transform(point: list[int]) -> tuple[int, int]:
+        x = (point[0] - center[0]) / source_width * size[0] + size[0] / 2
+        y = (point[1] - center[1]) / source_height * size[1] + size[1] / 2
+        dx, dy = x - size[0] / 2, y - size[1] / 2
+        return round(size[0] / 2 + dx * math.cos(radians) - dy * math.sin(radians)), round(size[1] / 2 + dx * math.sin(radians) + dy * math.cos(radians))
+    for points, color in ((geometry.get("outerContour", []), (235, 229, 224, 220)), (geometry.get("innerContour", []), (235, 229, 224, 220))):
+        transformed = [transform(point) for point in points]
+        draw.point(transformed, fill=color)
+    for segment in geometry.get("segments", []):
+        draw.line([transform(point) for point in segment["points"]], fill=(235, 229, 224, 255), width=1)
+    return result
 
 
-def _assemble_three_candidate(
-    candidate_id: str,
-    primitive_assets: dict[str, dict[str, Any]],
-    output_root: Path,
-    provenance: list[dict[str, Any]],
-) -> dict[str, Any]:
-    """Assemble two right-facing loop lobes without inventing a new font."""
-    top_source = Image.open(output_root / primitive_assets["top"]["resource"]).convert("RGBA")
-    bottom_source = Image.open(output_root / primitive_assets["bottom"]["resource"]).convert("RGBA")
-    top = _right_lobe(top_source)
-    bottom = _right_lobe(bottom_source)
-    canvas_width = max(top.width, bottom.width) + max(8, min(top.width, bottom.width) // 2)
-    canvas_height = max(top.height + bottom.height - 2, 1)
-    canvas = Image.new("RGBA", (canvas_width, canvas_height), (0, 0, 0, 0))
-    top_x = canvas_width - top.width
-    bottom_x = canvas_width - bottom.width
-    canvas.alpha_composite(top, (top_x, 0))
-    canvas.alpha_composite(bottom, (bottom_x, max(0, top.height - 2)))
+def _topology_region(geometry: dict[str, Any], region: str) -> dict[str, Any]:
+    box = geometry.get("bbox", [0, 0, geometry.get("width", 1), geometry.get("height", 1)])
+    midpoint = (box[1] + box[3]) / 2
+    def keep(point: list[int]) -> bool:
+        if region == "upper_right":
+            return point[1] <= midpoint and point[0] >= (box[0] + box[2]) / 2 - 1
+        if region == "upper_curve":
+            return point[1] <= midpoint
+        if region == "lower_curve":
+            return point[1] >= midpoint
+        return True
+    result = dict(geometry)
+    for key in ("outerContour", "innerContour", "skeleton"):
+        result[key] = [point for point in geometry.get(key, []) if keep(point)]
+    result["segments"] = [dict(segment, points=[point for point in segment["points"] if keep(point)]) for segment in geometry.get("segments", [])]
+    return result
+
+
+def _assemble_three_candidate(candidate_id: str, parts: list[tuple[dict[str, Any], str]], output_root: Path, provenance: list[dict[str, Any]]) -> dict[str, Any]:
+    """Render topology parts directly once at candidate resolution."""
+    canvas_size = (42, 64)
+    canvas = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
+    for geometry, region in parts:
+        part = _topology_region(geometry, region)
+        rendered = _rasterize_geometry(part, canvas_size)
+        canvas.alpha_composite(rendered)
     path = output_root / "assets/glyphs/synthesized/candidates" / f"candidate_3_{candidate_id}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(path)
-    return {
-        "character": "3",
-        "candidate": candidate_id,
-        "resource": path.name,
-        "path": str(path),
-        "source": "COMPOSITIONAL_ASSEMBLY",
-        "synthetic": True,
-        "confidence": 0.0,
-        "requiresHumanReview": True,
-        "provenance": provenance,
-        "metrics": {**_metrics(canvas), **_display_metrics(canvas)},
-    }
+    return {"character": "3", "candidate": candidate_id, "resource": path.name, "path": str(path), "source": "TOPOLOGY_FIRST_COMPOSITION", "synthetic": True, "confidence": 0.0, "requiresHumanReview": True, "provenance": provenance, "metrics": {**_metrics(canvas), **_display_metrics(canvas)}}
 
 
-def _synthesize_compositional_missing_glyphs(
-    output_root: Path,
-    themed_assets: dict[str, dict[str, Any]],
-    primitive_report: dict[str, Any],
-) -> tuple[dict[str, list[dict[str, Any]]], dict[str, dict[str, Any]]]:
-    """Generate review-only candidates from extracted observed primitives."""
-    if "3" not in primitive_report.get("targets", ()):  # reusable target hook
+def _topology_distance(first: dict[str, Any], second: dict[str, Any]) -> float:
+    return abs(len(first.get("segments", [])) - len(second.get("segments", []))) + abs(first.get("holes", 0) - second.get("holes", 0)) * 2 + abs(len(first.get("endpoints", [])) - len(second.get("endpoints", [])))
+
+
+def _leave_one_out_validation(output_root: Path, themed_assets: dict[str, dict[str, Any]], topology_report: dict[str, Any]) -> dict[str, Any]:
+    available = topology_report.get("glyphs", {})
+    validation_dir = output_root / "assets/glyphs/leave-one-out"
+    validation_dir.mkdir(parents=True, exist_ok=True)
+    result: dict[str, Any] = {"method": "topology_donor_leave_one_out", "targets": {}}
+    clean = {digit for digit, value in themed_assets.items() if value.get("provenance") == "OBSERVED_CLEAN"}
+    for target, asset in themed_assets.items():
+        target_geometry = available.get(target, {}).get("geometry", {})
+        donors = [digit for digit in clean if digit != target and digit in available]
+        candidates: list[dict[str, Any]] = []
+        if target == "6" and "9" in available:
+            donors = ["9"] + [digit for digit in donors if digit != "9"]
+        for donor in donors[:5]:
+            rotation = 180.0 if target == "6" and donor == "9" else 0.0
+            target_path = output_root / asset["resource"]
+            target_image = Image.open(target_path).convert("RGBA")
+            candidate_image = _rasterize_geometry(available[donor]["geometry"], target_image.size, rotation=rotation)
+            candidate_path = validation_dir / f"loo_{target}_from_{donor}.png"
+            candidate_image.save(candidate_path)
+            difference = ImageChops.difference(target_image.getchannel("A"), candidate_image.getchannel("A"))
+            score = round(1.0 - sum(difference.getdata()) / (255.0 * difference.width * difference.height), 4)
+            candidates.append({"donor": donor, "rotationDeg": rotation, "resource": str(candidate_path.relative_to(output_root)).replace("\\", "/"), "topologyDistance": _topology_distance(target_geometry, available[donor]["geometry"]), "similarity": score, "requiresHumanReview": True})
+        result["targets"][target] = {"provenance": asset.get("provenance"), "reference": asset["resource"], "candidates": candidates, "bestCandidate": max(candidates, key=lambda item: item["similarity"]) if candidates else None}
+    report_path = output_root / "leave-one-out-report.json"
+    report_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    result["report"] = str(report_path.relative_to(output_root)).replace("\\", "/")
+    return result
+
+
+def _synthesize_compositional_missing_glyphs(output_root: Path, themed_assets: dict[str, dict[str, Any]], topology_report: dict[str, Any]) -> tuple[dict[str, list[dict[str, Any]]], dict[str, dict[str, Any]]]:
+    """Generate review-only candidates from topology grammar recipes."""
+    if "3" not in topology_report.get("targets", ()):
         return {}, {}
-    available = primitive_report.get("glyphs", {})
-    required = ("8", "9", "5")
-    if any(digit not in available for digit in required):
+    available = topology_report.get("glyphs", {})
+    if any(digit not in available for digit in ("8", "2", "9")):
         return {"3": []}, {}
-    def resource(digit: str, kind: str) -> dict[str, Any]:
-        return available[digit]["primitives"][kind]
+    g = lambda digit: available[digit]["geometry"]
+    hybrid_lower = g("6") if "6" in available else g("9")
+    hybrid_lower_source = "6" if "6" in available else "9"
     recipes = (
-        ("01", resource("8", "upper_loop"), resource("8", "lower_loop"), "balanced_8_loops"),
-        ("02", resource("9", "upper_loop"), resource("8", "lower_loop"), "upper_9_lower_8"),
-        ("03", resource("8", "upper_loop"), resource("5", "lower_loop"), "upper_8_lower_5"),
+        ("01", [(g("8"), "upper_right"), (g("8"), "lower_curve")], "8_topology_cut_open"),
+        ("02", [(g("2"), "upper_curve"), (g("8"), "lower_curve")], "2_upper_curve_plus_8_lower"),
+        ("03", [(g("9"), "upper_curve"), (hybrid_lower, "lower_curve")], "9_6_family_hybrid"),
     )
+    confidence = {"01": 0.71, "02": 0.64, "03": 0.58}
     candidates: list[dict[str, Any]] = []
-    recipe_confidence = {"01": 0.68, "02": 0.61, "03": 0.55}
-    for candidate_id, top, bottom, recipe in recipes:
-        candidate = _assemble_three_candidate(
-                candidate_id,
-                {"top": top, "bottom": bottom},
-                output_root,
-                [
-                    {"role": "upper_loop", "source": top["resource"], "recipe": recipe},
-                    {"role": "lower_loop", "source": bottom["resource"], "recipe": recipe},
-                    {"role": "assembly", "operation": "right_lobe_stack_no_resample", "recipe": recipe},
-                ],
-            )
+    for candidate_id, parts, recipe in recipes:
+        candidate = _assemble_three_candidate(candidate_id, parts, output_root, [{"role": "topology_part", "sourceGlyph": "8" if candidate_id == "01" else "2" if candidate_id == "02" else "9", "sourceProvenance": available["8" if candidate_id == "01" else "2" if candidate_id == "02" else "9"].get("provenance"), "region": parts[0][1]}, {"role": "topology_part", "sourceGlyph": "8" if candidate_id in {"01", "02"} else hybrid_lower_source, "sourceProvenance": available["8" if candidate_id in {"01", "02"} else hybrid_lower_source].get("provenance"), "region": parts[1][1]}, {"role": "assembly", "operation": "contour_skeleton_transform_then_single_rasterize", "recipe": recipe}])
         candidate["rank"] = len(candidates) + 1
-        candidate["confidence"] = recipe_confidence.get(candidate_id, 0.5)
-        candidate["ranking"] = {
-            "score": candidate["confidence"],
-            "method": "deterministic_recipe_prior",
-            "autoApproved": False,
-        }
+        candidate["confidence"] = confidence[candidate_id]
+        candidate["ranking"] = {"score": confidence[candidate_id], "method": "topology_recipe_prior", "autoApproved": False}
         candidates.append(candidate)
-    # Candidate 01 is the default review asset only; it is never approved
-    # automatically and never added to the static 3 o'clock dial.
     selected = candidates[0] if candidates else None
-    themed = {}
+    themed: dict[str, dict[str, Any]] = {}
     if selected:
-        source_path = Path(selected["path"])
         themed_path = output_root / "assets/glyphs/themed/glyph_3.png"
         themed_path.parent.mkdir(parents=True, exist_ok=True)
-        Image.open(source_path).convert("RGBA").save(themed_path)
-        themed["3"] = {
-            "character": "3",
-            "type": THEMED_GLYPH_TYPE,
-            "source": "SYNTHESIZED_COMPOSITIONAL",
-            "synthetic": True,
-            "confidence": selected["confidence"],
-            "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"),
-            "candidate": selected["candidate"],
-            "requiresHumanReview": True,
-            "provenance": selected["provenance"],
-            "metrics": selected["metrics"],
-        }
+        Image.open(selected["path"]).convert("RGBA").save(themed_path)
+        themed["3"] = {"character": "3", "type": THEMED_GLYPH_TYPE, "source": "SYNTHESIZED_TOPOLOGY", "synthetic": True, "confidence": selected["confidence"], "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"), "candidate": selected["candidate"], "requiresHumanReview": True, "provenance": selected["provenance"], "metrics": selected["metrics"]}
     return {"3": candidates}, themed
 
 
@@ -679,10 +816,11 @@ def extract_themed_glyph_set(
             metric.update(_display_metrics(part))
             alpha_box = raw.getchannel("A").getbbox()
             touches_boundary = bool(alpha_box and (alpha_box[0] <= 1 or alpha_box[1] <= 1 or alpha_box[2] >= raw.width - 1 or alpha_box[3] >= raw.height - 1))
-            source_roi_mask = exclusion.crop(roi_box)
+            source_roi_mask = exclusion.filter(ImageFilter.MaxFilter(9)).crop(roi_box)
             source_reconstructed_mask = reconstructed_mask.crop(roi_box)
             overlap_ratio = _mask_overlap_ratio(raw.getchannel("A"), source_roi_mask)
             reconstructed_overlap_ratio = _mask_overlap_ratio(raw.getchannel("A"), source_reconstructed_mask)
+            provenance = _glyph_provenance(overlap_ratio, reconstructed_overlap_ratio)
             part_box = part.getchannel("A").getbbox()
             component_failed = part_box is None or (part_box[2] - part_box[0]) < 6 or (part_box[3] - part_box[1]) < 18
             validation_status = "FAIL" if touches_boundary or component_failed else "PASS"
@@ -698,6 +836,7 @@ def extract_themed_glyph_set(
                 "sourceROI": list(roi_box),
                 "handOcclusionOverlapRatio": overlap_ratio,
                 "reconstructedMaskOverlapRatio": reconstructed_overlap_ratio,
+                "provenance": provenance,
                 "foregroundTouchesROIBoundary": touches_boundary,
                 "componentLost": component_failed,
                 "validation": validation_status,
@@ -746,6 +885,7 @@ def extract_themed_glyph_set(
                 "source": "OBSERVED",
                 "synthetic": False,
                 "confidence": chosen["confidence"],
+                "provenance": chosen.get("provenance", "OBSERVED_CLEAN"),
                 "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"),
                 "observations": [item["id"] for item in observations[character]],
                 "metrics": {**_metrics(native), **_display_metrics(native)},
@@ -754,23 +894,29 @@ def extract_themed_glyph_set(
             coverage[character] = "MISSING"
 
     primitive_report: dict[str, Any] = {
-        "version": "A2b.2",
+        "version": "A2b.3",
+        "grammar": "TOPOLOGY_FIRST_GLYPH_GRAMMAR",
         "targetDigits": ["3"],
         "targets": ["3"],
-        "primitiveKinds": list(PRIMITIVE_KINDS),
+        "segmentKinds": list(TOPOLOGY_SEGMENT_KINDS),
+        "orientationModel": _fit_global_orientation(),
         "glyphs": {},
         "status": "completed_with_review",
     }
     for character, glyph in themed_assets.items():
-        primitive_report["glyphs"][character] = _extract_shape_primitives(
+        topology = _extract_shape_primitives(
             character,
             _asset_from_path(output_root / glyph["resource"]),
             output_root,
         )
+        topology["provenance"] = glyph.get("provenance", "OBSERVED_CLEAN")
+        primitive_report["glyphs"][character] = topology
+    leave_one_out = _leave_one_out_validation(output_root, themed_assets, primitive_report)
+    primitive_report["leaveOneOutReport"] = leave_one_out.get("report")
     primitive_report_path = output_root / "primitive-report.json"
     primitive_report_path.write_text(json.dumps(primitive_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
-    # A2b.2 synthesizes only a review candidate.  The actual dial remains
+    # A2b.3 synthesizes only a review candidate.  The actual dial remains
     # unchanged because the missing 3 o'clock index is a layout replacement.
     synthesizer = synthesizer or DeterministicFallbackAdapter(output_root / "assets/fonts/pretendard.ttf")
     adapter_status = [ExternalModelAdapter().status(), LocalModelAdapter().status(), synthesizer.status()]
@@ -801,13 +947,16 @@ def extract_themed_glyph_set(
         "glyphs": themed_assets,
         "candidates": candidates,
         "primitives": primitive_report,
+        "topology": primitive_report,
+        "leaveOneOut": leave_one_out,
         "primitiveReport": str(primitive_report_path.relative_to(output_root)).replace("\\", "/"),
         "dateStyleRelation": relation,
         "adapters": adapter_status,
         "externalModelStatus": "external synthesis unavailable",
         "synthesis": {
             "enabled": True,
-            "method": "COMPOSITIONAL_GLYPH_ASSEMBLY",
+            "version": "A2b.3",
+            "method": "TOPOLOGY_FIRST_GLYPH_GRAMMAR",
             "targetDigits": ["3"],
             "candidateCount": len(candidates.get("3", [])),
             "autoApproval": False,
@@ -817,7 +966,7 @@ def extract_themed_glyph_set(
         "validationFailures": validation_failures,
         "canonicalization": {
             "source": str(dial_source_path),
-            "orientation": "single inverse local dial-angle affine transform",
+            "orientation": _fit_global_orientation(),
             "roi": "fixed radial/tangential padded ROI before foreground segmentation",
             "nativeResolution": True,
             "alphaAwareResampling": "RGBA bicubic with continuous alpha; no thresholded resize",

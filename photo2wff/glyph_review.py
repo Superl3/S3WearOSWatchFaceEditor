@@ -238,30 +238,61 @@ def _observed_fidelity_review(report: dict[str, Any], output_root: Path, path: P
 
 
 def _primitive_atlas(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
-    """Show native extracted primitives; this is a review aid, not a font export."""
+    """Show topology overlays; this is a review aid, not a font export."""
     primitive_report = report.get("primitives", {})
-    kinds = tuple(primitive_report.get("primitiveKinds", ()))
+    kinds = ("outer/inner contour", "skeleton + segments", "endpoints/junctions")
     characters = tuple(character for character in "012456789" if character in primitive_report.get("glyphs", {}))
-    tile = (142, 118)
-    canvas = Image.new("RGB", (tile[0] * max(1, len(kinds)), tile[1] * max(1, len(characters)) + 42), "#151515")
+    tile = (190, 150)
+    canvas = Image.new("RGB", (tile[0] * len(kinds), tile[1] * max(1, len(characters)) + 42), "#151515")
     draw = ImageDraw.Draw(canvas)
     draw.text((10, 10), "EXTRACTED PRIMITIVES  native crop / no resample", fill="#FFFFFF", font=_font(15, True))
     for column, kind in enumerate(kinds):
-        draw.text((column * tile[0] + 5, 27), kind, fill="#A8A8A8", font=_font(8))
+        draw.text((column * tile[0] + 5, 27), kind, fill="#A8A8A8", font=_font(9))
     for row, character in enumerate(characters):
         glyph_report = primitive_report["glyphs"][character]
-        for column, kind in enumerate(kinds):
-            metadata = glyph_report.get("primitives", {}).get(kind)
-            image = Image.open(output_root / metadata["resource"]).convert("RGBA") if metadata else Image.new("RGBA", (1, 1), (0, 0, 0, 0))
+        topology_asset = glyph_report.get("geometry", {}).get("topologyAsset")
+        topology_image = Image.open(output_root / topology_asset).convert("RGBA") if topology_asset else Image.new("RGBA", (1, 1), (0, 0, 0, 0))
+        images = (topology_image, topology_image, topology_image)
+        for column, image in enumerate(images):
             panel = _fit(image, tile)
             left = column * tile[0]
             top = 42 + row * tile[1]
             canvas.paste(panel, (left, top))
             if column == 0:
-                draw.text((left + 6, top + 100), character, fill="#69F0AE", font=_font(12, True))
+                draw.text((left + 6, top + 128), f"{character}  {glyph_report.get('provenance', 'UNKNOWN')}", fill="#69F0AE", font=_font(10, True))
     path.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(path)
-    return {"artifact": str(path), "digits": list(characters), "primitiveKinds": list(kinds), "nativeResolution": True}
+    return {"artifact": str(path), "digits": list(characters), "segmentKinds": list(kinds), "nativeResolution": True, "grammar": "TOPOLOGY_FIRST"}
+
+
+def _leave_one_out_review(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
+    loo = report.get("leaveOneOut", {})
+    targets = [target for target in "012456789" if target in loo.get("targets", {})]
+    tile = (190, 158)
+    labels = ("SOURCE", "TOPOLOGY", "RECONSTRUCTED", "OVERLAY")
+    sheet = Image.new("RGB", (tile[0] * 4, tile[1] * max(1, len(targets)) + 40), "#151515")
+    draw = ImageDraw.Draw(sheet)
+    draw.text((10, 10), "LEAVE-ONE-OUT  source / topology / reconstructed / overlay", fill="#FFFFFF", font=_font(15, True))
+    for column, label in enumerate(labels):
+        draw.text((column * tile[0] + 6, 28), label, fill="#A8A8A8", font=_font(9))
+    for row, target in enumerate(targets):
+        entry = loo["targets"][target]
+        source = Image.open(output_root / entry["reference"]).convert("RGBA")
+        topology_path = report.get("primitives", {}).get("glyphs", {}).get(target, {}).get("geometry", {}).get("topologyAsset")
+        topology = Image.open(output_root / topology_path).convert("RGBA") if topology_path else source
+        best = entry.get("bestCandidate")
+        reconstructed = Image.open(output_root / best["resource"]).convert("RGBA") if best else Image.new("RGBA", source.size, (0, 0, 0, 0))
+        overlay = source.copy()
+        overlay.alpha_composite(reconstructed, (0, 0))
+        for column, image in enumerate((source, topology, reconstructed, overlay)):
+            left = column * tile[0]
+            top = 40 + row * tile[1]
+            sheet.paste(_fit(image, tile), (left, top))
+            if column == 0:
+                draw.text((left + 6, top + 134), f"DIGIT {target}  donor={best['donor'] if best else '-'}", fill="#69F0AE", font=_font(9, True))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(path)
+    return {"artifact": str(path), "digits": targets, "columns": list(labels), "method": loo.get("method")}
 
 
 def _candidate_comparison_atlas(
@@ -310,6 +341,7 @@ def generate_glyph_review_artifacts(
     full_watch = review_dir / "full-watch-themed-atlas.png"
     observed_fidelity = review_dir / "observed-glyph-fidelity-review.png"
     primitive_atlas = review_dir / "primitive-atlas.png"
+    leave_one_out = review_dir / "topology-leave-one-out-review.png"
     candidate_comparison = review_dir / "fallback-vs-compositional-candidates.png"
     _glyph_atlas(report, output_root, canonical)
     _glyph_atlas(report, output_root, provenance, provenance=True)
@@ -320,9 +352,10 @@ def generate_glyph_review_artifacts(
     full_watch_report = _full_watch_atlas(scene, themed_xml, full_watch)
     fidelity_report = _observed_fidelity_review(report, output_root, observed_fidelity)
     primitive_report = _primitive_atlas(report, output_root, primitive_atlas)
+    leave_one_out_report = _leave_one_out_review(report, output_root, leave_one_out)
     candidate_comparison_report = _candidate_comparison_atlas(scene, candidate_xmls or {}, fallback_xml, candidate_comparison) if candidate_xmls else None
     manifest = {
-        "milestone": "A2b.2 Compositional Glyph Synthesis",
+        "milestone": "A2b.3 Topology-first Glyph Grammar",
         "status": report.get("status", "incomplete"),
         "coverage": report.get("coverage", {}),
         "dateStyleRelation": report.get("dateStyleRelation", {}),
@@ -337,11 +370,13 @@ def generate_glyph_review_artifacts(
             "fullWatchThemed": full_watch_report,
             "observedGlyphFidelity": fidelity_report,
             "primitiveAtlas": primitive_report,
+            "topologyLeaveOneOutReview": leave_one_out_report,
             "fallbackVsCompositionalCandidates": candidate_comparison_report,
         },
         "requiresHumanReview": report.get("requiresHumanReview", True),
         "deviceOrEmulatorVerification": "deferred",
         "candidateRankingIsNotApproval": True,
+        "grammar": "TOPOLOGY_FIRST_GLYPH_GRAMMAR",
     }
     manifest_path = review_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
