@@ -100,6 +100,15 @@ python -m photo2wff product-photo path\\to\\product-photo.webp --out hermes-a2b-
 python -m photo2wff human-review hermes-a2b-output
 ```
 
+A2b.1 temporarily disables missing-glyph synthesis. Observed glyphs are sourced
+from A1d `assets/dial-completed.png`, extracted from padded radial ROIs, kept as
+native-resolution RGBA, and canonicalized with one alpha-aware affine rotation.
+The report records hand/reconstruction overlap and automatically fails ROI
+boundary contact or component loss. The review bundle additionally contains
+`human-review/glyphs/observed-glyph-fidelity-review.png` with source ROI,
+mask/reconstruction overlay, raw extraction, canonical asset, and source-space
+reprojection for every observed digit. Missing `3` remains deferred to A2b.2.
+
 The external and local model adapters are optional. When unavailable, the deterministic fallback adapter emits explicit review-only candidates and reports `external synthesis unavailable`; it does not claim model output. A2b writes `glyph-report.json`, `assets/glyphs/observed/raw/`, `assets/glyphs/observed/canonical/`, `assets/glyphs/synthesized/candidates/`, `assets/glyphs/themed/`, `project/`, `project-fallback/`, and glyph review sheets for canonical coverage, provenance, candidate 3, fallback-vs-themed dates, and full-watch themed renders. An unapproved synthesized glyph keeps the milestone at `completed_with_review`.
 
 `quick` creates:

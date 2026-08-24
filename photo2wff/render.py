@@ -40,7 +40,13 @@ def _themed_glyph_text(base: Image.Image, bbox: dict[str, int], text: str, eleme
         asset = themed.get("resources", {}).get(character)
         if not asset or not (scene_root / asset).exists():
             return False
-        glyphs.append(Image.open(scene_root / asset).convert("RGBA"))
+        glyph = Image.open(scene_root / asset).convert("RGBA")
+        metrics = themed.get("metrics", {}).get(character, {})
+        display_size = (int(metrics.get("displayWidth", glyph.width)), int(metrics.get("displayHeight", glyph.height)))
+        # Native source-derived pixels are scaled once, at final placement.
+        if glyph.size != display_size:
+            glyph = glyph.resize(display_size, Image.Resampling.LANCZOS)
+        glyphs.append(glyph)
     total_width = sum(image.width for image in glyphs)
     x = bbox["x"] + (bbox["width"] - total_width) // 2
     y = bbox["y"] + max(0, (bbox["height"] - max((image.height for image in glyphs), default=0)) // 2)

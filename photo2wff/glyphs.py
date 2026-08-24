@@ -210,8 +210,10 @@ def _ink_mask(image: Image.Image) -> Image.Image:
             # bright-red cutoff; warm cream numeral strokes remain balanced
             # across RGB and therefore survive.
             is_red = red >= 50 and red > green * 1.15 and red > blue * 1.05
-            if high >= 105 and (high - low) <= 115 and not is_red:
-                target[x, y] = min(255, max(0, high - 35) * 2)
+            if high >= 8 and (high - low) <= 125 and not is_red:
+                # Keep the continuous antialiased intensity.  The old
+                # high-minus-35 threshold erased dim outline/fill pixels.
+                target[x, y] = high
     return mask
 
 
@@ -221,12 +223,13 @@ def _apply_exclusion(mask: Image.Image, exclusion: Image.Image | None, date_fram
         result = ImageChops.subtract(result, exclusion.convert("L"))
     if date_frame:
         draw = ImageDraw.Draw(result)
+        margin = 4
         draw.rectangle(
             (
-                date_frame["x"],
-                date_frame["y"],
-                date_frame["x"] + date_frame["width"] - 1,
-                date_frame["y"] + date_frame["height"] - 1,
+                max(0, date_frame["x"] - margin),
+                max(0, date_frame["y"] - margin),
+                min(result.width - 1, date_frame["x"] + date_frame["width"] - 1 + margin),
+                min(result.height - 1, date_frame["y"] + date_frame["height"] - 1 + margin),
             ),
             fill=0,
         )
@@ -375,20 +378,37 @@ def _date_style_relation(date_glyph: Image.Image | None, reference_glyph: Image.
     return {"classification": classification, "confidence": score, "similarity": round(similarity, 4)}
 
 
-def _sector_crop(image: Image.Image, mask: Image.Image, center: tuple[float, float], angle: float) -> Image.Image:
-    """Collect one numeral using an oriented local dial window.
+def _radial_roi(
+    image: Image.Image,
+    mask: Image.Image,
+    center: tuple[float, float],
+    angle: float,
+    radial_min: float = 120.0,
+    radial_max: float = 230.0,
+    tangent_half_width: float = 48.0,
+) -> tuple[Image.Image, tuple[int, int, int, int]]:
+    """Return a fixed padded radial ROI and its source-space box.
 
-    A wide angular wedge preserves terminals but also captures the neighboring
-    hour positions (and turns the deliberately empty 3 o'clock slot into a
-    false glyph).  A radial/tangential window remains geometry-driven while
-    keeping each marker isolated.
+    The ROI is deliberately not foreground-tight.  Its transparent alpha is
+    the observed/reconstructed dial mask, while its RGB pixels remain the
+    source dial-completed pixels.
     """
-    result = Image.new("L", image.size, 0)
-    source = mask.load()
-    target = result.load()
     radians = math.radians(angle)
     radial_x, radial_y = math.sin(radians), -math.cos(radians)
     tangent_x, tangent_y = math.cos(radians), math.sin(radians)
+    corners = [
+        (center[0] + radial_x * radial + tangent_x * tangent, center[1] + radial_y * radial + tangent_y * tangent)
+        for radial in (radial_min, radial_max)
+        for tangent in (-tangent_half_width, tangent_half_width)
+    ]
+    left = max(0, math.floor(min(point[0] for point in corners)) - 2)
+    top = max(0, math.floor(min(point[1] for point in corners)) - 2)
+    right = min(image.width, math.ceil(max(point[0] for point in corners)) + 3)
+    bottom = min(image.height, math.ceil(max(point[1] for point in corners)) + 3)
+    roi_box = (left, top, right, bottom)
+    result = Image.new("L", image.size, 0)
+    source = mask.load()
+    target = result.load()
     for y in range(image.height):
         for x in range(image.width):
             if source[x, y] <= 20:
@@ -397,13 +417,35 @@ def _sector_crop(image: Image.Image, mask: Image.Image, center: tuple[float, flo
             dy = y - center[1]
             radial = dx * radial_x + dy * radial_y
             tangent = dx * tangent_x + dy * tangent_y
-            if radial < 135 or radial > 218 or abs(tangent) > 42:
+            if radial < radial_min or radial > radial_max or abs(tangent) > tangent_half_width:
                 continue
             target[x, y] = source[x, y]
-    box = result.getbbox()
-    if box is None:
-        return Image.new("RGBA", (1, 1), (0, 0, 0, 0))
-    return _crop_with_alpha(image, result, box)
+    return _crop_with_alpha(image, result, roi_box), roi_box
+
+
+def _mask_overlap_ratio(alpha: Image.Image, mask: Image.Image | None) -> float:
+    if mask is None:
+        return 0.0
+    alpha_values = alpha.load()
+    mask_values = mask.load()
+    total = 0
+    overlap = 0
+    for y in range(alpha.height):
+        for x in range(alpha.width):
+            if alpha_values[x, y] <= 20:
+                continue
+            total += 1
+            overlap += 1 if mask_values[x, y] > 20 else 0
+    return round(overlap / max(1, total), 5)
+
+
+def _display_metrics(image: Image.Image) -> dict[str, int]:
+    alpha = image.getchannel("A")
+    box = alpha.getbbox() or (0, 0, 1, 1)
+    width = max(1, box[2] - box[0])
+    height = max(1, box[3] - box[1])
+    scale = min((CELL_SIZE[0] - 1) / width, (CELL_SIZE[1] - 2) / height)
+    return {"displayWidth": max(1, round(width * scale)), "displayHeight": max(1, round(height * scale))}
 
 
 def extract_themed_glyph_set(
@@ -413,10 +455,15 @@ def extract_themed_glyph_set(
     clock_center: tuple[float, float],
     date_window_metadata_path: Path | None = None,
     synthesizer: GlyphSynthesizer | None = None,
+    dial_completed_path: Path | None = None,
+    reconstructed_mask_path: Path | None = None,
 ) -> dict[str, Any]:
-    """Extract, canonicalize, classify, and materialize a reusable themed digit set."""
+    """Extract observed glyphs from A1d dial completion at native resolution."""
     reference = Image.open(reference_path).convert("RGB")
+    dial_source_path = dial_completed_path if dial_completed_path and dial_completed_path.exists() else reference_path
+    dial_source = Image.open(dial_source_path).convert("RGB")
     exclusion = Image.open(hand_occlusion_mask_path).convert("L") if hand_occlusion_mask_path.exists() else Image.new("L", reference.size, 0)
+    reconstructed_mask = Image.open(reconstructed_mask_path).convert("L") if reconstructed_mask_path and reconstructed_mask_path.exists() else Image.new("L", reference.size, 0)
     date_metadata = json.loads(date_window_metadata_path.read_text(encoding="utf-8")) if date_window_metadata_path and date_window_metadata_path.exists() else {}
     frame = date_metadata.get("frameBbox")
     # The source hands are evidence of the photographed time, not part of a
@@ -424,7 +471,7 @@ def extract_themed_glyph_set(
     # dial strokes at 2/6/7/10.  Keep the original alpha here and record the
     # overlap as confidence/review metadata instead of destructively cutting a
     # glyph.  The date frame remains excluded because it replaces hour 3.
-    mask = _apply_exclusion(_ink_mask(reference), None, frame)
+    mask = _apply_exclusion(_ink_mask(dial_source), None, frame)
     raw_dir = output_root / "assets/glyphs/observed/raw"
     canonical_dir = output_root / "assets/glyphs/observed/canonical"
     candidate_dir = output_root / "assets/glyphs/synthesized/candidates"
@@ -437,47 +484,51 @@ def extract_themed_glyph_set(
     for hour in range(1, 13):
         label = str(hour) if hour != 12 else "12"
         angle = (hour % 12) * 30.0
-        raw = _sector_crop(reference, mask, clock_center, angle)
+        raw, roi_box = _radial_roi(dial_source, mask, clock_center, angle)
         raw_box = raw.getchannel("A").getbbox()
-        if raw_box:
-            box = (raw_box[0], raw_box[1], raw_box[2], raw_box[3])
-        else:
-            box = (0, 0, raw.width, raw.height)
+        box = raw_box or (0, 0, raw.width, raw.height)
         ink_box = raw.getchannel("A").getbbox()
         quality = 0.0 if ink_box is None else min(0.99, 0.62 + sum(1 for value in raw.getchannel("A").getdata() if value > 20) / 2800.0)
         if ink_box is None or quality < 0.63:
-            slots.append({"hour": hour, "label": label, "status": "MISSING", "angleDeg": angle, "bbox": {"x": box[0], "y": box[1], "width": box[2] - box[0], "height": box[3] - box[1]}, "confidence": 0.0})
+            slots.append({"hour": hour, "label": label, "status": "MISSING", "angleDeg": angle, "roiBox": list(roi_box), "bbox": {"x": box[0], "y": box[1], "width": box[2] - box[0], "height": box[3] - box[1]}, "confidence": 0.0})
             continue
-        raw = _tight(raw, padding=2)
         raw_name = f"hour_{hour:02d}_label.png"
         raw_path = raw_dir / raw_name
         raw.save(raw_path)
         local_rotation = _dial_orientation(angle)
         canonical_label = raw.rotate(local_rotation, resample=Image.Resampling.BICUBIC, expand=True)
-        canonical_label = _drop_isolated_ink(canonical_label)
-        canonical_label = _tight(canonical_label, padding=1)
         canonical_label_path = canonical_dir / raw_name
         canonical_label.save(canonical_label_path)
         # Segment multi-digit labels only after their baseline is horizontal.
         # Splitting a tilted "10" by source X columns was the cause of the
         # corrupted 0 and several partial glyph observations.
-        parts = _split_columns(canonical_label, len(label))
+        canonical_work = _tight(canonical_label, padding=1)
+        parts = _split_columns(canonical_work, len(label))
         if len(parts) != len(label):
-            parts = [canonical_label]
+            parts = [canonical_work]
         slot_observations = []
         for index, (character, part) in enumerate(zip(label, parts), start=1):
             glyph_rotation = local_rotation
-            part = _tight(part, padding=1)
+            part = _drop_isolated_ink(_tight(part, padding=1))
             observation_id = f"hour_{hour}" if len(label) == 1 else f"hour_{hour}_{'first' if index == 1 else 'second'}"
             canonical_name = f"{observation_id}_{character}.png"
             canonical_path = canonical_dir / canonical_name
             part.save(canonical_path)
             raw_observation = raw_dir / f"{observation_id}_{character}.png"
-            # The raw label is retained as the lossless source observation.
-            # Per-character raw crops are deliberately avoided for oblique
-            # multi-digit labels because their source-space X split is invalid.
+            # Raw is an exact copy of the fixed padded ROI; it is never
+            # foreground-tightened or resized.
             raw.save(raw_observation)
-            metric = _metrics(_normalize_cell(part))
+            metric = _metrics(part)
+            metric.update(_display_metrics(part))
+            alpha_box = raw.getchannel("A").getbbox()
+            touches_boundary = bool(alpha_box and (alpha_box[0] <= 1 or alpha_box[1] <= 1 or alpha_box[2] >= raw.width - 1 or alpha_box[3] >= raw.height - 1))
+            source_roi_mask = exclusion.crop(roi_box)
+            source_reconstructed_mask = reconstructed_mask.crop(roi_box)
+            overlap_ratio = _mask_overlap_ratio(raw.getchannel("A"), source_roi_mask)
+            reconstructed_overlap_ratio = _mask_overlap_ratio(raw.getchannel("A"), source_reconstructed_mask)
+            part_box = part.getchannel("A").getbbox()
+            component_failed = part_box is None or (part_box[2] - part_box[0]) < 6 or (part_box[3] - part_box[1]) < 18
+            validation_status = "FAIL" if touches_boundary or component_failed else "PASS"
             observation = {
                 "id": observation_id,
                 "character": character,
@@ -486,18 +537,30 @@ def extract_themed_glyph_set(
                 "localRotationDeg": round(glyph_rotation, 2),
                 "raw": str(raw_observation.relative_to(output_root)).replace("\\", "/"),
                 "canonical": str(canonical_path.relative_to(output_root)).replace("\\", "/"),
+                "canonicalLabel": str(canonical_label_path.relative_to(output_root)).replace("\\", "/"),
+                "sourceROI": list(roi_box),
+                "handOcclusionOverlapRatio": overlap_ratio,
+                "reconstructedMaskOverlapRatio": reconstructed_overlap_ratio,
+                "foregroundTouchesROIBoundary": touches_boundary,
+                "componentLost": component_failed,
+                "validation": validation_status,
                 "confidence": round(quality, 4),
                 "metrics": metric,
             }
             observations[character].append(observation)
             slot_observations.append(observation)
-        slots.append({"hour": hour, "label": label, "status": "OBSERVED", "angleDeg": angle, "localRotationDeg": local_rotation, "handOverlapMaskPresent": bool(exclusion.getbbox()), "observations": slot_observations, "confidence": round(quality, 4)})
+        slots.append({"hour": hour, "label": label, "status": "OBSERVED", "angleDeg": angle, "localRotationDeg": local_rotation, "roiBox": list(roi_box), "handOverlapMaskPresent": bool(exclusion.getbbox()), "observations": slot_observations, "confidence": round(quality, 4)})
 
     references: dict[str, dict[str, Any]] = {}
     coverage: dict[str, str] = {}
     themed_assets: dict[str, dict[str, Any]] = {}
+    validation_failures: list[str] = []
     for character in DIGITS:
-        if observations[character]:
+        valid_observations = [item for item in observations[character] if item.get("validation") == "PASS"]
+        for item in observations[character]:
+            if item.get("validation") != "PASS":
+                validation_failures.append(item["id"])
+        if valid_observations:
             def preference(item: dict[str, Any]) -> tuple[int, float, float]:
                 observation_id = item["id"]
                 preferred = 1 if observation_id == f"hour_{character}" else 0
@@ -510,11 +573,14 @@ def extract_themed_glyph_set(
                     preferred = {"hour_12_second": 3, "hour_2": 1}.get(observation_id, 0)
                 return preferred, item["confidence"], item["metrics"]["inkCoverage"]
 
-            chosen = max(observations[character], key=preference)
+            chosen = max(valid_observations, key=preference)
             source_path = output_root / chosen["canonical"]
             themed_path = themed_dir / f"glyph_{character}.png"
-            normalized = _normalize_cell(_asset_from_path(source_path))
-            normalized.save(themed_path)
+            # Keep the source-derived canonical pixels native.  Logical WFF
+            # display metrics are recorded separately and applied only by the
+            # final renderer.
+            native = _asset_from_path(source_path)
+            native.save(themed_path)
             references[character] = chosen
             coverage[character] = "OBSERVED"
             themed_assets[character] = {
@@ -525,37 +591,16 @@ def extract_themed_glyph_set(
                 "confidence": chosen["confidence"],
                 "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"),
                 "observations": [item["id"] for item in observations[character]],
-                "metrics": _metrics(normalized),
+                "metrics": {**_metrics(native), **_display_metrics(native)},
             }
         else:
             coverage[character] = "MISSING"
 
+    # A2b.1 deliberately stops before missing-glyph synthesis.  Keep the
+    # adapter boundary and report it explicitly for the next milestone.
     synthesizer = synthesizer or DeterministicFallbackAdapter(output_root / "assets/fonts/pretendard.ttf")
     adapter_status = [ExternalModelAdapter().status(), LocalModelAdapter().status(), synthesizer.status()]
     candidates: dict[str, list[dict[str, Any]]] = {}
-    for character in DIGITS:
-        if coverage[character] != "MISSING":
-            continue
-        generated = synthesizer.synthesize(character, references, candidate_dir)
-        candidates[character] = generated
-        if generated:
-            best = max(generated, key=lambda item: item["confidence"])
-            source_path = Path(best["path"])
-            themed_path = themed_dir / f"glyph_{character}.png"
-            normalized = _normalize_cell(_asset_from_path(source_path))
-            normalized.save(themed_path)
-            coverage[character] = "SYNTHESIZED"
-            themed_assets[character] = {
-                "character": character,
-                "type": THEMED_GLYPH_TYPE,
-                "source": "SYNTHESIZED",
-                "synthetic": True,
-                "confidence": best["confidence"],
-                "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"),
-                "candidate": best["candidate"],
-                "requiresHumanReview": True,
-                "metrics": _metrics(normalized),
-            }
 
     date_glyph = None
     if date_metadata.get("innerBbox"):
@@ -567,12 +612,13 @@ def extract_themed_glyph_set(
     relation = _date_style_relation(date_glyph, _asset_from_path(output_root / themed_assets["9"]["resource"]) if "9" in themed_assets else None)
     observed_count = sum(1 for value in coverage.values() if value == "OBSERVED")
     synthesized_count = sum(1 for value in coverage.values() if value == "SYNTHESIZED")
+    missing_count = sum(1 for value in coverage.values() if value == "MISSING")
     report = {
-        "status": "completed_with_review" if synthesized_count or relation["classification"] in {"UNKNOWN", "DIFFERENT_STYLE_SYSTEM"} else "completed",
+        "status": "completed_with_review" if missing_count or validation_failures or relation["classification"] in {"UNKNOWN", "DIFFERENT_STYLE_SYSTEM"} else "completed",
         "type": THEMED_GLYPH_TYPE,
         "family": THEMED_FAMILY,
         "coverage": coverage,
-        "coverageCounts": {"observed": observed_count, "synthesized": synthesized_count, "missing": sum(1 for value in coverage.values() if value == "MISSING")},
+        "coverageCounts": {"observed": observed_count, "synthesized": synthesized_count, "missing": missing_count},
         "slots": slots,
         "observations": observations,
         "glyphs": themed_assets,
@@ -580,12 +626,16 @@ def extract_themed_glyph_set(
         "dateStyleRelation": relation,
         "adapters": adapter_status,
         "externalModelStatus": "external synthesis unavailable",
+        "synthesis": {"enabled": False, "status": "deferred_to_A2b.2", "reason": "A2b.1 observed glyph fidelity only"},
+        "validationFailures": validation_failures,
         "canonicalization": {
-            "orientation": "inverse full local dial-angle rotation; no 180-degree folding for decimal glyphs",
-            "cellSize": {"width": CELL_SIZE[0], "height": CELL_SIZE[1]},
-            "sourceFidelity": "observed glyph pixels preserved before normalization",
+            "source": str(dial_source_path),
+            "orientation": "single inverse local dial-angle affine transform",
+            "roi": "fixed radial/tangential padded ROI before foreground segmentation",
+            "nativeResolution": True,
+            "alphaAwareResampling": "RGBA bicubic with continuous alpha; no thresholded resize",
         },
-        "requiresHumanReview": synthesized_count > 0 or relation["classification"] not in {"SAME_STYLE_SYSTEM", "RELATED_BUT_OPTICALLY_ADJUSTED"},
+        "requiresHumanReview": bool(missing_count or validation_failures) or relation["classification"] not in {"SAME_STYLE_SYSTEM", "RELATED_BUT_OPTICALLY_ADJUSTED"},
         "actualDialThreeOClockNumeral": "intentionally_absent_not_reconstructed",
     }
     report_path = output_root / "glyph-report.json"

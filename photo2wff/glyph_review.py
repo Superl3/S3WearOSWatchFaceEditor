@@ -176,6 +176,62 @@ def _full_watch_atlas(scene: dict[str, Any], themed_xml: Path, path: Path) -> di
     return {"atlas": str(path), "renders": renders, "days": list(days)}
 
 
+def _observed_fidelity_review(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
+    """Show source ROI, provenance overlay, raw ROI, canonical, and reprojection."""
+    tile = (190, 166)
+    columns = 5
+    observed = [
+        (character, max(values, key=lambda item: (item.get("confidence", 0), item.get("metrics", {}).get("inkCoverage", 0))))
+        for character, values in report.get("observations", {}).items()
+        if report.get("coverage", {}).get(character) == "OBSERVED" and values
+    ]
+    sheet = Image.new("RGB", (tile[0] * columns, tile[1] * max(1, len(observed))), "#151515")
+    draw = ImageDraw.Draw(sheet)
+    labels = ("SOURCE ROI", "MASK / RECON", "RAW EXTRACTION", "CANONICAL", "REPROJECTED")
+    dial = Image.open(output_root / "assets/dial-completed.png").convert("RGB")
+    hand_mask = Image.open(output_root / "assets/hand-occlusion-mask.png").convert("L")
+    reconstructed_mask = Image.open(output_root / "assets/reconstructed-mask.png").convert("L")
+    for row, (character, observation) in enumerate(observed):
+        roi = tuple(int(value) for value in observation["sourceROI"])
+        source_roi = dial.crop(roi)
+        raw = Image.open(output_root / observation["raw"]).convert("RGBA")
+        canonical = Image.open(output_root / observation["canonical"]).convert("RGBA")
+        overlay = source_roi.convert("RGBA")
+        overlay_pixels = overlay.load()
+        local_hand = hand_mask.crop(roi)
+        local_reconstructed = reconstructed_mask.crop(roi)
+        for y in range(overlay.height):
+            for x in range(overlay.width):
+                red = local_hand.getpixel((x, y)) > 20
+                cyan = local_reconstructed.getpixel((x, y)) > 20
+                if red or cyan:
+                    base = overlay_pixels[x, y]
+                    tint = (255, 64, 64, 125) if red else (64, 220, 255, 125)
+                    overlay_pixels[x, y] = tuple(round(base[channel] * 0.45 + tint[channel] * 0.55) for channel in range(3)) + (255,)
+        canonical_label = Image.open(output_root / observation["canonicalLabel"]).convert("RGBA")
+        reprojected = canonical_label.rotate(-float(observation["localRotationDeg"]), resample=Image.Resampling.BICUBIC, expand=True)
+        panels = (source_roi, overlay, raw, canonical, reprojected)
+        for column, (label, image) in enumerate(zip(labels, panels)):
+            left = column * tile[0]
+            top = row * tile[1]
+            fitted = _fit(image, tile)
+            sheet.paste(fitted, (left, top))
+            draw.text((left + 8, top + 6), label, fill="#FFFFFF", font=_font(11, True))
+            if column == 0:
+                draw.text((left + 8, top + 144), f"DIGIT {character}  {observation['id']}", fill="#69F0AE", font=_font(11, True))
+            elif column == 1:
+                draw.text((left + 8, top + 144), f"recon={observation.get('reconstructedMaskOverlapRatio', 0):.2f}", fill="#64DCFF", font=_font(11))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(path)
+    return {
+        "artifact": str(path),
+        "digits": [character for character, _ in observed],
+        "columns": list(labels),
+        "source": "assets/dial-completed.png",
+        "nativeResolution": True,
+    }
+
+
 def generate_glyph_review_artifacts(scene: dict[str, Any], output_root: Path, themed_xml: Path, fallback_xml: Path, report: dict[str, Any]) -> dict[str, Any]:
     review_dir = output_root / "human-review" / "glyphs"
     review_dir.mkdir(parents=True, exist_ok=True)
@@ -186,6 +242,7 @@ def generate_glyph_review_artifacts(scene: dict[str, Any], output_root: Path, th
     context = review_dir / "candidate-3-dial-context.png"
     date_comparison = review_dir / "date-fallback-vs-themed-atlas.png"
     full_watch = review_dir / "full-watch-themed-atlas.png"
+    observed_fidelity = review_dir / "observed-glyph-fidelity-review.png"
     _glyph_atlas(report, output_root, canonical)
     _glyph_atlas(report, output_root, provenance, provenance=True)
     _candidate_sheet(report, output_root, candidates)
@@ -193,6 +250,7 @@ def generate_glyph_review_artifacts(scene: dict[str, Any], output_root: Path, th
     _candidate_context(report, output_root, context)
     comparison = _date_comparison(scene, output_root, themed_xml, fallback_xml, date_comparison)
     full_watch_report = _full_watch_atlas(scene, themed_xml, full_watch)
+    fidelity_report = _observed_fidelity_review(report, output_root, observed_fidelity)
     manifest = {
         "milestone": "A2b Themed Glyph Reconstruction",
         "status": report.get("status", "incomplete"),
@@ -207,6 +265,7 @@ def generate_glyph_review_artifacts(scene: dict[str, Any], output_root: Path, th
             "candidate3DialContext": str(context),
             "dateFallbackVsThemed": comparison,
             "fullWatchThemed": full_watch_report,
+            "observedGlyphFidelity": fidelity_report,
         },
         "requiresHumanReview": report.get("requiresHumanReview", True),
         "deviceOrEmulatorVerification": "deferred",
