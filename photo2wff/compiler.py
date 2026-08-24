@@ -131,11 +131,8 @@ def _append_bitmap_fonts(root: ET.Element, scene: dict[str, Any], resource_names
                 {
                     "name": str(character),
                     "resource": resource_names[asset],
-                    # Keep native bitmap dimensions in the drawable.  WFF
-                    # character metrics describe the logical date-window
-                    # size; the renderer performs the only final scaling.
-                    "width": str(int(glyph_metrics.get("displayWidth", glyph_metrics.get("width", 20)))),
-                    "height": str(int(glyph_metrics.get("displayHeight", glyph_metrics.get("height", 24)))),
+                    "width": str(int(glyph_metrics.get("width", 20))),
+                    "height": str(int(glyph_metrics.get("height", 24))),
                 },
             )
 

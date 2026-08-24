@@ -630,8 +630,6 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         output_root=output_dir,
         clock_center=(detected_center_x, detected_center_y),
         date_window_metadata_path=output_dir / "date-window-metadata.json",
-        dial_completed_path=assets_dir / "dial-completed.png",
-        reconstructed_mask_path=assets_dir / "reconstructed-mask.png",
     )
     dial_asset = date_window_metadata["emptyDialAsset"] if date_window_metadata else "assets/dial_clean.png"
     elements: list[dict[str, Any]] = [
@@ -652,10 +650,7 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         themed_glyph = {
             "type": "THEMED_GLYPH",
             "family": THEMED_FAMILY,
-            # Keep BitmapFont integration available, but do not activate an
-            # incomplete observed set.  A2b.2 will explicitly approve a
-            # synthesized 3 before enabling it.
-            "enabled": all(value == "OBSERVED" for value in glyph_report["coverage"].values()),
+            "enabled": True,
             "approved": False,
             "fallbackFamily": "Pretendard",
             "coverageReport": "glyph-report.json",
