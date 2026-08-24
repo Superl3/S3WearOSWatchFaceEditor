@@ -41,12 +41,15 @@ def _font_attributes(style: dict[str, Any], include_text: bool = False) -> dict[
     return attrs
 
 
-def _part_text(element: dict[str, Any], expression: str | None = None, template: str | None = None) -> ET.Element:
+def _part_text(element: dict[str, Any], expression: str | None = None, template: str | None = None, manual_glyphs: dict[str, Any] | None = None) -> ET.Element:
     bbox = element["bbox"]
     style = element.get("style", {})
     part = ET.Element("PartText", {"x": str(bbox["x"]), "y": str(bbox["y"]), "width": str(bbox["width"]), "height": str(bbox["height"])})
     text = ET.SubElement(part, "Text", {"align": str(style.get("alignment", "center")).upper()})
-    font = ET.SubElement(text, "Font", _font_attributes(style))
+    if manual_glyphs:
+        font = ET.SubElement(text, "BitmapFont", {"family": str(manual_glyphs["family"]), "size": str(int(style.get("fontSize", 24))), "color": _xml_color(style.get("color", "#FFFFFF")), "fallbackFamily": str(manual_glyphs.get("fallbackFamily", "Pretendard"))})
+    else:
+        font = ET.SubElement(text, "Font", _font_attributes(style))
     if template is not None:
         template_node = ET.SubElement(font, "Template")
         template_node.text = template
@@ -85,6 +88,25 @@ def _asset_part(element: dict[str, Any], resource: str) -> ET.Element:
     return part
 
 
+def _append_manual_glyph_fonts(root: ET.Element, scene: dict[str, Any], resource_names: dict[str, str]) -> None:
+    definitions: dict[str, dict[str, Any]] = {}
+    for element in scene["elements"]:
+        manual = element.get("manualGlyphs")
+        if manual:
+            definitions.setdefault(str(manual["family"]), manual)
+    if not definitions:
+        return
+    fonts_node = ET.SubElement(root, "BitmapFonts")
+    for family, manual in sorted(definitions.items()):
+        font_node = ET.SubElement(fonts_node, "BitmapFont", {"name": family, "fallbackFamily": str(manual.get("fallbackFamily", "Pretendard"))})
+        metrics = manual.get("metrics", {})
+        for character, asset in sorted(manual.get("resources", {}).items()):
+            if asset not in resource_names:
+                raise ValueError(f"manual glyph '{character}' references missing asset '{asset}'")
+            glyph_metrics = metrics.get(character, {})
+            ET.SubElement(font_node, "Character", {"name": str(character), "resource": resource_names[asset], "width": str(int(glyph_metrics.get("width", 1))), "height": str(int(glyph_metrics.get("height", 1)))})
+
+
 def _pretty_xml(root: ET.Element) -> str:
     raw = ET.tostring(root, encoding="utf-8", xml_declaration=True)
     return minidom.parseString(raw).toprettyxml(indent="  ", encoding="utf-8").decode("utf-8")
@@ -97,6 +119,7 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
     ET.SubElement(root, "Metadata", {"key": "CLOCK_TYPE", "value": "ANALOG" if is_analog else "DIGITAL"})
     ET.SubElement(root, "Metadata", {"key": "PREVIEW_TIME", "value": str(scene.get("preview", {}).get("time", "10:08:32"))})
     ET.SubElement(root, "Metadata", {"key": "PREVIEW_DATE", "value": str(scene.get("preview", {}).get("date", "08.20"))})
+    _append_manual_glyph_fonts(root, scene, resource_names)
     background = scene["background"]
     if str(background.get("type", "")).upper() not in {"SOLID", "UNKNOWN", "IMAGE"}:
         raise ValueError(f"background type '{background.get('type')}' needs a rasterized background asset before WFF compilation")
@@ -120,7 +143,8 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
             if element.get("slotType") != "DATE_DAY_OF_MONTH":
                 raise ValueError(f"element '{element['id']}' has unsupported DYNAMIC_SLOT type")
             expression = "[DAY_Z]" if element.get("format", "d") == "dd" else "[DAY]"
-            scene_node.append(_part_text(element, expression))
+            manual = element.get("manualGlyphs")
+            scene_node.append(_part_text(element, expression, manual_glyphs=manual if manual and manual.get("resources") else None))
         elif element_type == "WEEKDAY":
             scene_node.append(_part_text(element, "[DAY_OF_WEEK_S]"))
         elif element_type == "BATTERY":
@@ -227,6 +251,15 @@ def compile_project(scene: dict[str, Any], project_dir: Path, source_root: Path)
         resource_name = Path(asset).stem.lower().replace("-", "_")
         resource_names[asset] = resource_name
         shutil.copy2(source_asset, drawable / f"{resource_name}.png")
+    for element in scene["elements"]:
+        manual = element.get("manualGlyphs") or {}
+        for manual_asset in manual.get("resources", {}).values():
+            source_manual_asset = source_root / manual_asset
+            if not source_manual_asset.exists():
+                raise ValueError(f"manual glyph references missing asset '{manual_asset}'")
+            manual_name = Path(manual_asset).stem.replace("-", "_").lower()
+            resource_names[manual_asset] = manual_name
+            shutil.copy2(source_manual_asset, drawable / f"{manual_name}.png")
     for element in scene["elements"]:
         if element["type"] in {"RECTANGLE", "CIRCLE", "LINE", "RING"}:
             resource_name = element["id"].lower().replace("-", "_")

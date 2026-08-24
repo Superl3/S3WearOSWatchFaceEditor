@@ -97,13 +97,13 @@ def build(scene_path: Path, output: Path) -> None:
     (output / "build-report.json").write_text(json.dumps({"scene": str(scene_path), "compiler": "photo2wff", "visionAnalyzerUsed": False}, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
-def product_photo(reference: Path, output: Path, generative_fallback: Path | None = None) -> None:
+def product_photo(reference: Path, output: Path, generative_fallback: Path | None = None, manual_glyph_dir: Path | None = None) -> None:
     """Analyze a product photograph without pretending it is a clean digital screenshot."""
     if output.exists() and any(output.iterdir()):
         raise SystemExit(f"output directory is not empty: {output}")
     output.mkdir(parents=True, exist_ok=True)
     _copy_default_font(output)
-    scene = analyze_product_photo(reference, output, generative_fallback_path=generative_fallback)
+    scene = analyze_product_photo(reference, output, generative_fallback_path=generative_fallback, manual_glyph_dir=manual_glyph_dir)
     save_scene(scene, output / "scene.json")
     (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
     render_scene(scene, output / "preview.png", output)
@@ -165,6 +165,7 @@ def main() -> None:
     photo_parser.add_argument("reference", type=Path)
     photo_parser.add_argument("--out", type=Path, default=Path("product-photo-output"))
     photo_parser.add_argument("--generative-fallback", type=Path, help="optional 438x438 external inpainting candidate for unresolved regions")
+    photo_parser.add_argument("--manual-glyph-dir", type=Path, help="optional directory containing user-supplied 0.png-9.png glyph overrides")
     review_parser = subparsers.add_parser("human-review")
     review_parser.add_argument("output", type=Path)
     args = parser.parse_args()
@@ -184,6 +185,6 @@ def main() -> None:
     elif args.command == "build":
         build(args.scene, args.out)
     elif args.command == "product-photo":
-        product_photo(args.reference, args.out, args.generative_fallback)
+        product_photo(args.reference, args.out, args.generative_fallback, args.manual_glyph_dir)
     elif args.command == "human-review":
         human_review(args.output)

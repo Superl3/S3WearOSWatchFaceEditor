@@ -86,13 +86,16 @@ def _color(value: str) -> tuple[int, int, int, int]:
     return int(raw[0:2], 16), int(raw[2:4], 16), int(raw[4:6], 16), alpha
 
 
-def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: str) -> None:
+def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: str, bitmap_fonts: dict[str, dict[str, dict[str, str]]]) -> None:
     text_node = node.find("Text")
     if text_node is None:
         return
     font_node = text_node.find("Font")
-    if font_node is None:
+    bitmap_font_node = text_node.find("BitmapFont")
+    if font_node is None and bitmap_font_node is None:
         return
+    if bitmap_font_node is not None:
+        font_node = bitmap_font_node
     template = font_node.find("Template")
     if template is not None:
         value = str(template.text or "").strip()
@@ -105,13 +108,38 @@ def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: 
     height = int(float(node.attrib.get("height", "0")))
     if width <= 0 or height <= 0:
         return
-    layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
-    font = _font_for(xml_path, font_node.attrib)
     align = text_node.attrib.get("align", "CENTER").upper()
-    x = 0 if align == "LEFT" else width if align == "RIGHT" else width / 2
-    anchor = "lm" if align == "LEFT" else "rm" if align == "RIGHT" else "mm"
-    draw.text((x, height / 2), text, font=font, fill=_color(font_node.attrib.get("color", "#FFFFFF")), anchor=anchor)
+    layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    if bitmap_font_node is not None:
+        family = bitmap_font_node.attrib.get("family", "")
+        catalog = bitmap_fonts.get(family, {})
+        fallback_family = bitmap_font_node.attrib.get("fallbackFamily", "Pretendard")
+        fallback = _font_for(xml_path, {"family": fallback_family, "size": bitmap_font_node.attrib.get("size", "24")})
+        glyphs: list[Image.Image] = []
+        color = _color(bitmap_font_node.attrib.get("color", "#FFFFFF"))
+        for character in text:
+            definition = catalog.get(character)
+            if definition is not None:
+                glyphs.append(_resource(xml_path.parent.parent / "drawable", definition["resource"]))
+                continue
+            bounds = fallback.getbbox(character)
+            glyph_width = max(1, round(fallback.getlength(character))) if hasattr(fallback, "getlength") else max(1, bounds[2] - bounds[0])
+            glyph_height = max(1, bounds[3] - bounds[1])
+            fallback_glyph = Image.new("RGBA", (glyph_width, glyph_height), (0, 0, 0, 0))
+            ImageDraw.Draw(fallback_glyph).text((-bounds[0], -bounds[1]), character, font=fallback, fill=color)
+            glyphs.append(fallback_glyph)
+        total_width = sum(glyph.width for glyph in glyphs)
+        x = 0 if align == "LEFT" else width - total_width if align == "RIGHT" else (width - total_width) / 2
+        y = max(0, (height - max((glyph.height for glyph in glyphs), default=0)) // 2)
+        for glyph in glyphs:
+            layer.alpha_composite(glyph, (round(x), y))
+            x += glyph.width
+    else:
+        draw = ImageDraw.Draw(layer)
+        font = _font_for(xml_path, font_node.attrib)
+        x = 0 if align == "LEFT" else width if align == "RIGHT" else width / 2
+        anchor = "lm" if align == "LEFT" else "rm" if align == "RIGHT" else "mm"
+        draw.text((x, height / 2), text, font=font, fill=_color(font_node.attrib.get("color", "#FFFFFF")), anchor=anchor)
     base.alpha_composite(layer, (int(float(node.attrib.get("x", "0"))), int(float(node.attrib.get("y", "0")))))
 
 
@@ -153,6 +181,11 @@ def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = N
     root = ET.parse(xml_path).getroot()
     drawable = xml_path.parent.parent / "drawable"
     metadata = {node.attrib.get("key"): node.attrib.get("value", "") for node in root.findall("Metadata")}
+    bitmap_fonts: dict[str, dict[str, dict[str, str]]] = {}
+    bitmap_fonts_node = root.find("BitmapFonts")
+    if bitmap_fonts_node is not None:
+        for bitmap_font in bitmap_fonts_node.findall("BitmapFont"):
+            bitmap_fonts[bitmap_font.attrib["name"]] = {character.attrib["name"]: dict(character.attrib) for character in bitmap_font.findall("Character")}
     render_time = fixed_time or metadata.get("PREVIEW_TIME", "10:08:30")
     render_date = fixed_date or metadata.get("PREVIEW_DATE", "08.20")
     background = root.find("Scene")
@@ -167,7 +200,7 @@ def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = N
         if node.tag == "PartImage":
             _part_image(base, node, drawable)
         elif node.tag == "PartText":
-            _part_text(base, node, xml_path, render_date)
+            _part_text(base, node, xml_path, render_date, bitmap_fonts)
         elif node.tag == "AnalogClock":
             for hand in node:
                 if hand.tag in {"HourHand", "MinuteHand", "SecondHand"}:

@@ -214,6 +214,26 @@
         },
         "dataSource": { "type": "string" },
         "slotType": { "enum": ["DATE_DAY_OF_MONTH"] },
+        "manualGlyphs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "family", "resources"],
+          "properties": {
+            "type": { "const": "MANUAL_GLYPH_OVERRIDE" },
+            "family": { "type": "string", "minLength": 1 },
+            "fallbackFamily": { "type": "string", "minLength": 1 },
+            "resources": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "patternProperties": { "^[0-9]$": { "type": "string", "minLength": 1 } }
+            },
+            "metrics": { "type": "object" },
+            "providedDigits": { "type": "array", "items": { "type": "string", "pattern": "^[0-9]$" } },
+            "sourceDirectory": { "type": "string" },
+            "automaticSynthesis": { "const": false }
+          }
+        },
         "role": { "enum": ["HOUR", "MINUTE", "SECOND"] },
         "observedAngleDeg": { "type": "number", "minimum": -360, "maximum": 360 },
         "length": { "type": "number", "exclusiveMinimum": 0 },
@@ -239,7 +259,8 @@
         "requiresHumanReview": { "type": "boolean" },
         "method": { "type": "string" },
         "componentCount": { "type": "integer", "minimum": 0 },
-        "groupCount": { "type": "integer", "minimum": 0 }
+        "groupCount": { "type": "integer", "minimum": 0 },
+        "manualGlyphOverride": { "type": ["object", "null"] }
       }
     }
   }

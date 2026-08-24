@@ -84,6 +84,51 @@ class Photo2WFFTests(unittest.TestCase):
             render_wff_xml(xml_path, second, fixed_date="2024-08-31")
             self.assertNotEqual(first.read_bytes(), second.read_bytes())
 
+    def test_manual_glyph_override_uses_provided_digit_and_pretendard_fallback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            drawable = root / "project" / "watchface" / "src" / "main" / "res" / "drawable"
+            raw = root / "project" / "watchface" / "src" / "main" / "res" / "raw"
+            drawable.mkdir(parents=True)
+            raw.mkdir(parents=True)
+            manual_asset = "assets/manual-glyphs/manual_glyph_8.png"
+            manual = Image.new("RGBA", (13, 21), (0, 0, 0, 0))
+            ImageDraw.Draw(manual).rectangle((1, 1, 11, 19), outline=(255, 40, 40, 255), width=2)
+            (root / manual_asset).parent.mkdir(parents=True)
+            manual.save(root / manual_asset)
+            scene = basic_scene()
+            scene["elements"] = [{
+                "id": "date_day_of_month",
+                "type": "DYNAMIC_SLOT",
+                "slotType": "DATE_DAY_OF_MONTH",
+                "dynamic": True,
+                "bbox": {"x": 170, "y": 200, "width": 98, "height": 36},
+                "format": "d",
+                "style": {"fontFamily": "Pretendard", "fontSize": 24, "alignment": "center", "color": "#FFFFFF"},
+                "manualGlyphs": {
+                    "type": "MANUAL_GLYPH_OVERRIDE",
+                    "family": "Photo2WFFManualGlyphs",
+                    "fallbackFamily": "Pretendard",
+                    "resources": {"8": manual_asset},
+                    "metrics": {"8": {"width": 13, "height": 21}},
+                },
+                "confidence": 1,
+            }]
+            xml = compile_watchface_xml(scene, {manual_asset: "manual_glyph_8"})
+            xml_path = raw / "watchface.xml"
+            xml_path.write_text(xml, encoding="utf-8")
+            shutil_target = drawable / "manual_glyph_8.png"
+            manual.save(shutil_target)
+            self.assertEqual(validate_wff_xml(xml_path), "structural validation passed")
+            self.assertIsNotNone(ET.fromstring(xml).find("./BitmapFonts/BitmapFont/Character[@name='8']"))
+            provided = root / "provided.png"
+            fallback = root / "fallback.png"
+            render_wff_xml(xml_path, provided, fixed_date="2024-08-08")
+            render_wff_xml(xml_path, fallback, fixed_date="2024-08-09")
+            self.assertNotEqual(provided.read_bytes(), fallback.read_bytes())
+            with Image.open(shutil_target) as copied:
+                self.assertEqual(copied.size, (13, 21))
+
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:
             xml_path = Path(temp) / "watchface.xml"

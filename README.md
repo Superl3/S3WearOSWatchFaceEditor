@@ -93,6 +93,19 @@ python -m photo2wff render-wff hermes-a2-output\\project\\watchface\\src\\main\\
 
 This milestone supports only `slotType: DATE_DAY_OF_MONTH` (`d` or `dd`). The review bundle contains renders for days 1, 8, 11, 20, and 31 plus centered geometry guides and padding/clipping metrics under `human-review/date-window/`. Complications, weather, battery, weekday, and other dynamic semantics remain out of scope.
 
+Production stops automatic glyph synthesis after A2. To use a supplied glyph,
+place only the desired files (`0.png` through `9.png`) in a directory and pass
+it to the product-photo command:
+
+```powershell
+python -m photo2wff product-photo path\to\product-photo.webp --out manual-glyph-output --manual-glyph-dir path\to\manual-glyphs
+```
+
+The PNGs are copied at their original resolution. Supplied digits are used by
+the date slot; absent digits use the Pretendard fallback. No automatic glyph
+extraction, synthesis, style fitting, or topology reconstruction is performed
+on production `main`.
+
 `quick` creates:
 
 ```text

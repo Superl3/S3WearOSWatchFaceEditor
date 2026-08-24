@@ -9,6 +9,7 @@ from PIL import Image
 from PIL import ImageDraw
 
 from .date_window import extract_date_day_of_month_window
+from .manual_glyphs import import_manual_glyphs
 from .model import CANVAS_SIZE
 from .occlusion import reconstruct_occluded_dial
 
@@ -550,7 +551,7 @@ def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> tuple[dict[str, d
     return metadata, (center_x, center_y, center_confidence)
 
 
-def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fallback_path: Path | None = None) -> dict[str, Any]:
+def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fallback_path: Path | None = None, manual_glyph_dir: Path | None = None) -> dict[str, Any]:
     """Extract a frontal dark display from a product photo and preserve it as static artwork."""
     source = Image.open(reference_path).convert("RGB")
     source_size = list(source.size)
@@ -623,6 +624,7 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         dial_path=assets_dir / "dial_clean.png",
         output_dir=output_dir,
     )
+    manual_glyphs = import_manual_glyphs(manual_glyph_dir, output_dir)
     dial_asset = date_window_metadata["emptyDialAsset"] if date_window_metadata else "assets/dial_clean.png"
     elements: list[dict[str, Any]] = [
         {
@@ -639,34 +641,36 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
     ]
     if date_window_metadata:
         inner = date_window_metadata["innerBbox"]
-        elements.append(
-            {
-                "id": "date_day_of_month",
-                "type": "DYNAMIC_SLOT",
-                "slotType": "DATE_DAY_OF_MONTH",
-                "dynamic": True,
-                "bbox": inner,
-                "format": "d",
-                "style": {
-                    "fontFamily": "Pretendard",
-                    "fontWeight": 400,
-                    "fontSize": 24,
-                    "alignment": "center",
-                    "color": date_window_metadata["glyphColor"],
-                },
-                "confidence": date_window_metadata["confidence"],
-                "zIndex": 5,
-                "relationships": {
-                    "layoutReplacement": True,
-                    "replacesSourceElement": "hour_index_3",
-                    "staticFramePreserved": True,
-                    "frameBbox": date_window_metadata["frameBbox"],
-                    "innerBbox": date_window_metadata["innerBbox"],
-                    "padding": date_window_metadata["padding"],
-                },
-                "uncertainty": ["Source absence of hour numeral 3 is intentional layout replacement; numeral 3 is not reconstructed"],
-            }
-        )
+        date_element = {
+            "id": "date_day_of_month",
+            "type": "DYNAMIC_SLOT",
+            "slotType": "DATE_DAY_OF_MONTH",
+            "dynamic": True,
+            "bbox": inner,
+            "format": "d",
+            "style": {
+                "fontFamily": "Pretendard",
+                "fontWeight": 400,
+                "fontSize": 24,
+                "alignment": "center",
+                "color": date_window_metadata["glyphColor"],
+            },
+            "confidence": date_window_metadata["confidence"],
+            "zIndex": 5,
+            "relationships": {
+                "layoutReplacement": True,
+                "replacesSourceElement": "hour_index_3",
+                "staticFramePreserved": True,
+                "frameBbox": date_window_metadata["frameBbox"],
+                "innerBbox": date_window_metadata["innerBbox"],
+                "padding": date_window_metadata["padding"],
+            },
+            "uncertainty": ["Source absence of hour numeral 3 is intentional layout replacement; numeral 3 is not reconstructed"],
+        }
+        if manual_glyphs:
+            date_element["manualGlyphs"] = manual_glyphs
+            date_element["uncertainty"].append("Only user-supplied manual glyph PNGs override Pretendard; missing digits use Pretendard fallback")
+        elements.append(date_element)
     role_ids = {"HOUR": "hour_hand", "MINUTE": "minute_hand", "SECOND": "second_hand"}
     for role, metadata in hand_metadata.items():
         elements.append(
@@ -731,6 +735,7 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
             "method": "A1b dark-display crop + A1d occlusion completion + A2 dynamic date-window slot",
             "componentCount": 1,
             "groupCount": 5 if date_window_metadata else 4,
+            "manualGlyphOverride": manual_glyphs,
         },
     }
     return scene

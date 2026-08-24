@@ -208,6 +208,18 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
                 _fail(f"{path}.slotType", "A2 supports only DATE_DAY_OF_MONTH")
             if element.get("format", "d") not in {"d", "dd"}:
                 _fail(f"{path}.format", "DATE_DAY_OF_MONTH supports only d or dd")
+            manual = element.get("manualGlyphs")
+            if manual is not None:
+                if not isinstance(manual, dict) or manual.get("type") != "MANUAL_GLYPH_OVERRIDE":
+                    _fail(f"{path}.manualGlyphs", "must be a MANUAL_GLYPH_OVERRIDE object")
+                if not isinstance(manual.get("family"), str) or not manual["family"]:
+                    _fail(f"{path}.manualGlyphs.family", "must be a non-empty string")
+                resources = manual.get("resources")
+                if not isinstance(resources, dict) or not resources:
+                    _fail(f"{path}.manualGlyphs.resources", "must contain at least one digit resource")
+                for character, resource in resources.items():
+                    if character not in "0123456789" or not isinstance(resource, str) or not resource:
+                        _fail(f"{path}.manualGlyphs.resources", "keys must be digits and values must be asset paths")
         if element_type == "ANALOG_HAND":
             if not element["dynamic"]:
                 _fail(f"{path}.dynamic", "ANALOG_HAND must be dynamic")

@@ -31,6 +31,32 @@ def _centered_text(draw: ImageDraw.ImageDraw, bbox: dict[str, int], text: str, f
     draw.multiline_text(center, text, font=font, fill=fill, anchor="mm", align="center", spacing=spacing)
 
 
+def _manual_glyph_text(base: Image.Image, element: dict[str, Any], value: str, scene_root: Path) -> None:
+    override = element.get("manualGlyphs") or {}
+    fallback_style = dict(element.get("style", {}))
+    fallback_style["fontFamily"] = override.get("fallbackFamily", "Pretendard")
+    fallback = _font(scene_root, fallback_style)
+    glyphs: list[Image.Image] = []
+    for character in value:
+        resource = override.get("resources", {}).get(character)
+        if resource and (scene_root / resource).exists():
+            glyphs.append(Image.open(scene_root / resource).convert("RGBA"))
+            continue
+        bounds = fallback.getbbox(character)
+        glyph_width = max(1, round(fallback.getlength(character))) if hasattr(fallback, "getlength") else max(1, bounds[2] - bounds[0])
+        glyph_height = max(1, bounds[3] - bounds[1])
+        fallback_glyph = Image.new("RGBA", (glyph_width, glyph_height), (0, 0, 0, 0))
+        ImageDraw.Draw(fallback_glyph).text((-bounds[0], -bounds[1]), character, font=fallback, fill=_rgba(element.get("style", {})))
+        glyphs.append(fallback_glyph)
+    bbox = element["bbox"]
+    total_width = sum(glyph.width for glyph in glyphs)
+    x = bbox["x"] + (bbox["width"] - total_width) / 2
+    y = bbox["y"] + max(0, (bbox["height"] - max((glyph.height for glyph in glyphs), default=0)) // 2)
+    for glyph in glyphs:
+        base.alpha_composite(glyph, (round(x), round(y)))
+        x += glyph.width
+
+
 def _rgba(style: dict[str, Any]) -> tuple[int, int, int, int]:
     value = style.get("color", "#FFFFFF").lstrip("#")
     if len(value) == 6:
@@ -127,7 +153,10 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
                 raise ValueError(f"unsupported DYNAMIC_SLOT type: {element.get('slotType')}")
             day = _day_of_month(sample_date)
             value = f"{day:02d}" if element.get("format", "d") == "dd" else str(day)
-            _centered_text(draw, bbox, value, _font(scene_root, style), fill)
+            if element.get("manualGlyphs"):
+                _manual_glyph_text(base, element, value, scene_root)
+            else:
+                _centered_text(draw, bbox, value, _font(scene_root, style), fill)
         elif element_type == "WEEKDAY":
             _centered_text(draw, bbox, sample_weekday, _font(scene_root, style), fill)
         elif element_type in dynamic_values:
