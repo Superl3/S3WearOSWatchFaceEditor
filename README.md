@@ -159,3 +159,11 @@ python -m photo2wff quick fixtures\canonical.png --out demo-output
 The generated project uses Watch Face Format version 1, minSdk 33, and compile/target SDK 34. That keeps the first slice compatible with Wear OS 4+ while using only version-1 data sources. Galaxy Watch9's 40mm target is 438×438; the attached product specification deliberately fixes the compiler canvas to that size. A 44mm target must be added as a separate 480×480 scene variant rather than silently scaling the design.
 
 The project is resource-only (`android:hasCode="false"`). Dynamic time, date, weekday, battery, steps, and heart-rate fields are emitted as native WFF expressions when present. Static or unsupported visual content is emitted as image resources.
+
+## Wear OS emulator setup
+
+`scripts/wear_runtime_setup.ps1` boots the Wear OS AVD, verifies the `watch` device characteristic, installs a WFF APK, opens the real watch-face picker, captures its UI, and writes `a25-runtime-validation/wear-runtime-setup.json`. It distinguishes installation, picker visibility, picker registration, and actual selection; it never claims selection when the system picker does not expose the face.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/wear_runtime_setup.ps1 -ApkPath C:\path\to\watchface-debug.apk -NoWindow -CapturePicker
+```
