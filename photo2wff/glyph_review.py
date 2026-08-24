@@ -76,12 +76,7 @@ def _candidate_sheet(report: dict[str, Any], output_root: Path, path: Path) -> N
         image = Image.open(output_root / "assets/glyphs/synthesized/candidates" / candidate["resource"]).convert("RGBA")
         sheet.paste(_fit(image, tile), (left, top))
         draw.text((left + 8, top + 116), f"{candidate['character']}  #{candidate['candidate']}", fill="#FFB45C", font=_font(14, True))
-        draw.text((left + 8, top + 133), f"rank={candidate.get('rank', '?')}  confidence={candidate['confidence']:.2f}", fill="#D0D0D0", font=_font(10))
-        provenance = candidate.get("provenance", [])
-        for line_index, item in enumerate(provenance[:2]):
-            role = item.get("role", item.get("operation", "step"))
-            source = Path(str(item.get("source", item.get("recipe", "")))).stem
-            draw.text((left + 8, top + 145 + line_index * 11), f"{role}: {source}", fill="#BDBDBD", font=_font(8))
+        draw.text((left + 8, top + 133), f"{candidate['source']}  {candidate['confidence']:.2f}", fill="#D0D0D0", font=_font(10))
     if not candidates:
         draw.text((12, 60), "No missing glyph candidates", fill="#69F0AE", font=_font(18, True))
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -237,68 +232,7 @@ def _observed_fidelity_review(report: dict[str, Any], output_root: Path, path: P
     }
 
 
-def _primitive_atlas(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
-    """Show native extracted primitives; this is a review aid, not a font export."""
-    primitive_report = report.get("primitives", {})
-    kinds = tuple(primitive_report.get("primitiveKinds", ()))
-    characters = tuple(character for character in "012456789" if character in primitive_report.get("glyphs", {}))
-    tile = (142, 118)
-    canvas = Image.new("RGB", (tile[0] * max(1, len(kinds)), tile[1] * max(1, len(characters)) + 42), "#151515")
-    draw = ImageDraw.Draw(canvas)
-    draw.text((10, 10), "EXTRACTED PRIMITIVES  native crop / no resample", fill="#FFFFFF", font=_font(15, True))
-    for column, kind in enumerate(kinds):
-        draw.text((column * tile[0] + 5, 27), kind, fill="#A8A8A8", font=_font(8))
-    for row, character in enumerate(characters):
-        glyph_report = primitive_report["glyphs"][character]
-        for column, kind in enumerate(kinds):
-            metadata = glyph_report.get("primitives", {}).get(kind)
-            image = Image.open(output_root / metadata["resource"]).convert("RGBA") if metadata else Image.new("RGBA", (1, 1), (0, 0, 0, 0))
-            panel = _fit(image, tile)
-            left = column * tile[0]
-            top = 42 + row * tile[1]
-            canvas.paste(panel, (left, top))
-            if column == 0:
-                draw.text((left + 6, top + 100), character, fill="#69F0AE", font=_font(12, True))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    canvas.save(path)
-    return {"artifact": str(path), "digits": list(characters), "primitiveKinds": list(kinds), "nativeResolution": True}
-
-
-def _candidate_comparison_atlas(
-    scene: dict[str, Any],
-    candidate_xmls: dict[str, Path],
-    fallback_xml: Path,
-    path: Path,
-) -> dict[str, Any]:
-    days = (1, 8, 11, 20, 31)
-    labels = (("FALLBACK", fallback_xml),) + tuple(sorted(candidate_xmls.items()))
-    tile = (240, 270)
-    atlas = Image.new("RGB", (tile[0] * len(labels), tile[1] * len(days)), "#151515")
-    draw = ImageDraw.Draw(atlas)
-    render_dir = path.parent / "candidate-comparison-renders"
-    render_dir.mkdir(parents=True, exist_ok=True)
-    for row, day in enumerate(days):
-        for column, (label, xml_path) in enumerate(labels):
-            render_path = render_dir / f"{label.lower().replace('-', '_')}-{day:02d}.png"
-            render_wff_xml(xml_path, render_path, fixed_time=scene["preview"]["time"], fixed_date=f"2024-08-{day:02d}")
-            image = Image.open(render_path).convert("RGB").resize((tile[0], tile[1] - 30), Image.Resampling.LANCZOS)
-            left = column * tile[0]
-            top = row * tile[1]
-            atlas.paste(image, (left, top))
-            draw.text((left + 8, top + tile[1] - 23), f"DAY {day}  {label}", fill="#FFFFFF", font=_font(12, True))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    atlas.save(path)
-    return {"artifact": str(path), "days": list(days), "columns": [label for label, _ in labels]}
-
-
-def generate_glyph_review_artifacts(
-    scene: dict[str, Any],
-    output_root: Path,
-    themed_xml: Path,
-    fallback_xml: Path,
-    report: dict[str, Any],
-    candidate_xmls: dict[str, Path] | None = None,
-) -> dict[str, Any]:
+def generate_glyph_review_artifacts(scene: dict[str, Any], output_root: Path, themed_xml: Path, fallback_xml: Path, report: dict[str, Any]) -> dict[str, Any]:
     review_dir = output_root / "human-review" / "glyphs"
     review_dir.mkdir(parents=True, exist_ok=True)
     canonical = review_dir / "canonical-glyph-atlas.png"
@@ -309,8 +243,6 @@ def generate_glyph_review_artifacts(
     date_comparison = review_dir / "date-fallback-vs-themed-atlas.png"
     full_watch = review_dir / "full-watch-themed-atlas.png"
     observed_fidelity = review_dir / "observed-glyph-fidelity-review.png"
-    primitive_atlas = review_dir / "primitive-atlas.png"
-    candidate_comparison = review_dir / "fallback-vs-compositional-candidates.png"
     _glyph_atlas(report, output_root, canonical)
     _glyph_atlas(report, output_root, provenance, provenance=True)
     _candidate_sheet(report, output_root, candidates)
@@ -319,10 +251,8 @@ def generate_glyph_review_artifacts(
     comparison = _date_comparison(scene, output_root, themed_xml, fallback_xml, date_comparison)
     full_watch_report = _full_watch_atlas(scene, themed_xml, full_watch)
     fidelity_report = _observed_fidelity_review(report, output_root, observed_fidelity)
-    primitive_report = _primitive_atlas(report, output_root, primitive_atlas)
-    candidate_comparison_report = _candidate_comparison_atlas(scene, candidate_xmls or {}, fallback_xml, candidate_comparison) if candidate_xmls else None
     manifest = {
-        "milestone": "A2b.2 Compositional Glyph Synthesis",
+        "milestone": "A2b Themed Glyph Reconstruction",
         "status": report.get("status", "incomplete"),
         "coverage": report.get("coverage", {}),
         "dateStyleRelation": report.get("dateStyleRelation", {}),
@@ -336,12 +266,9 @@ def generate_glyph_review_artifacts(
             "dateFallbackVsThemed": comparison,
             "fullWatchThemed": full_watch_report,
             "observedGlyphFidelity": fidelity_report,
-            "primitiveAtlas": primitive_report,
-            "fallbackVsCompositionalCandidates": candidate_comparison_report,
         },
         "requiresHumanReview": report.get("requiresHumanReview", True),
         "deviceOrEmulatorVerification": "deferred",
-        "candidateRankingIsNotApproval": True,
     }
     manifest_path = review_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")

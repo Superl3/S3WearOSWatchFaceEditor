@@ -14,7 +14,7 @@ from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
-from photo2wff.glyphs import ExternalModelAdapter, _extract_shape_primitives, _synthesize_compositional_missing_glyphs
+from photo2wff.glyphs import ExternalModelAdapter
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
@@ -144,36 +144,10 @@ class Photo2WFFTests(unittest.TestCase):
         from photo2wff.glyphs import _dial_orientation
 
         self.assertEqual(_dial_orientation(60), 60)
-        self.assertEqual(_dial_orientation(120), -60)
         self.assertEqual(_dial_orientation(150), -30)
         self.assertEqual(_dial_orientation(180), 0)
         self.assertEqual(_dial_orientation(210), 30)
         self.assertEqual(_dial_orientation(270), 270)
-
-    def test_compositional_synthesis_generates_ranked_review_candidates(self):
-        with tempfile.TemporaryDirectory() as temp:
-            output_root = Path(temp)
-            glyphs = {}
-            for character in ("5", "8", "9"):
-                image = Image.new("RGBA", (42, 64), (0, 0, 0, 0))
-                draw = ImageDraw.Draw(image)
-                draw.rounded_rectangle((5, 4, 36, 59), radius=12, outline=(240, 230, 220, 255), width=3)
-                if character == "5":
-                    draw.line((8, 31, 32, 31), fill=(240, 230, 220, 255), width=3)
-                elif character == "8":
-                    draw.line((8, 31, 33, 31), fill=(240, 230, 220, 255), width=3)
-                else:
-                    draw.line((8, 31, 33, 31), fill=(240, 230, 220, 255), width=3)
-                image_path = output_root / f"glyph_{character}.png"
-                image.save(image_path)
-                glyphs[character] = _extract_shape_primitives(character, image, output_root)
-            report = {"targets": ["3"], "primitiveKinds": [], "glyphs": glyphs}
-            candidates, themed = _synthesize_compositional_missing_glyphs(output_root, {}, report)
-            self.assertEqual(len(candidates["3"]), 3)
-            self.assertEqual([item["rank"] for item in candidates["3"]], [1, 2, 3])
-            self.assertTrue(all(item["requiresHumanReview"] for item in candidates["3"]))
-            self.assertEqual(themed["3"]["source"], "SYNTHESIZED_COMPOSITIONAL")
-            self.assertFalse(candidates["3"][0]["ranking"]["autoApproved"])
 
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:
