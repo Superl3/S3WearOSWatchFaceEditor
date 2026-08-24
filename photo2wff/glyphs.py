@@ -12,9 +12,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 DIGITS = tuple(str(value) for value in range(10))
 THEMED_GLYPH_TYPE = "THEMED_GLYPH"
 THEMED_FAMILY = "PHOTO2WFF_THEMED"
-# The date opening is 47 x 29 px.  22 x 27 retains the source stroke detail
-# while still allowing two proportional digits to fit without a second resize.
-CELL_SIZE = (22, 27)
+CELL_SIZE = (20, 24)
 
 
 class GlyphSynthesizer(ABC):
@@ -174,21 +172,8 @@ class DeterministicFallbackAdapter(GlyphSynthesizer):
 
 
 def _dial_orientation(degrees: float) -> float:
-    """Undo the full tangential rotation of a dial numeral.
-
-    Decimal digits are not 180-degree symmetric.  Reducing this value modulo
-    180 made 5/6/7 (and the second digit in 10/11) become different shapes.
-    Pillow's positive rotation is counter-clockwise, which is the inverse of
-    the clockwise rotation used by this reference dial.
-    """
-    angle = degrees % 360.0
-    # This face uses an intentional half-turn readability flip through the
-    # lower arc: 5, 6, and 7 keep their familiar reading direction instead of
-    # rotating fully with the radial marker.  Preserve that observed layout
-    # convention without applying the former, incorrect global modulo fold.
-    if 150.0 <= angle <= 210.0:
-        return angle - 180.0
-    return angle
+    """Use the dial prior while keeping numerals upright rather than upside down."""
+    return (degrees + 90.0) % 180.0 - 90.0
 
 
 def _bbox_from_alpha(alpha: Image.Image) -> tuple[int, int, int, int] | None:
@@ -205,11 +190,7 @@ def _ink_mask(image: Image.Image) -> Image.Image:
             red, green, blue = source[x, y]
             high = max(red, green, blue)
             low = min(red, green, blue)
-            # The seconds hand has antialiased dark-red edge pixels.  Treat
-            # them as hand-only even when the red channel falls below the old
-            # bright-red cutoff; warm cream numeral strokes remain balanced
-            # across RGB and therefore survive.
-            is_red = red >= 50 and red > green * 1.15 and red > blue * 1.05
+            is_red = red >= 80 and red > green * 1.35 and red > blue * 1.15
             if high >= 105 and (high - low) <= 115 and not is_red:
                 target[x, y] = min(255, max(0, high - 35) * 2)
     return mask
@@ -252,54 +233,16 @@ def _tight(image: Image.Image, padding: int = 2) -> Image.Image:
     return image.crop((left, top, right, bottom))
 
 
-def _drop_isolated_ink(image: Image.Image, minimum_area: int = 9) -> Image.Image:
-    """Remove detached capture specks without altering a glyph's stroke pixels."""
-    alpha = image.getchannel("A")
-    pixels = alpha.load()
-    visited: set[tuple[int, int]] = set()
-    components: list[list[tuple[int, int]]] = []
-    for y in range(alpha.height):
-        for x in range(alpha.width):
-            if (x, y) in visited or pixels[x, y] <= 20:
-                continue
-            stack = [(x, y)]
-            visited.add((x, y))
-            component: list[tuple[int, int]] = []
-            while stack:
-                current_x, current_y = stack.pop()
-                component.append((current_x, current_y))
-                for next_y in range(max(0, current_y - 1), min(alpha.height, current_y + 2)):
-                    for next_x in range(max(0, current_x - 1), min(alpha.width, current_x + 2)):
-                        if (next_x, next_y) not in visited and pixels[next_x, next_y] > 20:
-                            visited.add((next_x, next_y))
-                            stack.append((next_x, next_y))
-            components.append(component)
-    if not components:
-        return image
-    largest = max(len(component) for component in components)
-    keep_threshold = max(minimum_area, round(largest * 0.08))
-    cleaned = alpha.copy()
-    cleaned_pixels = cleaned.load()
-    for component in components:
-        if len(component) >= keep_threshold:
-            continue
-        for x, y in component:
-            cleaned_pixels[x, y] = 0
-    result = image.copy()
-    result.putalpha(cleaned)
-    return result
-
-
 def _normalize_cell(image: Image.Image, cell_size: tuple[int, int] = CELL_SIZE) -> Image.Image:
     image = _tight(image, padding=0)
     if image.width <= 0 or image.height <= 0:
         return Image.new("RGBA", cell_size, (0, 0, 0, 0))
-    scale = min((cell_size[1] - 2) / image.height, (cell_size[0] - 1) / image.width)
+    scale = min((cell_size[1] - 3) / image.height, (cell_size[0] - 2) / image.width)
     width = max(1, round(image.width * scale))
     height = max(1, round(image.height * scale))
     resized = image.resize((width, height), Image.Resampling.LANCZOS)
     cell = Image.new("RGBA", cell_size, (0, 0, 0, 0))
-    cell.alpha_composite(resized, ((cell_size[0] - width) // 2, cell_size[1] - height - 1))
+    cell.alpha_composite(resized, ((cell_size[0] - width) // 2, cell_size[1] - height - 2))
     return cell
 
 
@@ -376,30 +319,23 @@ def _date_style_relation(date_glyph: Image.Image | None, reference_glyph: Image.
 
 
 def _sector_crop(image: Image.Image, mask: Image.Image, center: tuple[float, float], angle: float) -> Image.Image:
-    """Collect one numeral using an oriented local dial window.
-
-    A wide angular wedge preserves terminals but also captures the neighboring
-    hour positions (and turns the deliberately empty 3 o'clock slot into a
-    false glyph).  A radial/tangential window remains geometry-driven while
-    keeping each marker isolated.
-    """
+    """Collect numeral ink from a polar dial sector instead of assuming one fixed radius."""
     result = Image.new("L", image.size, 0)
     source = mask.load()
     target = result.load()
-    radians = math.radians(angle)
-    radial_x, radial_y = math.sin(radians), -math.cos(radians)
-    tangent_x, tangent_y = math.cos(radians), math.sin(radians)
     for y in range(image.height):
         for x in range(image.width):
             if source[x, y] <= 20:
                 continue
             dx = x - center[0]
             dy = y - center[1]
-            radial = dx * radial_x + dy * radial_y
-            tangent = dx * tangent_x + dy * tangent_y
-            if radial < 135 or radial > 218 or abs(tangent) > 42:
+            radius = math.hypot(dx, dy)
+            if radius < 125 or radius > 215:
                 continue
-            target[x, y] = source[x, y]
+            pixel_angle = math.degrees(math.atan2(dx, -dy)) % 360.0
+            delta = abs((pixel_angle - angle + 180.0) % 360.0 - 180.0)
+            if delta <= 20.0:
+                target[x, y] = source[x, y]
     box = result.getbbox()
     if box is None:
         return Image.new("RGBA", (1, 1), (0, 0, 0, 0))
@@ -419,12 +355,7 @@ def extract_themed_glyph_set(
     exclusion = Image.open(hand_occlusion_mask_path).convert("L") if hand_occlusion_mask_path.exists() else Image.new("L", reference.size, 0)
     date_metadata = json.loads(date_window_metadata_path.read_text(encoding="utf-8")) if date_window_metadata_path and date_window_metadata_path.exists() else {}
     frame = date_metadata.get("frameBbox")
-    # The source hands are evidence of the photographed time, not part of a
-    # numeral.  However, subtracting their broad A1 mask removes legitimate
-    # dial strokes at 2/6/7/10.  Keep the original alpha here and record the
-    # overlap as confidence/review metadata instead of destructively cutting a
-    # glyph.  The date frame remains excluded because it replaces hour 3.
-    mask = _apply_exclusion(_ink_mask(reference), None, frame)
+    mask = _apply_exclusion(_ink_mask(reference), exclusion, frame)
     raw_dir = output_root / "assets/glyphs/observed/raw"
     canonical_dir = output_root / "assets/glyphs/observed/canonical"
     candidate_dir = output_root / "assets/glyphs/synthesized/candidates"
@@ -452,31 +383,27 @@ def extract_themed_glyph_set(
         raw_name = f"hour_{hour:02d}_label.png"
         raw_path = raw_dir / raw_name
         raw.save(raw_path)
+        raw_parts = _split_columns(raw, len(label))
         local_rotation = _dial_orientation(angle)
         canonical_label = raw.rotate(local_rotation, resample=Image.Resampling.BICUBIC, expand=True)
-        canonical_label = _drop_isolated_ink(canonical_label)
         canonical_label = _tight(canonical_label, padding=1)
         canonical_label_path = canonical_dir / raw_name
         canonical_label.save(canonical_label_path)
-        # Segment multi-digit labels only after their baseline is horizontal.
-        # Splitting a tilted "10" by source X columns was the cause of the
-        # corrupted 0 and several partial glyph observations.
-        parts = _split_columns(canonical_label, len(label))
+        parts = _split_columns(raw, len(label))
         if len(parts) != len(label):
-            parts = [canonical_label]
+            parts = [raw]
         slot_observations = []
-        for index, (character, part) in enumerate(zip(label, parts), start=1):
+        for index, (character, raw_part) in enumerate(zip(label, parts), start=1):
+            raw_part = _tight(raw_part, padding=1)
             glyph_rotation = local_rotation
-            part = _tight(part, padding=1)
+            part = _tight(raw_part.rotate(glyph_rotation, resample=Image.Resampling.BICUBIC, expand=True), padding=1)
             observation_id = f"hour_{hour}" if len(label) == 1 else f"hour_{hour}_{'first' if index == 1 else 'second'}"
             canonical_name = f"{observation_id}_{character}.png"
             canonical_path = canonical_dir / canonical_name
             part.save(canonical_path)
             raw_observation = raw_dir / f"{observation_id}_{character}.png"
-            # The raw label is retained as the lossless source observation.
-            # Per-character raw crops are deliberately avoided for oblique
-            # multi-digit labels because their source-space X split is invalid.
-            raw.save(raw_observation)
+            raw_part = raw_parts[index - 1] if len(raw_parts) == len(label) else raw
+            _tight(raw_part, padding=1).save(raw_observation)
             metric = _metrics(_normalize_cell(part))
             observation = {
                 "id": observation_id,
@@ -491,7 +418,7 @@ def extract_themed_glyph_set(
             }
             observations[character].append(observation)
             slot_observations.append(observation)
-        slots.append({"hour": hour, "label": label, "status": "OBSERVED", "angleDeg": angle, "localRotationDeg": local_rotation, "handOverlapMaskPresent": bool(exclusion.getbbox()), "observations": slot_observations, "confidence": round(quality, 4)})
+        slots.append({"hour": hour, "label": label, "status": "OBSERVED", "angleDeg": angle, "localRotationDeg": local_rotation, "observations": slot_observations, "confidence": round(quality, 4)})
 
     references: dict[str, dict[str, Any]] = {}
     coverage: dict[str, str] = {}
@@ -503,11 +430,6 @@ def extract_themed_glyph_set(
                 preferred = 1 if observation_id == f"hour_{character}" else 0
                 if character == "1":
                     preferred = {"hour_12_first": 3, "hour_1": 2, "hour_10_first": 1}.get(observation_id, 0)
-                elif character == "2":
-                    # The minute hand points at the source's 2 marker.  The
-                    # second character of the clean 12 marker is the reliable
-                    # source observation for date rendering.
-                    preferred = {"hour_12_second": 3, "hour_2": 1}.get(observation_id, 0)
                 return preferred, item["confidence"], item["metrics"]["inkCoverage"]
 
             chosen = max(observations[character], key=preference)
@@ -581,7 +503,7 @@ def extract_themed_glyph_set(
         "adapters": adapter_status,
         "externalModelStatus": "external synthesis unavailable",
         "canonicalization": {
-            "orientation": "inverse full local dial-angle rotation; no 180-degree folding for decimal glyphs",
+            "orientation": "inverse local dial-angle prior modulo 180 to preserve upright numerals",
             "cellSize": {"width": CELL_SIZE[0], "height": CELL_SIZE[1]},
             "sourceFidelity": "observed glyph pixels preserved before normalization",
         },
