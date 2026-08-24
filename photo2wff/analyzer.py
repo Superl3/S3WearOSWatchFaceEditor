@@ -577,8 +577,27 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
     display_mask = Image.new("L", resized.size, 0)
     mask_draw = ImageDraw.Draw(display_mask)
     inset = max(8, round(min(resized.size) * 0.025))
-    mask_draw.rounded_rectangle((inset, inset, resized.width - inset - 1, resized.height - inset - 1), radius=round(resized.height * 0.10), fill=255)
+    display_radius = min(round(resized.height * 0.10), (min(resized.width, resized.height) - 2 * inset) / 2)
+    mask_draw.rounded_rectangle((inset, inset, resized.width - inset - 1, resized.height - inset - 1), radius=round(display_radius), fill=255)
     canvas.paste(resized, (paste_x, 0), display_mask)
+    source_display_geometry = {
+        "shape": "ROUNDED_RECT",
+        "width": float(resized.width - 2 * inset),
+        "height": float(resized.height - 2 * inset),
+        "radius": float(display_radius),
+        "centerX": float(paste_x + resized.width / 2),
+        "centerY": float(CANVAS_SIZE / 2),
+        "isCircleSpecialCase": False,
+    }
+    target_display_geometry = {
+        "shape": "CIRCLE",
+        "width": float(CANVAS_SIZE),
+        "height": float(CANVAS_SIZE),
+        "radius": float(CANVAS_SIZE / 2),
+        "centerX": float(CANVAS_SIZE / 2),
+        "centerY": float(CANVAS_SIZE / 2),
+        "isCircleSpecialCase": True,
+    }
 
     output_dir.mkdir(parents=True, exist_ok=True)
     assets_dir = output_dir / "assets"
@@ -639,6 +658,12 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
     scene = {
         "schemaVersion": "1.0",
         "canvas": {"width": 438, "height": 438, "shape": "CIRCLE", "centerX": 219, "centerY": 219},
+        "displayGeometry": {
+            "source": source_display_geometry,
+            "target": target_display_geometry,
+            "mappingPolicy": "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
+            "availableMappings": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING"],
+        },
         "normalization": {
             "inputType": "PHOTOGRAPH",
             "rotationDegrees": 0.0,

@@ -13,6 +13,7 @@ from .model import apply_patches, editable_yaml, load_scene, save_scene, validat
 from .render import render_scene
 from .wff_validate import validate_wff_xml
 from .wff_render import render_wff_xml
+from .human_review import generate_human_review_artifacts
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -117,10 +118,24 @@ def product_photo(reference: Path, output: Path) -> None:
         render_wff_xml(xml_path, path, fixed_time=time)
     dynamic_validation = validate_dynamic_renders(scene, render_paths)
     (output / "dynamic-validation.json").write_text(json.dumps(dynamic_validation, indent=2) + "\n", encoding="utf-8", newline="\n")
+    human_review = generate_human_review_artifacts(scene, output, xml_path)
     comparison = compare_images(output / "reference.png", output / "wff-rendered.png")
     comparison["render"] = render_metadata
     comparison["dynamicValidation"] = dynamic_validation
+    comparison["humanReview"] = human_review
     save_report(comparison, output / "comparison.json")
+
+
+def human_review(output: Path) -> None:
+    scene = load_scene(output / "scene.json")
+    xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
+    manifest = generate_human_review_artifacts(scene, output, xml_path)
+    comparison_path = output / "comparison.json"
+    if comparison_path.exists():
+        comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+        comparison["humanReview"] = manifest
+        save_report(comparison, comparison_path)
+    print(json.dumps(manifest, ensure_ascii=False, indent=2))
 
 
 def main() -> None:
@@ -148,6 +163,8 @@ def main() -> None:
     photo_parser = subparsers.add_parser("product-photo")
     photo_parser.add_argument("reference", type=Path)
     photo_parser.add_argument("--out", type=Path, default=Path("product-photo-output"))
+    review_parser = subparsers.add_parser("human-review")
+    review_parser.add_argument("output", type=Path)
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -166,3 +183,5 @@ def main() -> None:
         build(args.scene, args.out)
     elif args.command == "product-photo":
         product_photo(args.reference, args.out)
+    elif args.command == "human-review":
+        human_review(args.output)

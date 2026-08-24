@@ -12,6 +12,7 @@ from photo2wff.analyzer import analyze_image
 from photo2wff.analog_validate import validate_dynamic_renders
 from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
+from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
 from photo2wff.render import render_scene
 from photo2wff.wff_validate import validate_wff_xml
@@ -151,6 +152,51 @@ class Photo2WFFTests(unittest.TestCase):
         scene = basic_scene()
         patched = apply_patches(scene, [{"element": "time_primary", "property": "bbox.x", "delta": 4}])
         self.assertEqual(patched["elements"][0]["bbox"]["x"], 84)
+
+    def test_rounded_rect_circle_is_a_special_case(self):
+        circle = RoundedRect(438, 438, 219, 219, 219)
+        self.assertTrue(circle.is_circle)
+        for angle in range(0, 360, 30):
+            import math
+
+            direction = (math.sin(math.radians(angle)), -math.cos(math.radians(angle)))
+            self.assertAlmostEqual(circle.boundary_distance(direction), 219, places=5)
+
+    def test_boundary_normalized_mapping_preserves_radial_position(self):
+        import math
+
+        source = RoundedRect(388, 418, 44, 219, 219)
+        target = RoundedRect(438, 438, 219, 219, 219)
+        direction = (math.sin(math.radians(45)), -math.cos(math.radians(45)))
+        source_boundary = source.boundary_distance(direction)
+        target_boundary = target.boundary_distance(direction)
+        point = (source.center_x + direction[0] * source_boundary * 0.62, source.center_y + direction[1] * source_boundary * 0.62)
+        mapped = boundary_normalized_map(point, source, target)
+        mapped_radius = math.hypot(mapped[0] - target.center_x, mapped[1] - target.center_y)
+        self.assertAlmostEqual(mapped_radius / target_boundary, 0.62, places=5)
+
+    def test_analog_hand_mapping_targets_clock_center_and_scales_length(self):
+        source = RoundedRect(388, 418, 44, 219, 219)
+        target = RoundedRect(438, 438, 219, 219, 219)
+        mapped = map_analog_hand(
+            {"id": "minute", "role": "MINUTE", "observedAngleDeg": 54, "length": 175, "thickness": 8},
+            source,
+            target,
+            source_clock_center=(219.7, 221.5),
+            target_clock_center=(219, 219),
+        )
+        self.assertEqual(mapped["targetPivot"], {"x": 219, "y": 219})
+        self.assertGreater(mapped["targetLength"], 0)
+        self.assertAlmostEqual(mapped["thicknessPreserved"], 8)
+
+    def test_inverse_raster_mapping_keeps_target_corners_outside_shape(self):
+        source = RoundedRect(388, 418, 44, 219, 219)
+        target = RoundedRect(438, 438, 219, 219, 219)
+        image = Image.new("RGBA", (438, 438), (255, 255, 255, 255))
+        mapped = inverse_raster_map(image, source, target)
+        self.assertEqual(mapped.size, (438, 438))
+        self.assertEqual(mapped.getpixel((0, 0))[3], 0)
+        self.assertGreater(mapped.getpixel((219, 219))[3], 0)
 
 
 if __name__ == "__main__":

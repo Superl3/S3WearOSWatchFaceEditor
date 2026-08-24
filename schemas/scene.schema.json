@@ -12,6 +12,7 @@
     "normalization": { "$ref": "#/$defs/normalization" },
     "background": { "$ref": "#/$defs/background" },
     "clock": { "$ref": "#/$defs/clock" },
+    "displayGeometry": { "$ref": "#/$defs/displayGeometry" },
     "reference": {
       "type": "object",
       "additionalProperties": false,
@@ -86,6 +87,35 @@
         "centerY": { "type": "number", "minimum": 0, "maximum": 438 },
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
         "method": { "type": "string" }
+      }
+    },
+    "displayShape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shape", "width", "height", "radius", "centerX", "centerY"],
+      "properties": {
+        "shape": { "enum": ["ROUNDED_RECT", "CIRCLE"] },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "radius": { "type": "number", "minimum": 0 },
+        "centerX": { "type": "number" },
+        "centerY": { "type": "number" },
+        "isCircleSpecialCase": { "type": "boolean" }
+      }
+    },
+    "displayGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "target", "mappingPolicy"],
+      "properties": {
+        "source": { "$ref": "#/$defs/displayShape" },
+        "target": { "$ref": "#/$defs/displayShape" },
+        "mappingPolicy": { "const": "CENTER_PRESERVING_BOUNDARY_NORMALIZED" },
+        "availableMappings": {
+          "type": "array",
+          "items": { "enum": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING"] },
+          "minItems": 1
+        }
       }
     },
     "normalization": {

@@ -55,6 +55,26 @@ python -m photo2wff render-wff hermes-a1-output\project\watchface\src\main\res\r
 
 The A1a.1 validation renders `10:08:30`, `03:15:45`, and `06:30:00`. It checks pairwise changes inside dynamic hand ROIs and scans the original source-angle corridors for persistent hand ghosts. Global MAE is not sufficient for this gate. The compiler and renderer are frozen at the A1a implementation; A1b is limited to reference-to-`dial_clean`/hand-assets/pivot-angle extraction and delegates WFF generation to the frozen pipeline.
 
+For A1c display geometry review, the same product-photo command also emits:
+
+```powershell
+python -m photo2wff product-photo path\to\product-photo.webp --out hermes-a1c-output
+python -m photo2wff human-review hermes-a1c-output
+```
+
+`scene.json` records a source `RoundedRect(width, height, radius)` and a target circle represented by the same primitive (`width == height`, `radius == width / 2`). The review artifacts are written under `human-review/`:
+
+```text
+human-review/
+  atlas.png                    # 9 fixed WFF render times
+  geometry-overlay.png         # source/target boundaries, centers, rays
+  asset-sheet.png              # dial_clean and extracted transparent assets
+  mapping-comparison.png       # source, naive XY, adaptive boundary-normalized
+  manifest.json                # structured mappings and review metadata
+```
+
+Structured elements map anchors, pivots, and geometry while preserving local appearance. Only static raster artwork uses inverse raster mapping. The A1c comparison keeps the legacy XY mapper beside the center-preserving boundary-normalized mapper; device/emulator runtime capture remains a separate deferred verification tier.
+
 `quick` creates:
 
 ```text

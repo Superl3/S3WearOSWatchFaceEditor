@@ -1,0 +1,196 @@
+{
+  "reference": "reference.png",
+  "preview": "wff-rendered.png",
+  "size": [
+    438,
+    438
+  ],
+  "meanAbsoluteError": 0.011286,
+  "changedPixelFraction": 0.020063,
+  "differenceBoundingBox": [
+    141,
+    108,
+    368,
+    394
+  ],
+  "threshold": 10,
+  "render": {
+    "renderer": "photo2wff-wff-xml",
+    "fixedTime": "10:08:30",
+    "sourceXml": "hermes-a1c-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml"
+  },
+  "dynamicValidation": {
+    "renders": {
+      "10:08:30": "hermes-a1c-output\\renders\\10-08-30.png",
+      "03:15:45": "hermes-a1c-output\\renders\\03-15-45.png",
+      "06:30:00": "hermes-a1c-output\\renders\\06-30-00.png"
+    },
+    "dynamicHandROI": {
+      "pairwiseChangedPixelFraction": {
+        "10:08:30 vs 03:15:45": 0.259108,
+        "10:08:30 vs 06:30:00": 0.297726,
+        "03:15:45 vs 06:30:00": 0.291108
+      },
+      "threshold": 0.005,
+      "passed": true
+    },
+    "sourceAngleGhost": {
+      "scores": {
+        "HOUR": {
+          "03:15:45": 0.0,
+          "06:30:00": 0.0
+        },
+        "MINUTE": {
+          "03:15:45": 0.0,
+          "06:30:00": 0.0
+        },
+        "SECOND": {
+          "03:15:45": 0.0,
+          "06:30:00": 0.0
+        }
+      },
+      "threshold": 0.25,
+      "maxOffSourceScore": 0.0,
+      "passed": true
+    },
+    "passed": true,
+    "deviceOrEmulatorCapture": "deferred: no Wear OS runtime was available"
+  },
+  "humanReview": {
+    "milestone": "A1c Display Geometry + Human Review",
+    "source": {
+      "shape": "ROUNDED_RECT",
+      "width": 388.0,
+      "height": 418.0,
+      "radius": 44.0,
+      "centerX": 219.0,
+      "centerY": 219.0,
+      "isCircleSpecialCase": false
+    },
+    "target": {
+      "shape": "CIRCLE",
+      "width": 438.0,
+      "height": 438.0,
+      "radius": 219.0,
+      "centerX": 219.0,
+      "centerY": 219.0,
+      "isCircleSpecialCase": true
+    },
+    "mappingPolicies": {
+      "naive": "NAIVE_XY_STRETCH",
+      "adaptive": "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
+      "staticRaster": "INVERSE_RASTER_MAPPING",
+      "structuredElements": "ANCHOR_PIVOT_GEOMETRY_ONLY_LOCAL_APPEARANCE_PRESERVED"
+    },
+    "structuredElements": [
+      {
+        "id": "hour_hand",
+        "role": "HOUR",
+        "sourcePivot": {
+          "x": 219.7,
+          "y": 221.5
+        },
+        "targetPivot": {
+          "x": 219.0,
+          "y": 219.0
+        },
+        "observedAngleDeg": 306.07,
+        "normalizedLength": 0.3874831939816938,
+        "sourceBoundaryDistance": 240.01040934021432,
+        "targetBoundaryDistance": 219.0,
+        "sourceLength": 93.0,
+        "targetLength": 84.85881948199093,
+        "thicknessPreserved": 8.0,
+        "targetBbox": {
+          "x": 150.40876254175078,
+          "y": 169.03740010944998,
+          "width": 70.94633031462126,
+          "height": 53.195792993020945
+        }
+      },
+      {
+        "id": "minute_hand",
+        "role": "MINUTE",
+        "sourcePivot": {
+          "x": 219.7,
+          "y": 221.5
+        },
+        "targetPivot": {
+          "x": 219.0,
+          "y": 219.0
+        },
+        "observedAngleDeg": 53.93,
+        "normalizedLength": 0.7291350424386708,
+        "sourceBoundaryDistance": 240.01040934021444,
+        "targetBoundaryDistance": 219.0,
+        "sourceLength": 175.0,
+        "targetLength": 159.6805742940689,
+        "thicknessPreserved": 8.0,
+        "targetBbox": {
+          "x": 216.64490714362796,
+          "y": 124.98435504466393,
+          "width": 131.42462570791622,
+          "height": 97.24883805780699
+        }
+      },
+      {
+        "id": "second_hand",
+        "role": "SECOND",
+        "sourcePivot": {
+          "x": 219.7,
+          "y": 221.5
+        },
+        "targetPivot": {
+          "x": 219.0,
+          "y": 219.0
+        },
+        "observedAngleDeg": 180.24,
+        "normalizedLength": 0.8157823167885596,
+        "sourceBoundaryDistance": 209.00183356657806,
+        "targetBoundaryDistance": 219.0,
+        "sourceLength": 170.5,
+        "targetLength": 178.65632737669455,
+        "thicknessPreserved": 3.0,
+        "targetBbox": {
+          "x": 217.5000131594533,
+          "y": 218.99371683306688,
+          "width": 2.9999736810934223,
+          "height": 178.66104319723055
+        }
+      }
+    ],
+    "staticRasterLayers": [
+      {
+        "id": "dial_clean",
+        "operation": "INVERSE_RASTER_MAPPING",
+        "output": "hermes-a1c-output\\human-review\\dial-clean-adaptive.png"
+      },
+      {
+        "id": "center_cap",
+        "operation": "LOCAL_ASSET_PRESERVED"
+      }
+    ],
+    "atlas": {
+      "path": "hermes-a1c-output\\human-review\\atlas.png",
+      "times": [
+        "00:00:00",
+        "03:15:45",
+        "06:30:00",
+        "09:45:15",
+        "10:08:30",
+        "12:00:00",
+        "15:22:10",
+        "18:40:30",
+        "21:55:50"
+      ],
+      "renderDirectory": "hermes-a1c-output\\human-review\\atlas-renders"
+    },
+    "artifacts": {
+      "geometryOverlay": "hermes-a1c-output\\human-review\\geometry-overlay.png",
+      "assetSheet": "hermes-a1c-output\\human-review\\asset-sheet.png",
+      "mappingComparison": "hermes-a1c-output\\human-review\\mapping-comparison.png",
+      "dialCleanAdaptive": "hermes-a1c-output\\human-review\\dial-clean-adaptive.png"
+    },
+    "deviceOrEmulatorVerification": "deferred"
+  }
+}

@@ -8,6 +8,8 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
+from .display_geometry import RoundedRect
+
 
 CANVAS_SIZE = 438
 SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schemas" / "scene.schema.json"
@@ -101,6 +103,28 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
             _number(clock.get(key), f"clock.{key}")
         if not 0 <= float(clock["confidence"]) <= 1:
             _fail("clock.confidence", "must be between 0 and 1")
+
+    display_geometry = scene.get("displayGeometry")
+    if display_geometry is not None:
+        if not isinstance(display_geometry, dict):
+            _fail("displayGeometry", "must be an object")
+        if display_geometry.get("mappingPolicy") != "CENTER_PRESERVING_BOUNDARY_NORMALIZED":
+            _fail("displayGeometry.mappingPolicy", "must use center-preserving boundary-normalized mapping")
+        for key in ("source", "target"):
+            value = display_geometry.get(key)
+            if not isinstance(value, dict):
+                _fail(f"displayGeometry.{key}", "must be an object")
+            try:
+                shape = RoundedRect.from_dict(value)
+            except (KeyError, TypeError, ValueError) as error:
+                _fail(f"displayGeometry.{key}", str(error))
+            declared_shape = str(value.get("shape", "")).upper()
+            if declared_shape == "CIRCLE" and not shape.is_circle:
+                _fail(f"displayGeometry.{key}.shape", "CIRCLE requires width == height and radius == width / 2")
+            if declared_shape == "ROUNDED_RECT" and shape.is_circle:
+                _fail(f"displayGeometry.{key}.shape", "a circle must use the CIRCLE special-case label")
+            if "isCircleSpecialCase" in value and bool(value["isCircleSpecialCase"]) != shape.is_circle:
+                _fail(f"displayGeometry.{key}.isCircleSpecialCase", "does not match width, height, and radius")
 
     normalization = scene["normalization"]
     if not isinstance(normalization, dict):
