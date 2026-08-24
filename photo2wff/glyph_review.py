@@ -7,7 +7,6 @@ from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .glyphs import _render_styled_scaffold
 from .wff_render import render_wff_xml
 
 
@@ -33,15 +32,6 @@ def _fit(image: Image.Image, size: tuple[int, int], background: str = "#0C0C0C")
 
 def _label(panel: Image.Image, text: str, color: str = "#FFFFFF") -> None:
     ImageDraw.Draw(panel).text((8, 8), text, fill=color, font=_font(14, True))
-
-
-def _candidate_resource_path(output_root: Path, resource: str) -> Path:
-    candidates = (
-        output_root / resource,
-        output_root / "assets/glyphs/synthesized/candidates" / resource,
-        output_root / "assets/glyphs/leave-one-out" / resource,
-    )
-    return next((candidate for candidate in candidates if candidate.exists()), candidates[0])
 
 
 def _glyph_atlas(report: dict[str, Any], output_root: Path, path: Path, provenance: bool = False) -> None:
@@ -305,46 +295,6 @@ def _leave_one_out_review(report: dict[str, Any], output_root: Path, path: Path)
     return {"artifact": str(path), "digits": targets, "columns": list(labels), "method": loo.get("method")}
 
 
-def _scaffold_review(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
-    """Compare source, generic scaffold, styled scaffold, donor candidate, overlay."""
-    style = report.get("primitives", {}).get("styleParameters", {})
-    labels = ("SOURCE", "GENERIC SCAFFOLD", "STYLED SCAFFOLD", "DONOR-ASSISTED", "SOURCE OVERLAY")
-    targets = ("6", "3")
-    tile = (180, 170)
-    sheet = Image.new("RGB", (tile[0] * len(labels), tile[1] * len(targets) + 42), "#151515")
-    draw = ImageDraw.Draw(sheet)
-    draw.text((10, 10), "SCAFFOLD-GUIDED RECONSTRUCTION REVIEW", fill="#FFFFFF", font=_font(15, True))
-    for column, label in enumerate(labels):
-        draw.text((column * tile[0] + 5, 28), label, fill="#A8A8A8", font=_font(8))
-    for row, target in enumerate(targets):
-        source_meta = report.get("glyphs", {}).get(target)
-        source = Image.open(output_root / source_meta["resource"]).convert("RGBA") if source_meta else Image.new("RGBA", (64, 96), (0, 0, 0, 0))
-        generic_style = dict(style)
-        generic_style["outerStrokeWidth"] = 1.0
-        generic_style["outlineGap"] = 0.2
-        generic = _render_styled_scaffold(target, generic_style)
-        styled = _render_styled_scaffold(target, style)
-        if target == "6":
-            best = report.get("leaveOneOut", {}).get("targets", {}).get("6", {}).get("bestCandidate")
-        else:
-            candidates = report.get("candidates", {}).get("3", [])
-            best = candidates[1] if len(candidates) > 1 else (candidates[0] if candidates else None)
-        donor = Image.open(_candidate_resource_path(output_root, best["resource"])).convert("RGBA") if best else Image.new("RGBA", styled.size, (0, 0, 0, 0))
-        overlay = source.copy()
-        if source_meta:
-            overlay.alpha_composite(donor.resize(source.size, Image.Resampling.NEAREST), (0, 0))
-        panels = (source, generic, styled, donor, overlay)
-        for column, image in enumerate(panels):
-            left = column * tile[0]
-            top = 42 + row * tile[1]
-            sheet.paste(_fit(image, tile), (left, top))
-            if column == 0:
-                draw.text((left + 5, top + 145), f"TARGET {target}", fill="#69F0AE", font=_font(10, True))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    sheet.save(path)
-    return {"artifact": str(path), "targets": list(targets), "columns": list(labels), "styleParameters": style.get("report")}
-
-
 def _candidate_comparison_atlas(
     scene: dict[str, Any],
     candidate_xmls: dict[str, Path],
@@ -392,7 +342,6 @@ def generate_glyph_review_artifacts(
     observed_fidelity = review_dir / "observed-glyph-fidelity-review.png"
     primitive_atlas = review_dir / "primitive-atlas.png"
     leave_one_out = review_dir / "topology-leave-one-out-review.png"
-    scaffold_review = review_dir / "scaffold-guided-reconstruction-review.png"
     candidate_comparison = review_dir / "fallback-vs-compositional-candidates.png"
     _glyph_atlas(report, output_root, canonical)
     _glyph_atlas(report, output_root, provenance, provenance=True)
@@ -404,10 +353,9 @@ def generate_glyph_review_artifacts(
     fidelity_report = _observed_fidelity_review(report, output_root, observed_fidelity)
     primitive_report = _primitive_atlas(report, output_root, primitive_atlas)
     leave_one_out_report = _leave_one_out_review(report, output_root, leave_one_out)
-    scaffold_review_report = _scaffold_review(report, output_root, scaffold_review)
     candidate_comparison_report = _candidate_comparison_atlas(scene, candidate_xmls or {}, fallback_xml, candidate_comparison) if candidate_xmls else None
     manifest = {
-        "milestone": "A2b.4 Scaffold-Guided Glyph Reconstruction",
+        "milestone": "A2b.3 Topology-first Glyph Grammar",
         "status": report.get("status", "incomplete"),
         "coverage": report.get("coverage", {}),
         "dateStyleRelation": report.get("dateStyleRelation", {}),
@@ -423,13 +371,12 @@ def generate_glyph_review_artifacts(
             "observedGlyphFidelity": fidelity_report,
             "primitiveAtlas": primitive_report,
             "topologyLeaveOneOutReview": leave_one_out_report,
-            "scaffoldGuidedReconstruction": scaffold_review_report,
             "fallbackVsCompositionalCandidates": candidate_comparison_report,
         },
         "requiresHumanReview": report.get("requiresHumanReview", True),
         "deviceOrEmulatorVerification": "deferred",
         "candidateRankingIsNotApproval": True,
-        "grammar": "SCAFFOLD_GUIDED_GLYPH_RECONSTRUCTION",
+        "grammar": "TOPOLOGY_FIRST_GLYPH_GRAMMAR",
     }
     manifest_path = review_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")

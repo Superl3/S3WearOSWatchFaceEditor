@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import math
-import statistics
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
@@ -624,7 +623,7 @@ def _extract_shape_primitives(character: str, image: Image.Image, output_root: P
     return _extract_topology(character, image, output_root)
 
 
-def _rasterize_geometry(geometry: dict[str, Any], size: tuple[int, int], rotation: float = 0.0, scale_xy: tuple[float, float] = (1.0, 1.0)) -> Image.Image:
+def _rasterize_geometry(geometry: dict[str, Any], size: tuple[int, int], rotation: float = 0.0) -> Image.Image:
     result = Image.new("RGBA", size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(result)
     box = geometry.get("bbox", [0, 0, geometry.get("width", 1), geometry.get("height", 1)])
@@ -635,7 +634,7 @@ def _rasterize_geometry(geometry: dict[str, Any], size: tuple[int, int], rotatio
     def transform(point: list[int]) -> tuple[int, int]:
         x = (point[0] - center[0]) / source_width * size[0] + size[0] / 2
         y = (point[1] - center[1]) / source_height * size[1] + size[1] / 2
-        dx, dy = (x - size[0] / 2) * scale_xy[0], (y - size[1] / 2) * scale_xy[1]
+        dx, dy = x - size[0] / 2, y - size[1] / 2
         return round(size[0] / 2 + dx * math.cos(radians) - dy * math.sin(radians)), round(size[1] / 2 + dx * math.sin(radians) + dy * math.cos(radians))
     for points, color in ((geometry.get("outerContour", []), (235, 229, 224, 220)), (geometry.get("innerContour", []), (235, 229, 224, 220))):
         transformed = [transform(point) for point in points]
@@ -643,87 +642,6 @@ def _rasterize_geometry(geometry: dict[str, Any], size: tuple[int, int], rotatio
     for segment in geometry.get("segments", []):
         draw.line([transform(point) for point in segment["points"]], fill=(235, 229, 224, 255), width=1)
     return result
-
-
-GENERIC_SCAFFOLDS: dict[str, list[list[tuple[float, float]]]] = {
-    "6": [[(0.72, 0.08), (0.42, 0.04), (0.18, 0.18), (0.12, 0.52), (0.20, 0.82), (0.45, 0.96), (0.72, 0.84), (0.76, 0.62), (0.58, 0.50), (0.30, 0.53)]],
-    "3": [[(0.18, 0.12), (0.48, 0.05), (0.76, 0.18), (0.58, 0.48), (0.76, 0.56), (0.78, 0.82), (0.50, 0.96), (0.18, 0.86)]],
-}
-
-
-def _estimate_style_parameters(output_root: Path, themed_assets: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    """Estimate shared appearance parameters from clean observed reference glyphs."""
-    clean = [asset for asset in themed_assets.values() if asset.get("provenance") == "OBSERVED_CLEAN"]
-    metrics = [asset.get("metrics", {}) for asset in clean]
-    widths = [float(item.get("width", 1)) for item in metrics]
-    heights = [float(item.get("height", 1)) for item in metrics]
-    strokes = [float(item.get("strokeWidthEstimate", 2)) for item in metrics]
-    proportion = statistics.median(width / max(1.0, height) for width, height in zip(widths, heights)) if widths else 0.65
-    stroke = statistics.median(strokes) if strokes else 2.0
-    style = {
-        "outerStrokeWidth": round(max(1.0, stroke), 3),
-        "innerStrokeWidth": round(max(1.0, stroke * 0.72), 3),
-        "outlineGap": round(max(0.8, stroke * 0.28), 3),
-        "widthHeightProportion": round(proportion, 4),
-        "curveRadius": round(statistics.median(heights) * 0.22 if heights else 8.0, 3),
-        "curveTension": 0.78,
-        "terminalShape": "round-joined-outline",
-        "counterProportion": round(max(0.2, min(0.8, proportion * 0.62)), 4),
-        "cornerTreatment": "continuous-curvature-with-rounded-cap",
-        "sampleCount": len(clean),
-        "sourceProvenance": "OBSERVED_CLEAN_ONLY",
-    }
-    style_path = output_root / "style-parameters.json"
-    style_path.write_text(json.dumps(style, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
-    return {**style, "report": str(style_path.relative_to(output_root)).replace("\\", "/")}
-
-
-def _render_styled_scaffold(character: str, style: dict[str, Any], size: tuple[int, int] = (64, 96)) -> Image.Image:
-    """Render a generic vector-like scaffold once at high resolution."""
-    outer = Image.new("L", size, 0)
-    paths = GENERIC_SCAFFOLDS.get(character, [])
-    draw_outer = ImageDraw.Draw(outer)
-    outer_width = max(3, round(float(style.get("outerStrokeWidth", 2.0)) * 2.0))
-    inner_width = max(1, round(outer_width - float(style.get("outlineGap", 1.0)) * 2.0))
-    for path in paths:
-        points = [(round(x * (size[0] - 1)), round(y * (size[1] - 1))) for x, y in path]
-        draw_outer.line(points, fill=255, width=outer_width, joint="curve")
-        draw_outer.ellipse((points[0][0] - outer_width // 2, points[0][1] - outer_width // 2, points[0][0] + outer_width // 2, points[0][1] + outer_width // 2), fill=255)
-        draw_outer.ellipse((points[-1][0] - outer_width // 2, points[-1][1] - outer_width // 2, points[-1][0] + outer_width // 2, points[-1][1] + outer_width // 2), fill=255)
-    inner = Image.new("L", size, 0)
-    draw_inner = ImageDraw.Draw(inner)
-    for path in paths:
-        points = [(round(x * (size[0] - 1)), round(y * (size[1] - 1))) for x, y in path]
-        draw_inner.line(points, fill=255, width=inner_width, joint="curve")
-    alpha = ImageChops.subtract(outer, inner)
-    result = Image.new("RGBA", size, (0, 0, 0, 0))
-    result.paste((235, 229, 224, 255), mask=alpha)
-    return result
-
-
-def _compose_scaffold_candidate(
-    character: str,
-    candidate_id: str,
-    style: dict[str, Any],
-    output_root: Path,
-    donor_parts: list[tuple[dict[str, Any], str, str]],
-    provenance: list[dict[str, Any]],
-) -> dict[str, Any]:
-    canvas = _render_styled_scaffold(character, style)
-    donor_alpha = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
-    for geometry, region, donor in donor_parts:
-        donor_geometry = _topology_region(geometry, region)
-        donor_image = _rasterize_geometry(donor_geometry, canvas.size)
-        donor_alpha = Image.alpha_composite(donor_alpha, donor_image)
-        provenance.append({"role": "donor_assistance", "sourceGlyph": donor, "region": region, "operation": "target_scaffold_warp"})
-    if donor_parts:
-        combined_alpha = ImageChops.lighter(canvas.getchannel("A"), donor_alpha.getchannel("A"))
-        canvas = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
-        canvas.paste((235, 229, 224, 255), mask=combined_alpha)
-    path = output_root / "assets/glyphs/synthesized/candidates" / f"candidate_{character}_{candidate_id}.png"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    canvas.save(path)
-    return {"character": character, "candidate": candidate_id, "resource": path.name, "path": str(path), "source": "SCAFFOLD_GUIDED_RECONSTRUCTION", "synthetic": True, "confidence": 0.0, "requiresHumanReview": True, "provenance": provenance, "metrics": {**_metrics(canvas), **_display_metrics(canvas)}, "styleParameters": style["report"]}
 
 
 def _topology_region(geometry: dict[str, Any], region: str) -> dict[str, Any]:
@@ -766,58 +684,25 @@ def _leave_one_out_validation(output_root: Path, themed_assets: dict[str, dict[s
     available = topology_report.get("glyphs", {})
     validation_dir = output_root / "assets/glyphs/leave-one-out"
     validation_dir.mkdir(parents=True, exist_ok=True)
-    style = topology_report.get("styleParameters", {})
-    result: dict[str, Any] = {"method": "scaffold_guided_leave_one_out", "targets": {}, "styleParameters": style}
+    result: dict[str, Any] = {"method": "topology_donor_leave_one_out", "targets": {}}
     clean = {digit for digit, value in themed_assets.items() if value.get("provenance") == "OBSERVED_CLEAN"}
     for target, asset in themed_assets.items():
         target_geometry = available.get(target, {}).get("geometry", {})
         donors = [digit for digit in clean if digit != target and digit in available]
         candidates: list[dict[str, Any]] = []
-        target_path = output_root / asset["resource"]
-        target_image = Image.open(target_path).convert("RGBA")
-        if target == "6":
-            generic = _render_styled_scaffold("6", style, target_image.size)
-            generic_path = validation_dir / "loo_6_generic_styled_scaffold.png"
-            generic.save(generic_path)
-            generic_diff = ImageChops.difference(target_image.getchannel("A"), generic.getchannel("A"))
-            generic_score = round(1.0 - sum(generic_diff.getdata()) / (255.0 * generic_diff.width * generic_diff.height), 4)
-            candidates.append({"candidateType": "generic_styled_6", "donor": None, "rotationDeg": 0.0, "resource": str(generic_path.relative_to(output_root)).replace("\\", "/"), "similarity": generic_score, "requiresHumanReview": True})
-            if "9" in available:
-                rotated = _rasterize_geometry(available["9"]["geometry"], target_image.size, rotation=180.0)
-                rotated_path = validation_dir / "loo_6_from_9_rot180.png"
-                rotated.save(rotated_path)
-                rotated_diff = ImageChops.difference(target_image.getchannel("A"), rotated.getchannel("A"))
-                rotated_score = round(1.0 - sum(rotated_diff.getdata()) / (255.0 * rotated_diff.width * rotated_diff.height), 4)
-                candidates.append({"candidateType": "nine_rotated_180", "donor": "9", "rotationDeg": 180.0, "resource": str(rotated_path.relative_to(output_root)).replace("\\", "/"), "similarity": rotated_score, "requiresHumanReview": True})
-                best_scale = (1.0, 1.0)
-                best_score = rotated_score
-                for scale_x in (0.90, 0.95, 1.05, 1.10):
-                    for scale_y in (0.94, 1.0, 1.06):
-                        corrected = _rasterize_geometry(available["9"]["geometry"], target_image.size, rotation=180.0, scale_xy=(scale_x, scale_y))
-                        corrected_diff = ImageChops.difference(target_image.getchannel("A"), corrected.getchannel("A"))
-                        corrected_score = round(1.0 - sum(corrected_diff.getdata()) / (255.0 * corrected_diff.width * corrected_diff.height), 4)
-                        if corrected_score > best_score:
-                            best_score, best_scale = corrected_score, (scale_x, scale_y)
-                corrected = _rasterize_geometry(available["9"]["geometry"], target_image.size, rotation=180.0, scale_xy=best_scale)
-                corrected_path = validation_dir / "loo_6_from_9_rot180_geometry_corrected.png"
-                corrected.save(corrected_path)
-                candidates.append({"candidateType": "nine_rotated_180_geometry_corrected", "donor": "9", "rotationDeg": 180.0, "scaleXY": list(best_scale), "resource": str(corrected_path.relative_to(output_root)).replace("\\", "/"), "similarity": best_score, "requiresHumanReview": True})
-        else:
-            for donor in donors[:5]:
-                candidate_image = _rasterize_geometry(available[donor]["geometry"], target_image.size)
-                candidate_path = validation_dir / f"loo_{target}_from_{donor}.png"
-                candidate_image.save(candidate_path)
-                difference = ImageChops.difference(target_image.getchannel("A"), candidate_image.getchannel("A"))
-                score = round(1.0 - sum(difference.getdata()) / (255.0 * difference.width * difference.height), 4)
-                candidates.append({"candidateType": "topology_donor", "donor": donor, "rotationDeg": 0.0, "resource": str(candidate_path.relative_to(output_root)).replace("\\", "/"), "topologyDistance": _topology_distance(target_geometry, available[donor]["geometry"]), "similarity": score, "requiresHumanReview": True})
-        best = max(candidates, key=lambda item: item["similarity"]) if candidates else None
-        target_result = {"provenance": asset.get("provenance"), "reference": asset["resource"], "candidates": candidates, "bestCandidate": best}
-        if target == "6":
-            generic_score = next((item["similarity"] for item in candidates if item["candidateType"] == "generic_styled_6"), 0.0)
-            corrected_score = next((item["similarity"] for item in candidates if item["candidateType"] == "nine_rotated_180_geometry_corrected"), 0.0)
-            target_result["validationPassed"] = corrected_score >= generic_score and corrected_score > 0.0
-            target_result["comparison"] = {"genericStyled6": generic_score, "nineRotated180GeometryCorrected": corrected_score}
-        result["targets"][target] = target_result
+        if target == "6" and "9" in available:
+            donors = ["9"] + [digit for digit in donors if digit != "9"]
+        for donor in donors[:5]:
+            rotation = 180.0 if target == "6" and donor == "9" else 0.0
+            target_path = output_root / asset["resource"]
+            target_image = Image.open(target_path).convert("RGBA")
+            candidate_image = _rasterize_geometry(available[donor]["geometry"], target_image.size, rotation=rotation)
+            candidate_path = validation_dir / f"loo_{target}_from_{donor}.png"
+            candidate_image.save(candidate_path)
+            difference = ImageChops.difference(target_image.getchannel("A"), candidate_image.getchannel("A"))
+            score = round(1.0 - sum(difference.getdata()) / (255.0 * difference.width * difference.height), 4)
+            candidates.append({"donor": donor, "rotationDeg": rotation, "resource": str(candidate_path.relative_to(output_root)).replace("\\", "/"), "topologyDistance": _topology_distance(target_geometry, available[donor]["geometry"]), "similarity": score, "requiresHumanReview": True})
+        result["targets"][target] = {"provenance": asset.get("provenance"), "reference": asset["resource"], "candidates": candidates, "bestCandidate": max(candidates, key=lambda item: item["similarity"]) if candidates else None}
     report_path = output_root / "leave-one-out-report.json"
     report_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     result["report"] = str(report_path.relative_to(output_root)).replace("\\", "/")
@@ -825,35 +710,27 @@ def _leave_one_out_validation(output_root: Path, themed_assets: dict[str, dict[s
 
 
 def _synthesize_compositional_missing_glyphs(output_root: Path, themed_assets: dict[str, dict[str, Any]], topology_report: dict[str, Any]) -> tuple[dict[str, list[dict[str, Any]]], dict[str, dict[str, Any]]]:
-    """Generate scaffold-guided review candidates after 6 leave-one-out passes."""
+    """Generate review-only candidates from topology grammar recipes."""
     if "3" not in topology_report.get("targets", ()):
         return {}, {}
     available = topology_report.get("glyphs", {})
-    six_validation = topology_report.get("leaveOneOut", {}).get("targets", {}).get("6", {})
-    if not six_validation.get("validationPassed", False):
-        return {"3": []}, {}
     if any(digit not in available for digit in ("8", "2", "9")):
         return {"3": []}, {}
-    style = topology_report.get("styleParameters", {})
     g = lambda digit: available[digit]["geometry"]
     hybrid_lower = g("6") if "6" in available else g("9")
     hybrid_lower_source = "6" if "6" in available else "9"
     recipes = (
-        ("01", [], "generic_3_styled_scaffold"),
-        ("02", [(g("8"), "upper_right", "8")], "scaffold_plus_8_upper"),
-        ("03", [(g("2"), "upper_curve", "2")], "scaffold_plus_2_upper"),
-        ("04", [(g("9"), "upper_curve", "9")], "scaffold_plus_9_upper"),
-        ("05", [(g("8"), "lower_curve", "8")], "scaffold_plus_8_lower"),
-        ("06", [(hybrid_lower, "lower_curve", hybrid_lower_source)], "scaffold_plus_6_lower_hybrid"),
+        ("01", [(g("8"), "upper_right"), (g("8"), "lower_curve")], "8_topology_cut_open"),
+        ("02", [(g("2"), "upper_curve"), (g("8"), "lower_curve")], "2_upper_curve_plus_8_lower"),
+        ("03", [(g("9"), "upper_curve"), (hybrid_lower, "lower_curve")], "9_6_family_hybrid"),
     )
-    confidence = {"01": 0.72, "02": 0.69, "03": 0.65, "04": 0.62, "05": 0.59, "06": 0.55}
+    confidence = {"01": 0.71, "02": 0.64, "03": 0.58}
     candidates: list[dict[str, Any]] = []
     for candidate_id, parts, recipe in recipes:
-        provenance = [{"role": "target_scaffold", "target": "3", "scaffold": "GENERIC_SCAFFOLD_3", "operation": "style_parameter_render"}, {"role": "assembly", "operation": "single_high_resolution_rasterize", "recipe": recipe}]
-        candidate = _compose_scaffold_candidate("3", candidate_id, style, output_root, parts, provenance)
+        candidate = _assemble_three_candidate(candidate_id, parts, output_root, [{"role": "topology_part", "sourceGlyph": "8" if candidate_id == "01" else "2" if candidate_id == "02" else "9", "sourceProvenance": available["8" if candidate_id == "01" else "2" if candidate_id == "02" else "9"].get("provenance"), "region": parts[0][1]}, {"role": "topology_part", "sourceGlyph": "8" if candidate_id in {"01", "02"} else hybrid_lower_source, "sourceProvenance": available["8" if candidate_id in {"01", "02"} else hybrid_lower_source].get("provenance"), "region": parts[1][1]}, {"role": "assembly", "operation": "contour_skeleton_transform_then_single_rasterize", "recipe": recipe}])
         candidate["rank"] = len(candidates) + 1
         candidate["confidence"] = confidence[candidate_id]
-        candidate["ranking"] = {"score": confidence[candidate_id], "method": "scaffold_style_recipe_prior", "autoApproved": False}
+        candidate["ranking"] = {"score": confidence[candidate_id], "method": "topology_recipe_prior", "autoApproved": False}
         candidates.append(candidate)
     selected = candidates[0] if candidates else None
     themed: dict[str, dict[str, Any]] = {}
@@ -861,7 +738,7 @@ def _synthesize_compositional_missing_glyphs(output_root: Path, themed_assets: d
         themed_path = output_root / "assets/glyphs/themed/glyph_3.png"
         themed_path.parent.mkdir(parents=True, exist_ok=True)
         Image.open(selected["path"]).convert("RGBA").save(themed_path)
-        themed["3"] = {"character": "3", "type": THEMED_GLYPH_TYPE, "source": "SYNTHESIZED_SCAFFOLD", "synthetic": True, "confidence": selected["confidence"], "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"), "candidate": selected["candidate"], "requiresHumanReview": True, "provenance": selected["provenance"], "metrics": selected["metrics"]}
+        themed["3"] = {"character": "3", "type": THEMED_GLYPH_TYPE, "source": "SYNTHESIZED_TOPOLOGY", "synthetic": True, "confidence": selected["confidence"], "resource": str(themed_path.relative_to(output_root)).replace("\\", "/"), "candidate": selected["candidate"], "requiresHumanReview": True, "provenance": selected["provenance"], "metrics": selected["metrics"]}
     return {"3": candidates}, themed
 
 
@@ -1017,13 +894,12 @@ def extract_themed_glyph_set(
             coverage[character] = "MISSING"
 
     primitive_report: dict[str, Any] = {
-        "version": "A2b.4",
-        "grammar": "SCAFFOLD_GUIDED_GLYPH_RECONSTRUCTION",
+        "version": "A2b.3",
+        "grammar": "TOPOLOGY_FIRST_GLYPH_GRAMMAR",
         "targetDigits": ["3"],
         "targets": ["3"],
         "segmentKinds": list(TOPOLOGY_SEGMENT_KINDS),
         "orientationModel": _fit_global_orientation(),
-        "styleParameters": _estimate_style_parameters(output_root, themed_assets),
         "glyphs": {},
         "status": "completed_with_review",
     }
@@ -1037,11 +913,10 @@ def extract_themed_glyph_set(
         primitive_report["glyphs"][character] = topology
     leave_one_out = _leave_one_out_validation(output_root, themed_assets, primitive_report)
     primitive_report["leaveOneOutReport"] = leave_one_out.get("report")
-    primitive_report["leaveOneOut"] = leave_one_out
     primitive_report_path = output_root / "primitive-report.json"
     primitive_report_path.write_text(json.dumps(primitive_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
-    # A2b.4 synthesizes only review candidates after 6 validation.  The actual dial remains
+    # A2b.3 synthesizes only a review candidate.  The actual dial remains
     # unchanged because the missing 3 o'clock index is a layout replacement.
     synthesizer = synthesizer or DeterministicFallbackAdapter(output_root / "assets/fonts/pretendard.ttf")
     adapter_status = [ExternalModelAdapter().status(), LocalModelAdapter().status(), synthesizer.status()]
@@ -1074,18 +949,16 @@ def extract_themed_glyph_set(
         "primitives": primitive_report,
         "topology": primitive_report,
         "leaveOneOut": leave_one_out,
-        "grammar": "SCAFFOLD_GUIDED_GLYPH_RECONSTRUCTION",
         "primitiveReport": str(primitive_report_path.relative_to(output_root)).replace("\\", "/"),
         "dateStyleRelation": relation,
         "adapters": adapter_status,
         "externalModelStatus": "external synthesis unavailable",
         "synthesis": {
             "enabled": True,
-            "version": "A2b.4",
-            "method": "SCAFFOLD_GUIDED_GLYPH_RECONSTRUCTION",
+            "version": "A2b.3",
+            "method": "TOPOLOGY_FIRST_GLYPH_GRAMMAR",
             "targetDigits": ["3"],
             "candidateCount": len(candidates.get("3", [])),
-            "gatedBy": "leave_one_out_6_validation",
             "autoApproval": False,
             "status": "review_only",
             "externalModelUsed": False,

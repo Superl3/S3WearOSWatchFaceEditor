@@ -167,17 +167,12 @@ class Photo2WFFTests(unittest.TestCase):
                 image_path = output_root / f"glyph_{character}.png"
                 image.save(image_path)
                 glyphs[character] = _extract_shape_primitives(character, image, output_root)
-            report = {
-                "targets": ["3"],
-                "glyphs": glyphs,
-                "styleParameters": {"outerStrokeWidth": 2, "innerStrokeWidth": 1, "outlineGap": 1, "report": "style-parameters.json"},
-                "leaveOneOut": {"targets": {"6": {"validationPassed": True}}},
-            }
+            report = {"targets": ["3"], "primitiveKinds": [], "glyphs": glyphs}
             candidates, themed = _synthesize_compositional_missing_glyphs(output_root, {}, report)
-            self.assertEqual(len(candidates["3"]), 6)
-            self.assertEqual([item["rank"] for item in candidates["3"]], [1, 2, 3, 4, 5, 6])
+            self.assertEqual(len(candidates["3"]), 3)
+            self.assertEqual([item["rank"] for item in candidates["3"]], [1, 2, 3])
             self.assertTrue(all(item["requiresHumanReview"] for item in candidates["3"]))
-            self.assertEqual(themed["3"]["source"], "SYNTHESIZED_SCAFFOLD")
+            self.assertEqual(themed["3"]["source"], "SYNTHESIZED_TOPOLOGY")
             self.assertFalse(candidates["3"][0]["ranking"]["autoApproved"])
 
     def test_leave_one_out_includes_rotated_nine_donor_for_six(self):
@@ -195,9 +190,8 @@ class Photo2WFFTests(unittest.TestCase):
             result = _leave_one_out_validation(output_root, themed, topology)
             six_candidates = result["targets"]["6"]["candidates"]
             self.assertTrue(six_candidates)
-            self.assertEqual(six_candidates[0]["candidateType"], "generic_styled_6")
-            self.assertTrue(any(item["candidateType"] == "nine_rotated_180" and item["rotationDeg"] == 180.0 for item in six_candidates))
-            self.assertTrue(any(item["candidateType"] == "nine_rotated_180_geometry_corrected" for item in six_candidates))
+            self.assertEqual(six_candidates[0]["donor"], "9")
+            self.assertEqual(six_candidates[0]["rotationDeg"], 180.0)
 
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:

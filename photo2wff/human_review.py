@@ -445,7 +445,7 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
     glyph_report_path = output_root / "glyph-report.json"
     fallback_xml_path = output_root / "project-fallback/watchface/src/main/res/raw/watchface.xml"
     if date_slot is not None and glyph_report_path.exists() and fallback_xml_path.exists():
-        manifest["milestone"] = "A2b.4 Scaffold-Guided Glyph Reconstruction"
+        manifest["milestone"] = "A2b.3 Topology-first Glyph Grammar"
         glyph_report = json.loads(glyph_report_path.read_text(encoding="utf-8"))
         candidate_xmls = {}
         for candidate in glyph_report.get("candidates", {}).get("3", []):
