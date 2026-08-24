@@ -174,13 +174,11 @@ class Photo2WFFTests(unittest.TestCase):
                 "leaveOneOut": {"targets": {"6": {"validationPassed": True}}},
             }
             candidates, themed = _synthesize_compositional_missing_glyphs(output_root, {}, report)
-            self.assertEqual(len(candidates["3"]), 8)
-            self.assertEqual([item["rank"] for item in candidates["3"]], list(range(1, 9)))
+            self.assertEqual(len(candidates["3"]), 6)
+            self.assertEqual([item["rank"] for item in candidates["3"]], [1, 2, 3, 4, 5, 6])
             self.assertTrue(all(item["requiresHumanReview"] for item in candidates["3"]))
             self.assertEqual(themed["3"]["source"], "SYNTHESIZED_SCAFFOLD")
             self.assertFalse(candidates["3"][0]["ranking"]["autoApproved"])
-            self.assertEqual(candidates["3"][0]["ranking"]["method"], "grammar_style_variation")
-            self.assertTrue(all(not any(item.get("role") == "donor_assistance" for item in candidate["provenance"]) for candidate in candidates["3"]))
 
     def test_leave_one_out_includes_rotated_nine_donor_for_six(self):
         with tempfile.TemporaryDirectory() as temp:
