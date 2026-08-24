@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import shutil
 from pathlib import Path
@@ -110,18 +109,8 @@ def product_photo(reference: Path, output: Path, generative_fallback: Path | Non
     render_scene(scene, output / "preview.png", output)
     compile_project(scene, output / "project", output)
     _copy_wrapper(output / "project")
-    fallback_scene = copy.deepcopy(scene)
-    for element in fallback_scene.get("elements", []):
-        themed = element.get("themedGlyph")
-        if themed:
-            themed["enabled"] = False
-    save_scene(fallback_scene, output / "scene.fallback.json")
-    compile_project(fallback_scene, output / "project-fallback", output)
-    _copy_wrapper(output / "project-fallback")
     xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
-    fallback_xml_path = output / "project-fallback/watchface/src/main/res/raw/watchface.xml"
     render_metadata = render_wff_xml(xml_path, output / "wff-rendered.png", fixed_time=scene["preview"]["time"])
-    fallback_render_metadata = render_wff_xml(fallback_xml_path, output / "fallback-wff-rendered.png", fixed_time=scene["preview"]["time"])
     render_dir = output / "renders"
     render_times = ["10:08:30", "03:15:45", "06:30:00", "09:45:15"]
     render_paths = {time: render_dir / f"{time.replace(':', '-')}.png" for time in render_times}
@@ -132,7 +121,6 @@ def product_photo(reference: Path, output: Path, generative_fallback: Path | Non
     human_review = generate_human_review_artifacts(scene, output, xml_path)
     comparison = compare_images(output / "reference.png", output / "wff-rendered.png")
     comparison["render"] = render_metadata
-    comparison["fallbackRender"] = fallback_render_metadata
     comparison["dynamicValidation"] = dynamic_validation
     comparison["humanReview"] = human_review
     save_report(comparison, output / "comparison.json")

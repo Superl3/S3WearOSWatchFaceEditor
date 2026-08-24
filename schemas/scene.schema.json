@@ -214,24 +214,6 @@
         },
         "dataSource": { "type": "string" },
         "slotType": { "enum": ["DATE_DAY_OF_MONTH"] },
-        "themedGlyph": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["type", "family", "enabled", "fallbackFamily", "coverageReport", "resourceDirectory", "resources"],
-          "properties": {
-            "type": { "const": "THEMED_GLYPH" },
-            "family": { "type": "string", "minLength": 1 },
-            "enabled": { "type": "boolean" },
-            "approved": { "type": "boolean" },
-            "fallbackFamily": { "type": "string", "minLength": 1 },
-            "coverageReport": { "type": "string", "minLength": 1 },
-            "resourceDirectory": { "type": "string", "minLength": 1 },
-            "resources": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } },
-            "metrics": { "type": "object", "additionalProperties": { "type": "object" } },
-            "dateStyleRelation": { "type": "object" },
-            "requiresHumanReview": { "type": "boolean" }
-          }
-        },
         "role": { "enum": ["HOUR", "MINUTE", "SECOND"] },
         "observedAngleDeg": { "type": "number", "minimum": -360, "maximum": 360 },
         "length": { "type": "number", "exclusiveMinimum": 0 },

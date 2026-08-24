@@ -31,25 +31,6 @@ def _centered_text(draw: ImageDraw.ImageDraw, bbox: dict[str, int], text: str, f
     draw.multiline_text(center, text, font=font, fill=fill, anchor="mm", align="center", spacing=spacing)
 
 
-def _themed_glyph_text(base: Image.Image, bbox: dict[str, int], text: str, element: dict[str, Any], scene_root: Path) -> bool:
-    themed = element.get("themedGlyph") or {}
-    if not themed.get("enabled"):
-        return False
-    glyphs = []
-    for character in text:
-        asset = themed.get("resources", {}).get(character)
-        if not asset or not (scene_root / asset).exists():
-            return False
-        glyphs.append(Image.open(scene_root / asset).convert("RGBA"))
-    total_width = sum(image.width for image in glyphs)
-    x = bbox["x"] + (bbox["width"] - total_width) // 2
-    y = bbox["y"] + max(0, (bbox["height"] - max((image.height for image in glyphs), default=0)) // 2)
-    for image in glyphs:
-        base.alpha_composite(image, (x, y))
-        x += image.width
-    return True
-
-
 def _rgba(style: dict[str, Any]) -> tuple[int, int, int, int]:
     value = style.get("color", "#FFFFFF").lstrip("#")
     if len(value) == 6:
@@ -146,8 +127,7 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
                 raise ValueError(f"unsupported DYNAMIC_SLOT type: {element.get('slotType')}")
             day = _day_of_month(sample_date)
             value = f"{day:02d}" if element.get("format", "d") == "dd" else str(day)
-            if not _themed_glyph_text(base, bbox, value, element, scene_root):
-                _centered_text(draw, bbox, value, _font(scene_root, style), fill)
+            _centered_text(draw, bbox, value, _font(scene_root, style), fill)
         elif element_type == "WEEKDAY":
             _centered_text(draw, bbox, sample_weekday, _font(scene_root, style), fill)
         elif element_type in dynamic_values:

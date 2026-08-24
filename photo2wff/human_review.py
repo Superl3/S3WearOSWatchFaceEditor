@@ -9,7 +9,6 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 from .display_geometry import RoundedRect, inverse_raster_map, map_structured_element
 from .date_review import generate_date_window_review_artifacts
-from .glyph_review import generate_glyph_review_artifacts
 from .wff_render import render_wff_xml
 
 
@@ -442,12 +441,6 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
         manifest["milestone"] = "A2 Dynamic Date Window"
         date_metadata = json.loads(date_metadata_path.read_text(encoding="utf-8"))
         manifest["dateWindow"] = generate_date_window_review_artifacts(scene, output_root, xml_path, date_metadata)
-    glyph_report_path = output_root / "glyph-report.json"
-    fallback_xml_path = output_root / "project-fallback/watchface/src/main/res/raw/watchface.xml"
-    if date_slot is not None and glyph_report_path.exists() and fallback_xml_path.exists():
-        manifest["milestone"] = "A2b Themed Glyph Reconstruction"
-        glyph_report = json.loads(glyph_report_path.read_text(encoding="utf-8"))
-        manifest["themedGlyph"] = generate_glyph_review_artifacts(scene, output_root, xml_path, fallback_xml_path, glyph_report)
     manifest_path = review_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest

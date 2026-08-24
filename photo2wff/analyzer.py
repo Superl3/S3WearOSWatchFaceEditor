@@ -9,7 +9,6 @@ from PIL import Image
 from PIL import ImageDraw
 
 from .date_window import extract_date_day_of_month_window
-from .glyphs import THEMED_FAMILY, extract_themed_glyph_set
 from .model import CANVAS_SIZE
 from .occlusion import reconstruct_occluded_dial
 
@@ -624,13 +623,6 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         dial_path=assets_dir / "dial_clean.png",
         output_dir=output_dir,
     )
-    glyph_report = extract_themed_glyph_set(
-        reference_path=output_dir / "reference.png",
-        hand_occlusion_mask_path=output_dir / "assets/hand-occlusion-mask.png",
-        output_root=output_dir,
-        clock_center=(detected_center_x, detected_center_y),
-        date_window_metadata_path=output_dir / "date-window-metadata.json",
-    )
     dial_asset = date_window_metadata["emptyDialAsset"] if date_window_metadata else "assets/dial_clean.png"
     elements: list[dict[str, Any]] = [
         {
@@ -647,19 +639,6 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
     ]
     if date_window_metadata:
         inner = date_window_metadata["innerBbox"]
-        themed_glyph = {
-            "type": "THEMED_GLYPH",
-            "family": THEMED_FAMILY,
-            "enabled": True,
-            "approved": False,
-            "fallbackFamily": "Pretendard",
-            "coverageReport": "glyph-report.json",
-            "resourceDirectory": "assets/glyphs/themed",
-            "resources": {character: glyph["resource"] for character, glyph in glyph_report["glyphs"].items()},
-            "metrics": {character: glyph["metrics"] for character, glyph in glyph_report["glyphs"].items()},
-            "dateStyleRelation": glyph_report["dateStyleRelation"],
-            "requiresHumanReview": glyph_report["requiresHumanReview"],
-        }
         elements.append(
             {
                 "id": "date_day_of_month",
@@ -675,7 +654,6 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
                     "alignment": "center",
                     "color": date_window_metadata["glyphColor"],
                 },
-                "themedGlyph": themed_glyph,
                 "confidence": date_window_metadata["confidence"],
                 "zIndex": 5,
                 "relationships": {
@@ -750,9 +728,9 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
             "overallConfidence": 0.68,
             "requiresStaticAssetExtraction": True,
             "requiresHumanReview": True,
-            "method": "A1b dark-display crop + A1d occlusion completion + A2 dynamic date-window slot + A2b themed glyph reconstruction",
+            "method": "A1b dark-display crop + A1d occlusion completion + A2 dynamic date-window slot",
             "componentCount": 1,
-            "groupCount": 6 if date_window_metadata else 5,
+            "groupCount": 5 if date_window_metadata else 4,
         },
     }
     return scene

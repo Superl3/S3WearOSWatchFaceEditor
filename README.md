@@ -93,15 +93,6 @@ python -m photo2wff render-wff hermes-a2-output\\project\\watchface\\src\\main\\
 
 This milestone supports only `slotType: DATE_DAY_OF_MONTH` (`d` or `dd`). The review bundle contains renders for days 1, 8, 11, 20, and 31 plus centered geometry guides and padding/clipping metrics under `human-review/date-window/`. Complications, weather, battery, weekday, and other dynamic semantics remain out of scope.
 
-For A2b Themed Glyph Reconstruction, the same product-photo command extracts numeral observations using the analog dial geometry and hand-occlusion mask, canonicalizes them into a bitmap glyph set, and records separate provenance for observed and synthesized digits. The missing 3 o'clock numeral is detected from coverage; it is never added to the actual dial. A2b declares the resulting `BitmapFonts` resource set in WFF and keeps an independently compilable fallback project:
-
-```powershell
-python -m photo2wff product-photo path\\to\\product-photo.webp --out hermes-a2b-output
-python -m photo2wff human-review hermes-a2b-output
-```
-
-The external and local model adapters are optional. When unavailable, the deterministic fallback adapter emits explicit review-only candidates and reports `external synthesis unavailable`; it does not claim model output. A2b writes `glyph-report.json`, `assets/glyphs/observed/raw/`, `assets/glyphs/observed/canonical/`, `assets/glyphs/synthesized/candidates/`, `assets/glyphs/themed/`, `project/`, `project-fallback/`, and glyph review sheets for canonical coverage, provenance, candidate 3, fallback-vs-themed dates, and full-watch themed renders. An unapproved synthesized glyph keeps the milestone at `completed_with_review`.
-
 `quick` creates:
 
 ```text

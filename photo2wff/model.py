@@ -208,18 +208,6 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
                 _fail(f"{path}.slotType", "A2 supports only DATE_DAY_OF_MONTH")
             if element.get("format", "d") not in {"d", "dd"}:
                 _fail(f"{path}.format", "DATE_DAY_OF_MONTH supports only d or dd")
-        themed_glyph = element.get("themedGlyph")
-        if themed_glyph is not None:
-            if element_type != "DYNAMIC_SLOT" or element.get("slotType") != "DATE_DAY_OF_MONTH":
-                _fail(f"{path}.themedGlyph", "THEMED_GLYPH is currently supported only by DATE_DAY_OF_MONTH")
-            if not isinstance(themed_glyph, dict):
-                _fail(f"{path}.themedGlyph", "must be an object")
-            if themed_glyph.get("type") != "THEMED_GLYPH":
-                _fail(f"{path}.themedGlyph.type", "must be THEMED_GLYPH")
-            if not isinstance(themed_glyph.get("family"), str) or not themed_glyph["family"]:
-                _fail(f"{path}.themedGlyph.family", "must be a non-empty string")
-            if not isinstance(themed_glyph.get("resources"), dict) or not themed_glyph["resources"]:
-                _fail(f"{path}.themedGlyph.resources", "must contain bitmap resources")
         if element_type == "ANALOG_HAND":
             if not element["dynamic"]:
                 _fail(f"{path}.dynamic", "ANALOG_HAND must be dynamic")
