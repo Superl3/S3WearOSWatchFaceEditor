@@ -190,6 +190,50 @@ def capture_runtime_matrix(
     return {"activation": activation, "captures": capture_records}
 
 
+def capture_runtime_cases(
+    adb: str,
+    serial: str,
+    apk_path: Path,
+    cases: list[tuple[str, int, Path]],
+) -> dict[str, Any]:
+    """Activate one production face and capture explicit time/date cases."""
+
+    activation = _activate_runtime_face(adb, serial, apk_path)
+    _adb_run(adb, serial, ["shell", "input", "keyevent", "224"])
+    time.sleep(1.0)
+    records: list[dict[str, Any]] = []
+    for time_value, day, destination in cases:
+        clock_ok, clock_output = _set_runtime_clock(adb, serial, time_value, day)
+        _adb_run(adb, serial, ["shell", "input", "keyevent", "224"])
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        remote = f"/sdcard/photo2wff-production-{destination.stem}.png"
+        capture_code, capture_output, before, after = _capture_with_device_bracket(adb, serial, remote)
+        pull_code, pull_output = _run([adb, "-s", serial, "pull", remote, str(destination)])
+        expected_epoch = _expected_epoch_ms(time_value, day)
+        records.append(
+            {
+                "time": time_value,
+                "date": day,
+                "path": str(destination),
+                "clockSet": clock_ok,
+                "clockOutput": clock_output,
+                "captureOk": capture_code == 0 and pull_code == 0 and destination.exists(),
+                "captureOutput": capture_output or pull_output,
+                "expectedEpochMs": expected_epoch,
+                "runtimeEpochMsBeforeCapture": before,
+                "runtimeEpochMsAfterCapture": after,
+                "captureTimestampDeltaRangeMs": (
+                    [before - expected_epoch, after - expected_epoch]
+                    if before is not None and after is not None
+                    else None
+                ),
+                "captureTimeUncertaintyMs": after - before if before is not None and after is not None else None,
+                "activeWatchFace": _runtime_is_active(adb, serial),
+            }
+        )
+    return {"activation": activation, "captures": records}
+
+
 def detect_runtime(adb: Path | None = None) -> dict[str, Any]:
     executable = _adb_path(adb)
     if not executable:

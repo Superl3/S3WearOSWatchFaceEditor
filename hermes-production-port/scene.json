@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "1.0",
+  "canvas": {
+    "width": 438,
+    "height": 438,
+    "shape": "CIRCLE",
+    "centerX": 219,
+    "centerY": 219
+  },
+  "displayGeometry": {
+    "source": {
+      "shape": "ROUNDED_RECT",
+      "width": 388.0,
+      "height": 418.0,
+      "radius": 44.0,
+      "centerX": 219.0,
+      "centerY": 219.0,
+      "isCircleSpecialCase": false
+    },
+    "target": {
+      "shape": "CIRCLE",
+      "width": 438.0,
+      "height": 438.0,
+      "radius": 219.0,
+      "centerX": 219.0,
+      "centerY": 219.0,
+      "isCircleSpecialCase": true
+    },
+    "mappingPolicy": "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
+    "availableMappings": [
+      "NAIVE_XY_STRETCH",
+      "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
+      "INVERSE_RASTER_MAPPING"
+    ]
+  },
+  "normalization": {
+    "inputType": "PHOTOGRAPH",
+    "rotationDegrees": 0.0,
+    "confidence": 0.78,
+    "requiresPerspectiveCorrection": false,
+    "sourceSize": [
+      1000,
+      1000
+    ],
+    "displayBounds": {
+      "x": 362,
+      "y": 308,
+      "width": 352,
+      "height": 378
+    }
+  },
+  "background": {
+    "type": "SOLID",
+    "color": "#000000"
+  },
+  "preview": {
+    "time": "10:08:30",
+    "date": "08.20",
+    "weekday": "THU",
+    "battery": 82,
+    "steps": 5240,
+    "heartRate": 68
+  },
+  "clock": {
+    "type": "ANALOG",
+    "centerX": 219.7,
+    "centerY": 221.5,
+    "confidence": 0.92,
+    "method": "A1b red pivot blob detection"
+  },
+  "elements": [
+    {
+      "id": "dial_complete",
+      "type": "STATIC_IMAGE",
+      "dynamic": false,
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 438,
+        "height": 438
+      },
+      "asset": "assets/dial_complete.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "confidence": 0.78,
+      "zIndex": 0,
+      "uncertainty": [
+        "A1b uses a conservative radial-light mask; segmentation remains adjustable for difficult references"
+      ]
+    },
+    {
+      "id": "date_day_of_month",
+      "type": "DYNAMIC_SLOT",
+      "slotType": "DATE_DAY_OF_MONTH",
+      "dynamic": true,
+      "bbox": {
+        "x": 346,
+        "y": 207,
+        "width": 47,
+        "height": 29
+      },
+      "format": "d",
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 24,
+        "alignment": "center",
+        "color": "#DFD8D2"
+      },
+      "confidence": 0.93,
+      "zIndex": 5,
+      "relationships": {
+        "layoutReplacement": true,
+        "replacesSourceElement": "hour_index_3",
+        "staticFramePreserved": true,
+        "frameBbox": {
+          "x": 341,
+          "y": 202,
+          "width": 57,
+          "height": 39
+        },
+        "innerBbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "padding": {
+          "left": 5,
+          "top": 5,
+          "right": 5,
+          "bottom": 5
+        }
+      },
+      "uncertainty": [
+        "Source absence of hour numeral 3 is intentional layout replacement; numeral 3 is not reconstructed"
+      ]
+    },
+    {
+      "id": "hour_hand",
+      "type": "ANALOG_HAND",
+      "role": "HOUR",
+      "dynamic": true,
+      "bbox": {
+        "x": 206,
+        "y": 128,
+        "width": 28,
+        "height": 105
+      },
+      "asset": "assets/hour_hand.png",
+      "observedAngleDeg": 306.07,
+      "length": 93.0,
+      "thickness": 8.0,
+      "pivotX": 0.5,
+      "pivotY": 0.885714,
+      "confidence": 0.79,
+      "zIndex": 10,
+      "uncertainty": [
+        "Radial-ray extraction is conservative and remains adjustable",
+        "Observed angle is from the supplied product photograph"
+      ]
+    },
+    {
+      "id": "minute_hand",
+      "type": "ANALOG_HAND",
+      "role": "MINUTE",
+      "dynamic": true,
+      "bbox": {
+        "x": 206,
+        "y": 46,
+        "width": 28,
+        "height": 185
+      },
+      "asset": "assets/minute_hand.png",
+      "observedAngleDeg": 53.93,
+      "length": 175.0,
+      "thickness": 8.0,
+      "pivotX": 0.5,
+      "pivotY": 0.945946,
+      "confidence": 0.79,
+      "zIndex": 20,
+      "uncertainty": [
+        "Radial-ray extraction is conservative and remains adjustable",
+        "Observed angle is from the supplied product photograph"
+      ]
+    },
+    {
+      "id": "second_hand",
+      "type": "ANALOG_HAND",
+      "role": "SECOND",
+      "dynamic": true,
+      "bbox": {
+        "x": 215,
+        "y": 51,
+        "width": 10,
+        "height": 180
+      },
+      "asset": "assets/second_hand.png",
+      "observedAngleDeg": 180.24,
+      "length": 170.5,
+      "thickness": 3.0,
+      "pivotX": 0.5,
+      "pivotY": 0.947222,
+      "confidence": 0.84,
+      "zIndex": 30,
+      "uncertainty": [
+        "Radial-ray extraction is conservative and remains adjustable",
+        "Observed angle is from the supplied product photograph"
+      ],
+      "sweepFrequency": 15
+    },
+    {
+      "id": "center_cap",
+      "type": "STATIC_IMAGE",
+      "dynamic": false,
+      "bbox": {
+        "x": 207,
+        "y": 207,
+        "width": 24,
+        "height": 24
+      },
+      "asset": "assets/center_cap.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "confidence": 0.78,
+      "zIndex": 100,
+      "uncertainty": [
+        "Center cap is preserved as a static foreground layer"
+      ]
+    }
+  ],
+  "analysis": {
+    "watchFaceCategory": "MINIMAL_ANALOG",
+    "overallConfidence": 0.68,
+    "requiresStaticAssetExtraction": true,
+    "requiresHumanReview": true,
+    "method": "production analog port from verified A0-A2.5 assets",
+    "componentCount": 1,
+    "groupCount": 5
+  }
+}

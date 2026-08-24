@@ -17,6 +17,7 @@ from .wff_render import render_wff_xml
 from .human_review import generate_human_review_artifacts
 from .measurement_correctness import run_measurement_correctness
 from .runtime_rendering_calibration import run_runtime_rendering_calibration
+from .production_port import create_production_port
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -204,6 +205,14 @@ def main() -> None:
     rendering_calibration_parser.add_argument("--capture", action="store_true")
     rendering_calibration_parser.add_argument("--adb", type=Path)
     rendering_calibration_parser.add_argument("--serial", type=str)
+    production_parser = subparsers.add_parser("production-port")
+    production_parser.add_argument("source", type=Path, help="verified A2 source bundle")
+    production_parser.add_argument("--out", type=Path, default=Path("production-analog-port"))
+    production_parser.add_argument("--no-build", action="store_true")
+    production_parser.add_argument("--no-capture", action="store_true")
+    production_parser.add_argument("--adb", type=Path)
+    production_parser.add_argument("--serial", type=str)
+    production_parser.add_argument("--manual-glyph-dir", type=Path)
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -232,3 +241,19 @@ def main() -> None:
         print(json.dumps(run_measurement_correctness(args.scene, args.out, manual_scene_path=args.manual_scene, build=args.build, capture=args.capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))
     elif args.command == "runtime-rendering-calibration":
         print(json.dumps(run_runtime_rendering_calibration(args.scene, args.manual_scene, args.out, build=args.build, capture=args.capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))
+    elif args.command == "production-port":
+        print(
+            json.dumps(
+                create_production_port(
+                    args.source,
+                    args.out,
+                    build=not args.no_build,
+                    capture=not args.no_capture,
+                    adb=args.adb,
+                    serial=args.serial,
+                    manual_glyph_dir=args.manual_glyph_dir,
+                ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )

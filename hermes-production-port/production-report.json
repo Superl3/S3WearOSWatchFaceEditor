@@ -1,0 +1,325 @@
+{
+  "milestone": "Production Analog Port",
+  "sourceBaseline": "hermes-a2-output",
+  "structure": [
+    "dial_complete.png",
+    "hour_hand.png",
+    "minute_hand.png",
+    "second_hand.png",
+    "center_cap.png",
+    "dynamic date"
+  ],
+  "staticDial": {
+    "source": "hermes-a2-output\\assets\\dial-completed.png",
+    "reference": "hermes-a2-output\\assets\\display_reference.png",
+    "policy": "preserve observed pixels; black-fill simple background; bridge only known static intersections",
+    "sourceHandCorridorPixels": 17648,
+    "reconstructedStaticPixels": 2956,
+    "unresolvedCorridorPixels": 14877,
+    "dateGlyphRemovedPixels": 469,
+    "changedPixels": 4517,
+    "generatedPixelsAreObservedTruth": false,
+    "requiresHumanReview": true,
+    "reviewRegions": [
+      "minute-hand intersection with 2 o'clock numeral",
+      "second-hand intersection with lower artwork and 6 o'clock numeral"
+    ]
+  },
+  "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : hermes-production-port\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1",
+  "build": {
+    "success": true,
+    "returnCode": 0,
+    "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\hermes-production-port\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+    "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources\n> Task :watchface:packageDebugResources\n> Task :watchface:processDebugNavigationResources\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:javaPreCompileDebug\n> Task :watchface:parseDebugLocalResources\n> Task :watchface:mergeDebugAssets\n> Task :watchface:compressDebugAssets\n> Task :watchface:generateDebugRFile\n> Task :watchface:checkDebugDuplicateClasses\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:extractProguardFiles\n> Task :watchface:checkDebugAarMetadata\n> Task :watchface:compileDebugNavigationResources\n> Task :watchface:mapDebugSourceSetPaths\n> Task :watchface:createDebugCompatibleScreenManifests\n> Task :watchface:extractDeepLinksDebug\n> Task :watchface:mergeDebugResources\n> Task :watchface:processDebugMainManifest\n> Task :watchface:processDebugManifest\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:processDebugManifestForPackage\n> Task :watchface:mergeDebugJniLibFolders\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug\n> Task :watchface:writeDebugAppMetadata\n> Task :watchface:mergeDebugJavaResource\n> Task :watchface:writeDebugSigningConfigVersions\n> Task :watchface:processDebugResources\n> Task :watchface:mergeDebugGeneratedProguardFiles\n> Task :watchface:minifyDebugWithR8\n> Task :watchface:packageDebug\n> Task :watchface:createDebugApkListingFileRedirect\n> Task :watchface:assembleDebug\n\nBUILD SUCCESSFUL in 3s\n29 actionable tasks: 29 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+  },
+  "runtime": {
+    "status": "runtime_verified",
+    "device": "emulator-5556",
+    "capture": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\hermes-production-port\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\hermes-production-port\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 30.8 MB/s (1348367 bytes in 0.042s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[147] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "captures": [
+        {
+          "time": "00:00:00",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\00-00-00.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723075200210\n1723075200589",
+          "expectedEpochMs": 1723075200000,
+          "runtimeEpochMsBeforeCapture": 1723075200210,
+          "runtimeEpochMsAfterCapture": 1723075200589,
+          "captureTimestampDeltaRangeMs": [
+            210,
+            589
+          ],
+          "captureTimeUncertaintyMs": 379,
+          "activeWatchFace": true
+        },
+        {
+          "time": "03:15:45",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\03-15-45.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723086945174\n1723086945484",
+          "expectedEpochMs": 1723086945000,
+          "runtimeEpochMsBeforeCapture": 1723086945174,
+          "runtimeEpochMsAfterCapture": 1723086945484,
+          "captureTimestampDeltaRangeMs": [
+            174,
+            484
+          ],
+          "captureTimeUncertaintyMs": 310,
+          "activeWatchFace": true
+        },
+        {
+          "time": "06:30:00",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\06-30-00.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723098600188\n1723098600484",
+          "expectedEpochMs": 1723098600000,
+          "runtimeEpochMsBeforeCapture": 1723098600188,
+          "runtimeEpochMsAfterCapture": 1723098600484,
+          "captureTimestampDeltaRangeMs": [
+            188,
+            484
+          ],
+          "captureTimeUncertaintyMs": 296,
+          "activeWatchFace": true
+        },
+        {
+          "time": "09:45:15",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\09-45-15.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 09:45:15 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723110315191\n1723110315502",
+          "expectedEpochMs": 1723110315000,
+          "runtimeEpochMsBeforeCapture": 1723110315191,
+          "runtimeEpochMsAfterCapture": 1723110315502,
+          "captureTimestampDeltaRangeMs": [
+            191,
+            502
+          ],
+          "captureTimeUncertaintyMs": 311,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\10-08-30.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723111710166\n1723111710500",
+          "expectedEpochMs": 1723111710000,
+          "runtimeEpochMsBeforeCapture": 1723111710166,
+          "runtimeEpochMsAfterCapture": 1723111710500,
+          "captureTimestampDeltaRangeMs": [
+            166,
+            500
+          ],
+          "captureTimeUncertaintyMs": 334,
+          "activeWatchFace": true
+        },
+        {
+          "time": "12:00:00",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\12-00-00.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 12:00:00 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723118400190\n1723118400501",
+          "expectedEpochMs": 1723118400000,
+          "runtimeEpochMsBeforeCapture": 1723118400190,
+          "runtimeEpochMsAfterCapture": 1723118400501,
+          "captureTimestampDeltaRangeMs": [
+            190,
+            501
+          ],
+          "captureTimeUncertaintyMs": 311,
+          "activeWatchFace": true
+        },
+        {
+          "time": "15:22:10",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\15-22-10.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 15:22:10 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723130530189\n1723130530502",
+          "expectedEpochMs": 1723130530000,
+          "runtimeEpochMsBeforeCapture": 1723130530189,
+          "runtimeEpochMsAfterCapture": 1723130530502,
+          "captureTimestampDeltaRangeMs": [
+            189,
+            502
+          ],
+          "captureTimeUncertaintyMs": 313,
+          "activeWatchFace": true
+        },
+        {
+          "time": "18:40:30",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\18-40-30.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 18:40:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723142430164\n1723142430477",
+          "expectedEpochMs": 1723142430000,
+          "runtimeEpochMsBeforeCapture": 1723142430164,
+          "runtimeEpochMsAfterCapture": 1723142430477,
+          "captureTimestampDeltaRangeMs": [
+            164,
+            477
+          ],
+          "captureTimeUncertaintyMs": 313,
+          "activeWatchFace": true
+        },
+        {
+          "time": "21:55:50",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\times\\21-55-50.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 21:55:50 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723154150186\n1723154150512",
+          "expectedEpochMs": 1723154150000,
+          "runtimeEpochMsBeforeCapture": 1723154150186,
+          "runtimeEpochMsAfterCapture": 1723154150512,
+          "captureTimestampDeltaRangeMs": [
+            186,
+            512
+          ],
+          "captureTimeUncertaintyMs": 326,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 1,
+          "path": "hermes-production-port\\human-review\\runtime\\dates\\day-01.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  1 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1722506910152\n1722506910460",
+          "expectedEpochMs": 1722506910000,
+          "runtimeEpochMsBeforeCapture": 1722506910152,
+          "runtimeEpochMsAfterCapture": 1722506910460,
+          "captureTimestampDeltaRangeMs": [
+            152,
+            460
+          ],
+          "captureTimeUncertaintyMs": 308,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 8,
+          "path": "hermes-production-port\\human-review\\runtime\\dates\\day-08.png",
+          "clockSet": true,
+          "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723111710177\n1723111710493",
+          "expectedEpochMs": 1723111710000,
+          "runtimeEpochMsBeforeCapture": 1723111710177,
+          "runtimeEpochMsAfterCapture": 1723111710493,
+          "captureTimestampDeltaRangeMs": [
+            177,
+            493
+          ],
+          "captureTimeUncertaintyMs": 316,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 11,
+          "path": "hermes-production-port\\human-review\\runtime\\dates\\day-11.png",
+          "clockSet": true,
+          "clockOutput": "Sun Aug 11 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723370910189\n1723370910520",
+          "expectedEpochMs": 1723370910000,
+          "runtimeEpochMsBeforeCapture": 1723370910189,
+          "runtimeEpochMsAfterCapture": 1723370910520,
+          "captureTimestampDeltaRangeMs": [
+            189,
+            520
+          ],
+          "captureTimeUncertaintyMs": 331,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 20,
+          "path": "hermes-production-port\\human-review\\runtime\\dates\\day-20.png",
+          "clockSet": true,
+          "clockOutput": "Tue Aug 20 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1724148510205\n1724148510534",
+          "expectedEpochMs": 1724148510000,
+          "runtimeEpochMsBeforeCapture": 1724148510205,
+          "runtimeEpochMsAfterCapture": 1724148510534,
+          "captureTimestampDeltaRangeMs": [
+            205,
+            534
+          ],
+          "captureTimeUncertaintyMs": 329,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 31,
+          "path": "hermes-production-port\\human-review\\runtime\\dates\\day-31.png",
+          "clockSet": true,
+          "clockOutput": "Sat Aug 31 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1725098910173\n1725098910537",
+          "expectedEpochMs": 1725098910000,
+          "runtimeEpochMsBeforeCapture": 1725098910173,
+          "runtimeEpochMsAfterCapture": 1725098910537,
+          "captureTimestampDeltaRangeMs": [
+            173,
+            537
+          ],
+          "captureTimeUncertaintyMs": 364,
+          "activeWatchFace": true
+        }
+      ]
+    },
+    "timeAtlas": "hermes-production-port\\human-review\\nine-time-runtime-atlas.png",
+    "dateAtlas": "hermes-production-port\\human-review\\date-values-runtime-atlas.png",
+    "sideBySide": "hermes-production-port\\human-review\\nine-time-runtime-render-side-by-side.png",
+    "finalPreview": "hermes-production-port\\human-review\\final-full-watch-preview.png"
+  },
+  "humanReview": {
+    "sourceNormalized": "hermes-production-port\\human-review\\source-normalized.png",
+    "handsOff": "hermes-production-port\\human-review\\dial-complete-hands-off.png",
+    "staticDetail": "hermes-production-port\\human-review\\static-detail-side-by-side.png",
+    "staticDetailZoom": "hermes-production-port\\human-review\\static-detail-zoom-sheet.png",
+    "reconstructedHighlight": "hermes-production-port\\human-review\\reconstructed-pixel-highlight.png",
+    "nineTimeRenderAtlas": "hermes-production-port\\human-review\\nine-time-render-atlas.png",
+    "dateRenderAtlas": "hermes-production-port\\human-review\\date-values-render-atlas.png"
+  },
+  "scope": {
+    "automaticFontGeneration": false,
+    "missingGlyphSynthesis": false,
+    "numeralVectorization": false,
+    "genericComplications": false,
+    "newDisplayMapping": false,
+    "opticalOffset": null,
+    "manualGlyphOverride": null
+  }
+}

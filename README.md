@@ -108,6 +108,25 @@ Pretendard. No automatic glyph
 extraction, synthesis, style fitting, or topology reconstruction is performed
 on production `main`.
 
+To freeze a verified A2 bundle into the production analog structure, build it,
+activate it on Wear OS, and create the review bundle in one command:
+
+```powershell
+python -m photo2wff production-port hermes-a2-output `
+  --out hermes-production-port `
+  --adb C:\Users\bug95\Android\Sdk\platform-tools\adb.exe `
+  --serial emulator-5556
+```
+
+The output contains only `dial_complete.png`, three canonical hand assets,
+`center_cap.png`, and a native dynamic date. Static artwork stays rasterized;
+the compiler emits the verified `AnalogClock` z-order. Optional manual digits
+can be supplied with `--manual-glyph-dir`; partial sets keep the existing
+whole-value Pretendard fallback. The command requires official WFF validation,
+runs `assembleDebug`, captures 9 active-runtime times and days
+`1 / 8 / 11 / 20 / 31`, and writes static-detail, runtime, date, and final
+preview review sheets.
+
 A2.5 runtime validation is a separate gate and does not alter the production
 renderer. It renders the fixed matrix of four times (`00:00:00`, `03:15:45`,
 `06:30:00`, `10:08:30`), five dates (`1`, `8`, `11`, `20`, `31`), and manual

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="ANALOG"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:30"/>
+  <Metadata key="PREVIEW_DATE" value="08.20"/>
+  <Scene backgroundColor="#000000">
+    <PartImage x="0" y="0" width="438" height="438">
+      <Image resource="dial_complete"/>
+    </PartImage>
+    <PartText x="346" y="207" width="47" height="29">
+      <Text align="CENTER">
+        <Font family="pretendard" size="24" weight="NORMAL" slant="NORMAL" color="#DFD8D2">
+          <Template>%d<Parameter expression="[DAY]"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+    <AnalogClock x="0" y="0" width="438" height="438" pivotX="0.5" pivotY="0.5">
+      <HourHand resource="hour_hand" x="206" y="128" width="28" height="105" pivotX="0.5" pivotY="0.885714"/>
+      <MinuteHand resource="minute_hand" x="206" y="46" width="28" height="185" pivotX="0.5" pivotY="0.945946"/>
+      <SecondHand resource="second_hand" x="215" y="51" width="10" height="180" pivotX="0.5" pivotY="0.947222">
+        <Sweep frequency="15"/>
+      </SecondHand>
+    </AnalogClock>
+    <PartImage x="207" y="207" width="24" height="24">
+      <Image resource="center_cap"/>
+    </PartImage>
+  </Scene>
+</WatchFace>

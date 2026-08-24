@@ -14,9 +14,10 @@ from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
-from photo2wff.model import SceneValidationError, apply_patches, validate_scene
+from photo2wff.model import SceneValidationError, apply_patches, load_scene, validate_scene
 from photo2wff.measurement_correctness import FIDUCIALS, _fit_geometry
 from photo2wff.occlusion import reconstruct_occluded_dial
+from photo2wff.production_port import _make_production_dial, _production_scene
 from photo2wff.render import render_scene
 from photo2wff.runtime_validation import _region_masks, run_runtime_gate
 from photo2wff.wff_validate import WffValidationError, lint_wff_xml, validate_wff_xml
@@ -407,6 +408,27 @@ class Photo2WFFTests(unittest.TestCase):
         self.assertEqual(mapped.size, (438, 438))
         self.assertEqual(mapped.getpixel((0, 0))[3], 0)
         self.assertGreater(mapped.getpixel((219, 219))[3], 0)
+
+    def test_production_port_uses_static_dial_native_hands_date_and_cap(self):
+        source_root = Path(__file__).resolve().parents[1] / "hermes-a2-output"
+        scene = _production_scene(load_scene(source_root / "scene.json"))
+        elements = {element["id"]: element for element in scene["elements"]}
+        self.assertEqual(elements["dial_complete"]["asset"], "assets/dial_complete.png")
+        self.assertEqual(elements["date_day_of_month"]["slotType"], "DATE_DAY_OF_MONTH")
+        self.assertEqual(elements["date_day_of_month"]["style"]["fontFamily"], "Pretendard")
+        self.assertNotIn("manualGlyphs", elements["date_day_of_month"])
+        self.assertEqual([elements[role]["zIndex"] for role in ("hour_hand", "minute_hand", "second_hand", "center_cap")], [10, 20, 30, 100])
+
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "dial_complete.png"
+            report = _make_production_dial(scene, source_root, destination)
+            completed = Image.open(destination).convert("RGB")
+            source = Image.open(source_root / "assets" / "dial-completed.png").convert("RGB")
+            self.assertEqual(completed.getpixel((219, 43)), source.getpixel((219, 43)))
+            self.assertLess(max(completed.getpixel((368, 220))), 20)
+            self.assertGreater(max(completed.getpixel((224, 270))), 80)
+            self.assertFalse(report["generatedPixelsAreObservedTruth"])
+            self.assertTrue(report["requiresHumanReview"])
 
 
 if __name__ == "__main__":
