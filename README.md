@@ -53,7 +53,7 @@ python -m photo2wff render-wff hermes-a1-output\project\watchface\src\main\res\r
 
 `render-wff` reads the compiled WFF XML and its drawable resources, then renders the fixed `PREVIEW_TIME` independently of the scene preview. It is a deterministic format-level renderer for CI; a Wear OS device/emulator screenshot is a separate verification tier.
 
-The A1a.1 validation renders `10:08:30`, `03:15:45`, and `06:30:00`. It checks pairwise changes inside dynamic hand ROIs and scans the original source-angle corridors for persistent hand ghosts. Global MAE is not sufficient for this gate. The compiler and renderer are frozen at the A1a implementation; A1b is limited to reference-to-`dial_clean`/hand-assets/pivot-angle extraction and delegates WFF generation to the frozen pipeline.
+The A1a.1 validation renders `10:08:30`, `03:15:45`, `06:30:00`, and `09:45:15`. It checks pairwise changes inside dynamic hand ROIs and scans the original source-angle corridors for persistent hand ghosts. Global MAE is not sufficient for this gate. The compiler and renderer are frozen at the A1a implementation; A1b is limited to reference-to-`dial_clean`/hand-assets/pivot-angle extraction and delegates WFF generation to the frozen pipeline.
 
 For A1c display geometry review, the same product-photo command also emits:
 
@@ -74,6 +74,15 @@ human-review/
 ```
 
 Structured elements map anchors, pivots, and geometry while preserving local appearance. Only static raster artwork uses inverse raster mapping. The A1c comparison keeps the legacy XY mapper beside the center-preserving boundary-normalized mapper; device/emulator runtime capture remains a separate deferred verification tier.
+
+For A1d occlusion reconstruction and dial completion, the same command produces a reusable `Occlusion Reconstruction Engine` artifact set:
+
+```powershell
+python -m photo2wff product-photo path\to\product-photo.webp --out hermes-a1d-output
+python -m photo2wff product-photo path\to\product-photo.webp --out hermes-a1d-fallback-output --generative-fallback path\to\inpaint-candidate.png
+```
+
+The default path restores deterministic background/stroke candidates and leaves uncertain pixels unresolved. The optional fallback is applied only inside the hand occlusion mask and is always marked as generated rather than observed. A1d writes `observed-mask.png`, `hand-occlusion-mask.png`, `reconstructed-mask.png`, `dial-before-reconstruction.png`, `dial-completed.png`, `unresolved-mask.png`, and `occlusion-metadata.json`. Its human-review bundle additionally contains `hands-off.png`, `occlusion-zoom-sheet.png`, `before-mask-reconstructed-final.png`, `reconstructed-highlight.png`, the normal 9-time atlas, and an adversarial `occlusion-reveal-atlas.png`. Uncertain regions keep confidence and `requiresHumanReview` metadata.
 
 `quick` creates:
 

@@ -5,7 +5,7 @@ import math
 from pathlib import Path
 from typing import Any
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 from .display_geometry import RoundedRect, inverse_raster_map, map_structured_element
 from .wff_render import render_wff_xml
@@ -71,8 +71,14 @@ def _draw_cross(draw: ImageDraw.ImageDraw, point: tuple[float, float], offset: t
     draw.line((round(x), round(y - 8), round(x), round(y + 8)), fill=color, width=2)
 
 
-def _render_atlas(xml_path: Path, review_dir: Path, times: tuple[str, ...]) -> dict[str, Any]:
-    render_dir = review_dir / "atlas-renders"
+def _render_atlas(
+    xml_path: Path,
+    review_dir: Path,
+    times: tuple[str, ...],
+    atlas_name: str = "atlas.png",
+    render_subdir: str = "atlas-renders",
+) -> dict[str, Any]:
+    render_dir = review_dir / render_subdir
     render_dir.mkdir(parents=True, exist_ok=True)
     tile_width = 320
     tile_height = 350
@@ -88,9 +94,160 @@ def _render_atlas(xml_path: Path, review_dir: Path, times: tuple[str, ...]) -> d
         atlas.paste(tile, (tile_left + 20, tile_top + 10))
         draw.text((tile_left + 20, tile_top + 302), fixed_time, fill="#FFFFFF", font=_font(22, bold=True))
         draw.text((tile_left + 20, tile_top + 328), "WFF XML deterministic render", fill="#A8A8A8", font=_font(14))
-    atlas_path = review_dir / "atlas.png"
+    atlas_path = review_dir / atlas_name
     atlas.save(atlas_path)
     return {"path": str(atlas_path), "times": list(times), "renderDirectory": str(render_dir)}
+
+
+def _parse_time(value: str) -> tuple[int, int, int]:
+    hours, minutes, seconds = (int(part) for part in value.split(":"))
+    return hours, minutes, seconds
+
+
+def _clock_angles(value: str) -> dict[str, float]:
+    hours, minutes, seconds = _parse_time(value)
+    return {
+        "HOUR": ((hours % 12) + minutes / 60 + seconds / 3600) * 30,
+        "MINUTE": (minutes + seconds / 60) * 6,
+        "SECOND": seconds * 6,
+    }
+
+
+def _angular_distance(first: float, second: float) -> float:
+    return abs((first - second + 180) % 360 - 180)
+
+
+def _source_hand_angles(scene: dict[str, Any]) -> dict[str, float]:
+    return {
+        str(element.get("role")): float(element.get("observedAngleDeg", 0))
+        for element in scene.get("elements", [])
+        if element.get("type") == "ANALOG_HAND" and element.get("role")
+    }
+
+
+def _choose_occlusion_reveal_times(scene: dict[str, Any], count: int = 9) -> tuple[tuple[str, ...], list[dict[str, Any]]]:
+    source_angles = _source_hand_angles(scene)
+    required = ("03:15:45", "06:30:00", "09:45:15")
+    candidates = set(required)
+    for hour in range(24):
+        for minute in range(0, 60, 5):
+            candidates.add(f"{hour:02d}:{minute:02d}:00")
+    scored = []
+    for fixed_time in sorted(candidates):
+        angles = _clock_angles(fixed_time)
+        distances = {
+            role: round(_angular_distance(angle, source_angles.get(role, angle)), 4)
+            for role, angle in angles.items()
+            if role in source_angles
+        }
+        score = sum(distances.values()) / max(1, len(distances))
+        scored.append((score, fixed_time, distances))
+    selected: list[tuple[float, str, dict[str, float]]] = []
+    for item in sorted(scored, key=lambda value: (-value[0], value[1])):
+        if item[1] in required or len(selected) < count:
+            selected.append(item)
+        if len(selected) >= count and all(required_time in {value[1] for value in selected} for required_time in required):
+            break
+    selected = sorted(selected, key=lambda value: value[1])
+    return tuple(item[1] for item in selected), [
+        {"time": item[1], "score": round(item[0], 4), "angularDistanceDeg": item[2]}
+        for item in selected
+    ]
+
+
+def _rgb_panel(image: Image.Image, size: tuple[int, int], mask: Image.Image | None = None, tint: tuple[int, int, int] | None = None) -> Image.Image:
+    fitted = image.convert("RGBA").resize(size, Image.Resampling.LANCZOS)
+    if mask is not None:
+        fitted_mask = mask.convert("L").resize(size, Image.Resampling.NEAREST)
+        if tint is None:
+            fitted = Image.merge("RGBA", (fitted_mask, fitted_mask, fitted_mask, Image.new("L", size, 255)))
+        else:
+            color = Image.new("RGBA", size, (*tint, 255))
+            fitted = Image.composite(color, Image.new("RGBA", size, (0, 0, 0, 255)), fitted_mask)
+    background = Image.new("RGB", size, "#000000")
+    background.paste(fitted.convert("RGB"), mask=fitted.getchannel("A"))
+    return background
+
+
+def _make_hands_off(dial: Image.Image, center_cap_path: Path, output: Path) -> None:
+    canvas = Image.new("RGBA", dial.size, (0, 0, 0, 255))
+    canvas.alpha_composite(dial.convert("RGBA"))
+    if center_cap_path.exists():
+        cap = Image.open(center_cap_path).convert("RGBA")
+        cap_left = round((dial.width - cap.width) / 2)
+        cap_top = round((dial.height - cap.height) / 2)
+        canvas.alpha_composite(cap, (cap_left, cap_top))
+    canvas.convert("RGB").save(output)
+
+
+def _make_four_way_comparison(
+    source: Image.Image,
+    before: Image.Image,
+    occlusion_mask: Image.Image,
+    reconstructed_mask: Image.Image,
+    completed: Image.Image,
+    output: Path,
+) -> None:
+    panel_size = (438, 438)
+    header = 58
+    labels = ("SOURCE", "MASK", "RECONSTRUCTED PIXELS", "FINAL")
+    panels = (
+        _rgb_panel(source, panel_size),
+        _rgb_panel(before, panel_size, occlusion_mask, (255, 55, 55)),
+        _rgb_panel(completed, panel_size, reconstructed_mask, (70, 245, 170)),
+        _rgb_panel(completed, panel_size),
+    )
+    canvas = Image.new("RGB", (panel_size[0] * 4, panel_size[1] + header), "#101010")
+    draw = ImageDraw.Draw(canvas)
+    for index, (label, panel) in enumerate(zip(labels, panels)):
+        left = index * panel_size[0]
+        draw.text((left + 14, 16), label, fill="#FFFFFF", font=_font(20, bold=True))
+        canvas.paste(panel, (left, header))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(output)
+
+
+def _make_reconstructed_highlight(completed: Image.Image, reconstructed_mask: Image.Image, output: Path) -> None:
+    highlighted = completed.convert("RGBA")
+    overlay = Image.new("RGBA", highlighted.size, (255, 0, 190, 0))
+    overlay.putalpha(reconstructed_mask.convert("L").point(lambda value: round(value * 0.78)))
+    highlighted.alpha_composite(overlay)
+    draw = ImageDraw.Draw(highlighted)
+    draw.text((12, 12), "GENERATED PIXELS / REVIEW", fill="#FFFFFF", stroke_width=3, stroke_fill="#000000", font=_font(18, bold=True))
+    highlighted.convert("RGB").save(output)
+
+
+def _make_occlusion_zoom_sheet(
+    reference: Image.Image,
+    before: Image.Image,
+    completed: Image.Image,
+    occlusion_mask: Image.Image,
+    metadata: dict[str, Any],
+    output: Path,
+) -> None:
+    roles = metadata.get("regions", [])
+    tile = (220, 220)
+    row_height = 278
+    canvas = Image.new("RGB", (tile[0] * 4, 74 + row_height * max(1, len(roles))), "#111111")
+    draw = ImageDraw.Draw(canvas)
+    draw.text((18, 20), "HAND OCCLUSION ZOOM  source / mask / before / completed", fill="#FFFFFF", font=_font(22, bold=True))
+    for row, region in enumerate(roles):
+        bbox = region.get("bbox") or [0, 0, reference.width, reference.height]
+        left, top, right, bottom = (int(value) for value in bbox)
+        pad = 20
+        crop_box = (max(0, left - pad), max(0, top - pad), min(reference.width, right + pad), min(reference.height, bottom + pad))
+        panels = (
+            _rgb_panel(reference.crop(crop_box), tile),
+            _rgb_panel(before.crop(crop_box), tile, occlusion_mask.crop(crop_box), (255, 55, 55)),
+            _rgb_panel(before.crop(crop_box), tile),
+            _rgb_panel(completed.crop(crop_box), tile),
+        )
+        y = 74 + row * row_height
+        draw.text((18, y), f"{region.get('sourceHandRole', region.get('id', 'region'))}  {region.get('class', '')}  confidence={region.get('confidence', 0)}", fill="#FFD27D", font=_font(15, bold=True))
+        for index, panel in enumerate(panels):
+            canvas.paste(panel, (index * tile[0], y + 28))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(output)
 
 
 def _make_geometry_overlay(source_image: Image.Image, adaptive_image: Image.Image, source: RoundedRect, target: RoundedRect, output: Path) -> None:
@@ -202,6 +359,36 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
     dial_adaptive_rgb.save(dial_adaptive_path)
     mapping_path = review_dir / "mapping-comparison.png"
     _make_mapping_comparison(source_image, source, target, mapping_path)
+    completed_path = assets_dir / "dial-completed.png"
+    before_path = assets_dir / "dial-before-reconstruction.png"
+    occlusion_mask_path = assets_dir / "hand-occlusion-mask.png"
+    reconstructed_mask_path = assets_dir / "reconstructed-mask.png"
+    occlusion_metadata_path = output_root / "occlusion-metadata.json"
+    completed = Image.open(completed_path if completed_path.exists() else dial_path).convert("RGBA")
+    before = Image.open(before_path if before_path.exists() else dial_path).convert("RGBA")
+    occlusion_mask = Image.open(occlusion_mask_path).convert("L") if occlusion_mask_path.exists() else Image.new("L", completed.size, 0)
+    reconstructed_mask = Image.open(reconstructed_mask_path).convert("L") if reconstructed_mask_path.exists() else Image.new("L", completed.size, 0)
+    occlusion_metadata = json.loads(occlusion_metadata_path.read_text(encoding="utf-8")) if occlusion_metadata_path.exists() else {
+        "status": "not_available",
+        "requiresHumanReview": True,
+    }
+    hands_off_path = review_dir / "hands-off.png"
+    _make_hands_off(completed, assets_dir / "center_cap.png", hands_off_path)
+    zoom_sheet_path = review_dir / "occlusion-zoom-sheet.png"
+    _make_occlusion_zoom_sheet(source_image, before, completed, occlusion_mask, occlusion_metadata, zoom_sheet_path)
+    four_way_path = review_dir / "before-mask-reconstructed-final.png"
+    _make_four_way_comparison(source_image, before, occlusion_mask, reconstructed_mask, completed, four_way_path)
+    highlight_path = review_dir / "reconstructed-highlight.png"
+    _make_reconstructed_highlight(completed, reconstructed_mask, highlight_path)
+    generative_candidate_path = assets_dir / "generative-inpaint-candidate.png"
+    reveal_times, reveal_selection = _choose_occlusion_reveal_times(scene)
+    reveal_atlas = _render_atlas(
+        xml_path,
+        review_dir,
+        reveal_times,
+        atlas_name="occlusion-reveal-atlas.png",
+        render_subdir="occlusion-reveal-renders",
+    )
     source_clock = scene.get("clock", {})
     source_clock_center = (float(source_clock.get("centerX", source.center_x)), float(source_clock.get("centerY", source.center_y)))
     target_clock_center = (float(scene["canvas"]["centerX"]), float(scene["canvas"]["centerY"]))
@@ -211,7 +398,7 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
         if element.get("type") not in {"STATIC_IMAGE", "IMAGE", "ICON"}
     ]
     manifest = {
-        "milestone": "A1c Display Geometry + Human Review",
+        "milestone": "A1d Occlusion Reconstruction / Dial Completion",
         "source": source.as_dict(),
         "target": target.as_dict(),
         "mappingPolicies": {
@@ -226,11 +413,24 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
             {"id": "center_cap", "operation": "LOCAL_ASSET_PRESERVED"},
         ],
         "atlas": atlas,
+        "occlusion": {
+            "metadata": str(occlusion_metadata_path) if occlusion_metadata_path.exists() else None,
+            "status": occlusion_metadata.get("status"),
+            "requiresHumanReview": bool(occlusion_metadata.get("requiresHumanReview", True)),
+            "reconstructedPixelsAreObservedTruth": False,
+            "revealSelection": reveal_selection,
+        },
         "artifacts": {
             "geometryOverlay": str(overlay_path),
             "assetSheet": str(asset_sheet_path),
             "mappingComparison": str(mapping_path),
             "dialCleanAdaptive": str(dial_adaptive_path),
+            "handsOff": str(hands_off_path),
+            "occlusionZoomSheet": str(zoom_sheet_path),
+            "fourWayComparison": str(four_way_path),
+            "reconstructedHighlight": str(highlight_path),
+            "generativeInpaintCandidate": str(generative_candidate_path) if generative_candidate_path.exists() else None,
+            "occlusionRevealAtlas": reveal_atlas,
         },
         "deviceOrEmulatorVerification": "deferred",
     }

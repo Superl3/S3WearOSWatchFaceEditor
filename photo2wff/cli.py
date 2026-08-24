@@ -97,13 +97,13 @@ def build(scene_path: Path, output: Path) -> None:
     (output / "build-report.json").write_text(json.dumps({"scene": str(scene_path), "compiler": "photo2wff", "visionAnalyzerUsed": False}, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
-def product_photo(reference: Path, output: Path) -> None:
+def product_photo(reference: Path, output: Path, generative_fallback: Path | None = None) -> None:
     """Analyze a product photograph without pretending it is a clean digital screenshot."""
     if output.exists() and any(output.iterdir()):
         raise SystemExit(f"output directory is not empty: {output}")
     output.mkdir(parents=True, exist_ok=True)
     _copy_default_font(output)
-    scene = analyze_product_photo(reference, output)
+    scene = analyze_product_photo(reference, output, generative_fallback_path=generative_fallback)
     save_scene(scene, output / "scene.json")
     (output / "editable.yaml").write_text(editable_yaml(scene), encoding="utf-8", newline="\n")
     render_scene(scene, output / "preview.png", output)
@@ -112,7 +112,7 @@ def product_photo(reference: Path, output: Path) -> None:
     xml_path = output / "project/watchface/src/main/res/raw/watchface.xml"
     render_metadata = render_wff_xml(xml_path, output / "wff-rendered.png", fixed_time=scene["preview"]["time"])
     render_dir = output / "renders"
-    render_times = ["10:08:30", "03:15:45", "06:30:00"]
+    render_times = ["10:08:30", "03:15:45", "06:30:00", "09:45:15"]
     render_paths = {time: render_dir / f"{time.replace(':', '-')}.png" for time in render_times}
     for time, path in render_paths.items():
         render_wff_xml(xml_path, path, fixed_time=time)
@@ -163,6 +163,7 @@ def main() -> None:
     photo_parser = subparsers.add_parser("product-photo")
     photo_parser.add_argument("reference", type=Path)
     photo_parser.add_argument("--out", type=Path, default=Path("product-photo-output"))
+    photo_parser.add_argument("--generative-fallback", type=Path, help="optional 438x438 external inpainting candidate for unresolved regions")
     review_parser = subparsers.add_parser("human-review")
     review_parser.add_argument("output", type=Path)
     args = parser.parse_args()
@@ -182,6 +183,6 @@ def main() -> None:
     elif args.command == "build":
         build(args.scene, args.out)
     elif args.command == "product-photo":
-        product_photo(args.reference, args.out)
+        product_photo(args.reference, args.out, args.generative_fallback)
     elif args.command == "human-review":
         human_review(args.output)

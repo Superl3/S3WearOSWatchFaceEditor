@@ -1,0 +1,276 @@
+{
+  "milestone": "A1d Occlusion Reconstruction / Dial Completion",
+  "source": {
+    "shape": "ROUNDED_RECT",
+    "width": 388.0,
+    "height": 418.0,
+    "radius": 44.0,
+    "centerX": 219.0,
+    "centerY": 219.0,
+    "isCircleSpecialCase": false
+  },
+  "target": {
+    "shape": "CIRCLE",
+    "width": 438.0,
+    "height": 438.0,
+    "radius": 219.0,
+    "centerX": 219.0,
+    "centerY": 219.0,
+    "isCircleSpecialCase": true
+  },
+  "mappingPolicies": {
+    "naive": "NAIVE_XY_STRETCH",
+    "adaptive": "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
+    "staticRaster": "INVERSE_RASTER_MAPPING",
+    "structuredElements": "ANCHOR_PIVOT_GEOMETRY_ONLY_LOCAL_APPEARANCE_PRESERVED"
+  },
+  "structuredElements": [
+    {
+      "id": "hour_hand",
+      "role": "HOUR",
+      "sourcePivot": {
+        "x": 219.7,
+        "y": 221.5
+      },
+      "targetPivot": {
+        "x": 219.0,
+        "y": 219.0
+      },
+      "observedAngleDeg": 306.07,
+      "normalizedLength": 0.3874831939816938,
+      "sourceBoundaryDistance": 240.01040934021432,
+      "targetBoundaryDistance": 219.0,
+      "sourceLength": 93.0,
+      "targetLength": 84.85881948199093,
+      "thicknessPreserved": 8.0,
+      "targetBbox": {
+        "x": 150.40876254175078,
+        "y": 169.03740010944998,
+        "width": 70.94633031462126,
+        "height": 53.195792993020945
+      }
+    },
+    {
+      "id": "minute_hand",
+      "role": "MINUTE",
+      "sourcePivot": {
+        "x": 219.7,
+        "y": 221.5
+      },
+      "targetPivot": {
+        "x": 219.0,
+        "y": 219.0
+      },
+      "observedAngleDeg": 53.93,
+      "normalizedLength": 0.7291350424386708,
+      "sourceBoundaryDistance": 240.01040934021444,
+      "targetBoundaryDistance": 219.0,
+      "sourceLength": 175.0,
+      "targetLength": 159.6805742940689,
+      "thicknessPreserved": 8.0,
+      "targetBbox": {
+        "x": 216.64490714362796,
+        "y": 124.98435504466393,
+        "width": 131.42462570791622,
+        "height": 97.24883805780699
+      }
+    },
+    {
+      "id": "second_hand",
+      "role": "SECOND",
+      "sourcePivot": {
+        "x": 219.7,
+        "y": 221.5
+      },
+      "targetPivot": {
+        "x": 219.0,
+        "y": 219.0
+      },
+      "observedAngleDeg": 180.24,
+      "normalizedLength": 0.8157823167885596,
+      "sourceBoundaryDistance": 209.00183356657806,
+      "targetBoundaryDistance": 219.0,
+      "sourceLength": 170.5,
+      "targetLength": 178.65632737669455,
+      "thicknessPreserved": 3.0,
+      "targetBbox": {
+        "x": 217.5000131594533,
+        "y": 218.99371683306688,
+        "width": 2.9999736810934223,
+        "height": 178.66104319723055
+      }
+    }
+  ],
+  "staticRasterLayers": [
+    {
+      "id": "dial_clean",
+      "operation": "INVERSE_RASTER_MAPPING",
+      "output": "hermes-a1d-output\\human-review\\dial-clean-adaptive.png"
+    },
+    {
+      "id": "center_cap",
+      "operation": "LOCAL_ASSET_PRESERVED"
+    }
+  ],
+  "atlas": {
+    "path": "hermes-a1d-output\\human-review\\atlas.png",
+    "times": [
+      "00:00:00",
+      "03:15:45",
+      "06:30:00",
+      "09:45:15",
+      "10:08:30",
+      "12:00:00",
+      "15:22:10",
+      "18:40:30",
+      "21:55:50"
+    ],
+    "renderDirectory": "hermes-a1d-output\\human-review\\atlas-renders"
+  },
+  "occlusion": {
+    "metadata": "hermes-a1d-output\\occlusion-metadata.json",
+    "status": "completed_with_review",
+    "requiresHumanReview": true,
+    "reconstructedPixelsAreObservedTruth": false,
+    "revealSelection": [
+      {
+        "time": "03:15:45",
+        "score": 94.045,
+        "angularDistanceDeg": {
+          "HOUR": 151.805,
+          "MINUTE": 40.57,
+          "SECOND": 89.76
+        }
+      },
+      {
+        "time": "03:35:00",
+        "score": 165.7533,
+        "angularDistanceDeg": {
+          "HOUR": 161.43,
+          "MINUTE": 156.07,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "03:40:00",
+        "score": 172.54,
+        "angularDistanceDeg": {
+          "HOUR": 163.93,
+          "MINUTE": 173.93,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "03:45:00",
+        "score": 163.3733,
+        "angularDistanceDeg": {
+          "HOUR": 166.43,
+          "MINUTE": 143.93,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "04:35:00",
+        "score": 168.1333,
+        "angularDistanceDeg": {
+          "HOUR": 168.57,
+          "MINUTE": 156.07,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "04:40:00",
+        "score": 173.2533,
+        "angularDistanceDeg": {
+          "HOUR": 166.07,
+          "MINUTE": 173.93,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "06:30:00",
+        "score": 138.9667,
+        "angularDistanceDeg": {
+          "HOUR": 111.07,
+          "MINUTE": 126.07,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "09:45:15",
+        "score": 82.0383,
+        "angularDistanceDeg": {
+          "HOUR": 13.445,
+          "MINUTE": 142.43,
+          "SECOND": 90.24
+        }
+      },
+      {
+        "time": "15:35:00",
+        "score": 165.7533,
+        "angularDistanceDeg": {
+          "HOUR": 161.43,
+          "MINUTE": 156.07,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "15:40:00",
+        "score": 172.54,
+        "angularDistanceDeg": {
+          "HOUR": 163.93,
+          "MINUTE": 173.93,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "16:35:00",
+        "score": 168.1333,
+        "angularDistanceDeg": {
+          "HOUR": 168.57,
+          "MINUTE": 156.07,
+          "SECOND": 179.76
+        }
+      },
+      {
+        "time": "16:40:00",
+        "score": 173.2533,
+        "angularDistanceDeg": {
+          "HOUR": 166.07,
+          "MINUTE": 173.93,
+          "SECOND": 179.76
+        }
+      }
+    ]
+  },
+  "artifacts": {
+    "geometryOverlay": "hermes-a1d-output\\human-review\\geometry-overlay.png",
+    "assetSheet": "hermes-a1d-output\\human-review\\asset-sheet.png",
+    "mappingComparison": "hermes-a1d-output\\human-review\\mapping-comparison.png",
+    "dialCleanAdaptive": "hermes-a1d-output\\human-review\\dial-clean-adaptive.png",
+    "handsOff": "hermes-a1d-output\\human-review\\hands-off.png",
+    "occlusionZoomSheet": "hermes-a1d-output\\human-review\\occlusion-zoom-sheet.png",
+    "fourWayComparison": "hermes-a1d-output\\human-review\\before-mask-reconstructed-final.png",
+    "reconstructedHighlight": "hermes-a1d-output\\human-review\\reconstructed-highlight.png",
+    "generativeInpaintCandidate": "hermes-a1d-output\\assets\\generative-inpaint-candidate.png",
+    "occlusionRevealAtlas": {
+      "path": "hermes-a1d-output\\human-review\\occlusion-reveal-atlas.png",
+      "times": [
+        "03:15:45",
+        "03:35:00",
+        "03:40:00",
+        "03:45:00",
+        "04:35:00",
+        "04:40:00",
+        "06:30:00",
+        "09:45:15",
+        "15:35:00",
+        "15:40:00",
+        "16:35:00",
+        "16:40:00"
+      ],
+      "renderDirectory": "hermes-a1d-output\\human-review\\occlusion-reveal-renders"
+    }
+  },
+  "deviceOrEmulatorVerification": "deferred"
+}

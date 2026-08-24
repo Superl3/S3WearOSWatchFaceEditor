@@ -14,6 +14,7 @@ from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
+from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
 from photo2wff.wff_validate import validate_wff_xml
 
@@ -188,6 +189,40 @@ class Photo2WFFTests(unittest.TestCase):
         self.assertEqual(mapped["targetPivot"], {"x": 219, "y": 219})
         self.assertGreater(mapped["targetLength"], 0)
         self.assertAlmostEqual(mapped["thicknessPreserved"], 8)
+
+    def test_occlusion_engine_separates_observed_and_reconstructed_pixels(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "assets"
+            assets.mkdir()
+            reference = Image.new("RGB", (96, 96), "black")
+            ImageDraw.Draw(reference).line((48, 48, 48, 12), fill="white", width=4)
+            reference_path = root / "reference.png"
+            reference.save(reference_path)
+            before = reference.copy()
+            ImageDraw.Draw(before).line((48, 48, 48, 12), fill="black", width=8)
+            before.save(assets / "dial_clean.png")
+            report = reconstruct_occluded_dial(
+                reference_path,
+                assets,
+                root,
+                (48, 48),
+                {
+                    "HOUR": {
+                        "observedAngleDeg": 0,
+                        "length": 36,
+                        "thickness": 4,
+                        "bbox": {"height": 42},
+                    }
+                },
+            )
+            self.assertFalse(report["generatedPixelsAreObservedTruth"])
+            self.assertTrue((assets / "observed-mask.png").exists())
+            self.assertTrue((assets / "hand-occlusion-mask.png").exists())
+            self.assertTrue((assets / "reconstructed-mask.png").exists())
+            self.assertTrue((assets / "dial-completed.png").exists())
+            self.assertGreater(report["pixelCounts"]["observed"], 0)
+            self.assertGreaterEqual(report["pixelCounts"]["unresolved"], 0)
 
     def test_inverse_raster_mapping_keeps_target_corners_outside_shape(self):
         source = RoundedRect(388, 418, 44, 219, 219)

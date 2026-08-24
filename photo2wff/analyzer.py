@@ -9,6 +9,7 @@ from PIL import Image
 from PIL import ImageDraw
 
 from .model import CANVAS_SIZE
+from .occlusion import reconstruct_occluded_dial
 
 
 def _background_color(image: Image.Image) -> tuple[int, int, int]:
@@ -548,7 +549,7 @@ def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> tuple[dict[str, d
     return metadata, (center_x, center_y, center_confidence)
 
 
-def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, Any]:
+def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fallback_path: Path | None = None) -> dict[str, Any]:
     """Extract a frontal dark display from a product photo and preserve it as static artwork."""
     source = Image.open(reference_path).convert("RGB")
     source_size = list(source.size)
@@ -607,6 +608,15 @@ def analyze_product_photo(reference_path: Path, output_dir: Path) -> dict[str, A
     crop.save(assets_dir / "display_crop.png")
     hand_metadata, detected_clock = _write_a1_assets(canvas, assets_dir)
     detected_center_x, detected_center_y, detected_center_confidence = detected_clock
+    reconstruct_occluded_dial(
+        reference_path=output_dir / "reference.png",
+        assets_dir=assets_dir,
+        output_dir=output_dir,
+        center=(detected_center_x, detected_center_y),
+        hands=hand_metadata,
+        generative_fallback_path=generative_fallback_path,
+        margin=4,
+    )
     elements: list[dict[str, Any]] = [
         {
             "id": "dial_clean",
