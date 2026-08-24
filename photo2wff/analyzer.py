@@ -8,6 +8,7 @@ from typing import Any
 from PIL import Image
 from PIL import ImageDraw
 
+from .date_window import extract_date_day_of_month_window
 from .model import CANVAS_SIZE
 from .occlusion import reconstruct_occluded_dial
 
@@ -617,19 +618,55 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         generative_fallback_path=generative_fallback_path,
         margin=4,
     )
+    date_window_metadata = extract_date_day_of_month_window(
+        reference_path=output_dir / "reference.png",
+        dial_path=assets_dir / "dial_clean.png",
+        output_dir=output_dir,
+    )
+    dial_asset = date_window_metadata["emptyDialAsset"] if date_window_metadata else "assets/dial_clean.png"
     elements: list[dict[str, Any]] = [
         {
             "id": "dial_clean",
             "type": "STATIC_IMAGE",
             "dynamic": False,
             "bbox": {"x": 0, "y": 0, "width": 438, "height": 438},
-            "asset": "assets/dial_clean.png",
+            "asset": dial_asset,
             "assetInstruction": {"operation": "extract_from_reference"},
             "confidence": 0.78,
             "zIndex": 0,
             "uncertainty": ["A1b uses a conservative radial-light mask; segmentation remains adjustable for difficult references"],
         }
     ]
+    if date_window_metadata:
+        inner = date_window_metadata["innerBbox"]
+        elements.append(
+            {
+                "id": "date_day_of_month",
+                "type": "DYNAMIC_SLOT",
+                "slotType": "DATE_DAY_OF_MONTH",
+                "dynamic": True,
+                "bbox": inner,
+                "format": "d",
+                "style": {
+                    "fontFamily": "Pretendard",
+                    "fontWeight": 400,
+                    "fontSize": 24,
+                    "alignment": "center",
+                    "color": date_window_metadata["glyphColor"],
+                },
+                "confidence": date_window_metadata["confidence"],
+                "zIndex": 5,
+                "relationships": {
+                    "layoutReplacement": True,
+                    "replacesSourceElement": "hour_index_3",
+                    "staticFramePreserved": True,
+                    "frameBbox": date_window_metadata["frameBbox"],
+                    "innerBbox": date_window_metadata["innerBbox"],
+                    "padding": date_window_metadata["padding"],
+                },
+                "uncertainty": ["Source absence of hour numeral 3 is intentional layout replacement; numeral 3 is not reconstructed"],
+            }
+        )
     role_ids = {"HOUR": "hour_hand", "MINUTE": "minute_hand", "SECOND": "second_hand"}
     for role, metadata in hand_metadata.items():
         elements.append(
@@ -691,9 +728,9 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
             "overallConfidence": 0.68,
             "requiresStaticAssetExtraction": True,
             "requiresHumanReview": True,
-            "method": "A1b dark-display crop + red pivot detection + radial hand extraction",
+            "method": "A1b dark-display crop + A1d occlusion completion + A2 dynamic date-window slot",
             "componentCount": 1,
-            "groupCount": 4,
+            "groupCount": 5 if date_window_metadata else 4,
         },
     }
     return scene

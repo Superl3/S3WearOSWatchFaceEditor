@@ -152,6 +152,7 @@ def main() -> None:
     wff_render_parser.add_argument("xml", type=Path)
     wff_render_parser.add_argument("--out", type=Path, default=Path("wff-rendered.png"))
     wff_render_parser.add_argument("--time", type=str)
+    wff_render_parser.add_argument("--date", type=str)
     validate_parser = subparsers.add_parser("validate")
     validate_parser.add_argument("scene", type=Path)
     wff_parser = subparsers.add_parser("validate-wff")
@@ -174,7 +175,7 @@ def main() -> None:
     elif args.command == "render":
         render(args.output)
     elif args.command == "render-wff":
-        print(render_wff_xml(args.xml, args.out, fixed_time=args.time))
+        print(render_wff_xml(args.xml, args.out, fixed_time=args.time, fixed_date=args.date))
     elif args.command == "validate":
         validate_scene(json.loads(args.scene.read_text(encoding="utf-8")))
         print(f"valid: {args.scene}")

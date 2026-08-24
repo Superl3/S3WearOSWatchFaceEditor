@@ -48,6 +48,18 @@ def _clock_seconds(value: str) -> tuple[int, int, int]:
     return parts[0] % 24, parts[1] % 60, parts[2] % 60
 
 
+def _day_of_month(value: str) -> int:
+    text = str(value)
+    if "-" in text:
+        text = text.rsplit("-", 1)[-1]
+    elif "." in text:
+        text = text.rsplit(".", 1)[-1]
+    try:
+        return max(1, min(31, int(text)))
+    except ValueError:
+        return 1
+
+
 def _analog_angle(role: str, hour: int, minute: int, second: int) -> float:
     if role == "HOUR":
         return ((hour % 12) + minute / 60 + second / 3600) * 30
@@ -110,6 +122,12 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
             _centered_text(draw, bbox, time_parts[2] if len(time_parts) > 2 else "00", _font(scene_root, style), fill)
         elif element_type == "DATE":
             _centered_text(draw, bbox, sample_date, _font(scene_root, style), fill)
+        elif element_type == "DYNAMIC_SLOT":
+            if element.get("slotType") != "DATE_DAY_OF_MONTH":
+                raise ValueError(f"unsupported DYNAMIC_SLOT type: {element.get('slotType')}")
+            day = _day_of_month(sample_date)
+            value = f"{day:02d}" if element.get("format", "d") == "dd" else str(day)
+            _centered_text(draw, bbox, value, _font(scene_root, style), fill)
         elif element_type == "WEEKDAY":
             _centered_text(draw, bbox, sample_weekday, _font(scene_root, style), fill)
         elif element_type in dynamic_values:

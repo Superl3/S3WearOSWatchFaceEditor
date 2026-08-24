@@ -12,11 +12,13 @@ from photo2wff.analyzer import analyze_image
 from photo2wff.analog_validate import validate_dynamic_renders
 from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
+from photo2wff.date_window import extract_date_day_of_month_window
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
 from photo2wff.wff_validate import validate_wff_xml
+from photo2wff.wff_render import render_wff_xml
 
 
 def basic_scene() -> dict:
@@ -55,6 +57,32 @@ class Photo2WFFTests(unittest.TestCase):
         self.assertEqual(root.tag, "WatchFace")
         self.assertIsNotNone(root.find(".//DigitalClock/TimeText"))
         self.assertEqual(root.find(".//PartText/Text/Font/Template/Parameter").attrib["expression"], "[MONTH_Z]")
+
+    def test_dynamic_slot_compiles_day_of_month(self):
+        scene = basic_scene()
+        scene["elements"] = [
+            {
+                "id": "date_day_of_month",
+                "type": "DYNAMIC_SLOT",
+                "slotType": "DATE_DAY_OF_MONTH",
+                "dynamic": True,
+                "bbox": {"x": 344, "y": 207, "width": 48, "height": 28},
+                "format": "d",
+                "style": {"fontFamily": "SYNC_TO_DEVICE", "fontSize": 24, "alignment": "center", "color": "#EEE3DC"},
+                "confidence": 0.93,
+            }
+        ]
+        xml = compile_watchface_xml(scene, {})
+        self.assertIn("[DAY]", xml)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            xml_path = root / "watchface.xml"
+            xml_path.write_text(xml, encoding="utf-8")
+            first = root / "day-01.png"
+            second = root / "day-31.png"
+            render_wff_xml(xml_path, first, fixed_date="2024-08-01")
+            render_wff_xml(xml_path, second, fixed_date="2024-08-31")
+            self.assertNotEqual(first.read_bytes(), second.read_bytes())
 
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -223,6 +251,26 @@ class Photo2WFFTests(unittest.TestCase):
             self.assertTrue((assets / "dial-completed.png").exists())
             self.assertGreater(report["pixelCounts"]["observed"], 0)
             self.assertGreaterEqual(report["pixelCounts"]["unresolved"], 0)
+
+    def test_date_window_removes_only_visible_glyph_and_preserves_frame(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "assets"
+            assets.mkdir()
+            reference = Image.new("RGB", (64, 64), "black")
+            draw = ImageDraw.Draw(reference)
+            draw.rounded_rectangle((10, 20, 53, 45), radius=5, outline=(220, 20, 40), width=3)
+            draw.text((31, 32), "9", font=ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 18), fill="white", anchor="mm")
+            reference_path = root / "reference.png"
+            dial_path = assets / "dial_clean.png"
+            reference.save(reference_path)
+            reference.save(dial_path)
+            metadata = extract_date_day_of_month_window(reference_path, dial_path, root)
+            self.assertIsNotNone(metadata)
+            self.assertEqual(metadata["semanticType"], "DATE_DAY_OF_MONTH")
+            empty = Image.open(assets / "dial_empty_date.png").convert("RGB")
+            self.assertEqual(empty.getpixel((10, 32)), (220, 20, 40))
+            self.assertLess(max(empty.getpixel((31, 32))), 45)
 
     def test_inverse_raster_mapping_keeps_target_corners_outside_shape(self):
         source = RoundedRect(388, 418, 44, 219, 219)

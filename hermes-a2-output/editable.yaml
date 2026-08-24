@@ -1,0 +1,58 @@
+# Human-editable projection of scene.json
+canvas:
+  width: 438
+  height: 438
+elements:
+  dial_clean:
+    type: STATIC_IMAGE
+    dynamic: false
+    x: 0
+    y: 0
+    width: 438
+    height: 438
+    asset: assets/dial_empty_date.png
+  date_day_of_month:
+    type: DYNAMIC_SLOT
+    dynamic: true
+    x: 346
+    y: 207
+    width: 47
+    height: 29
+    fontFamily: Pretendard
+    fontWeight: 400
+    fontSize: 24
+    alignment: center
+    color: #DFD8D2
+    format: d
+  hour_hand:
+    type: ANALOG_HAND
+    dynamic: true
+    x: 206
+    y: 128
+    width: 28
+    height: 105
+    asset: assets/hour_hand.png
+  minute_hand:
+    type: ANALOG_HAND
+    dynamic: true
+    x: 206
+    y: 46
+    width: 28
+    height: 185
+    asset: assets/minute_hand.png
+  second_hand:
+    type: ANALOG_HAND
+    dynamic: true
+    x: 215
+    y: 51
+    width: 10
+    height: 180
+    asset: assets/second_hand.png
+  center_cap:
+    type: STATIC_IMAGE
+    dynamic: false
+    x: 207
+    y: 207
+    width: 24
+    height: 24
+    asset: assets/center_cap.png

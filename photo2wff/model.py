@@ -19,6 +19,7 @@ SUPPORTED_TYPES = {
     "MINUTE",
     "SECOND",
     "DATE",
+    "DYNAMIC_SLOT",
     "WEEKDAY",
     "TEXT",
     "ICON",
@@ -200,6 +201,13 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
                 _fail(f"{path}.dynamic", f"{element_type} must be dynamic")
             if element_type == "TIME" and element.get("format", "hh:mm") not in {"hh:mm", "HH:mm", "hh:mm:ss"}:
                 _fail(f"{path}.format", "supported values are hh:mm, HH:mm, hh:mm:ss")
+        if element_type == "DYNAMIC_SLOT":
+            if not element["dynamic"]:
+                _fail(f"{path}.dynamic", "DYNAMIC_SLOT must be dynamic")
+            if element.get("slotType") != "DATE_DAY_OF_MONTH":
+                _fail(f"{path}.slotType", "A2 supports only DATE_DAY_OF_MONTH")
+            if element.get("format", "d") not in {"d", "dd"}:
+                _fail(f"{path}.format", "DATE_DAY_OF_MONTH supports only d or dd")
         if element_type == "ANALOG_HAND":
             if not element["dynamic"]:
                 _fail(f"{path}.dynamic", "ANALOG_HAND must be dynamic")

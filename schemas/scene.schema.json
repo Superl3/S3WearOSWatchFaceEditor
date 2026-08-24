@@ -198,7 +198,7 @@
       "required": ["id", "type", "dynamic", "bbox", "confidence"],
       "properties": {
         "id": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
-        "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "ANALOG_HAND", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
+        "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "DYNAMIC_SLOT", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "ANALOG_HAND", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
         "dynamic": { "type": "boolean" },
         "bbox": { "$ref": "#/$defs/bbox" },
         "rotation": { "type": "number", "minimum": -360, "maximum": 360 },
@@ -213,6 +213,7 @@
           "properties": { "operation": { "const": "extract_from_reference" } }
         },
         "dataSource": { "type": "string" },
+        "slotType": { "enum": ["DATE_DAY_OF_MONTH"] },
         "role": { "enum": ["HOUR", "MINUTE", "SECOND"] },
         "observedAngleDeg": { "type": "number", "minimum": -360, "maximum": 360 },
         "length": { "type": "number", "exclusiveMinimum": 0 },

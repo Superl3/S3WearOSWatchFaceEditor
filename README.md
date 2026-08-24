@@ -84,6 +84,15 @@ python -m photo2wff product-photo path\to\product-photo.webp --out hermes-a1d-fa
 
 The default path restores deterministic background/stroke candidates and leaves uncertain pixels unresolved. The optional fallback is applied only inside the hand occlusion mask and is always marked as generated rather than observed. A1d writes `observed-mask.png`, `hand-occlusion-mask.png`, `reconstructed-mask.png`, `dial-before-reconstruction.png`, `dial-completed.png`, `unresolved-mask.png`, and `occlusion-metadata.json`. Its human-review bundle additionally contains `hands-off.png`, `occlusion-zoom-sheet.png`, `before-mask-reconstructed-final.png`, `reconstructed-highlight.png`, the normal 9-time atlas, and an adversarial `occlusion-reveal-atlas.png`. Uncertain regions keep confidence and `requiresHumanReview` metadata.
 
+For A2 Dynamic Date Window, the analyzer treats a rounded window replacing the omitted 3 o'clock index as a high-confidence `DATE_DAY_OF_MONTH` candidate. The missing hour numeral is intentionally not reconstructed. The static frame, border, and background are preserved while only the observed glyph is removed into `assets/dial_empty_date.png`; the compiler emits a minimal `DYNAMIC_SLOT` abstraction:
+
+```powershell
+python -m photo2wff product-photo path\\to\\product-photo.webp --out hermes-a2-output
+python -m photo2wff render-wff hermes-a2-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml --out hermes-a2-output\\wff-rendered.png --date 2024-08-20
+```
+
+This milestone supports only `slotType: DATE_DAY_OF_MONTH` (`d` or `dd`). The review bundle contains renders for days 1, 8, 11, 20, and 31 plus centered geometry guides and padding/clipping metrics under `human-review/date-window/`. Complications, weather, battery, weekday, and other dynamic semantics remain out of scope.
+
 `quick` creates:
 
 ```text

@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 from .model import CANVAS_SIZE
 
@@ -31,6 +31,88 @@ def _resource(drawable: Path, name: str) -> Image.Image:
     if not path.exists():
         raise FileNotFoundError(f"WFF resource not found: {path}")
     return Image.open(path).convert("RGBA")
+
+
+def _day_value(fixed_date: str, padded: bool = False) -> str:
+    value = str(fixed_date)
+    if "-" in value:
+        value = value.rsplit("-", 1)[-1]
+    elif "." in value:
+        value = value.rsplit(".", 1)[-1]
+    try:
+        day = max(1, min(31, int(value)))
+    except ValueError:
+        day = 1
+    return f"{day:02d}" if padded else str(day)
+
+
+def _parameter_value(expression: str, fixed_date: str) -> str:
+    if expression == "[DAY]":
+        return _day_value(fixed_date)
+    if expression == "[DAY_Z]":
+        return _day_value(fixed_date, padded=True)
+    if expression == "[MONTH_Z]":
+        normalized = str(fixed_date).replace("/", "-")
+        parts = normalized.split("-")
+        value = parts[-2] if len(parts) >= 3 else parts[0].split(".")[0]
+        try:
+            return f"{max(1, min(12, int(value))):02d}"
+        except ValueError:
+            return "01"
+    return expression
+
+
+def _font_for(xml_path: Path, attributes: dict[str, str]) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    family = attributes.get("family", "").lower()
+    candidates = []
+    if family == "pretendard":
+        candidates.append(xml_path.parent.parent / "font" / "pretendard.ttf")
+    candidates.extend((Path("C:/Windows/Fonts/segoeui.ttf"), Path("C:/Windows/Fonts/arial.ttf")))
+    for candidate in candidates:
+        if candidate.exists():
+            return ImageFont.truetype(str(candidate), max(1, int(float(attributes.get("size", "20")))))
+    return ImageFont.load_default()
+
+
+def _color(value: str) -> tuple[int, int, int, int]:
+    raw = str(value or "#FFFFFF").lstrip("#")
+    if len(raw) == 8:
+        alpha = int(raw[:2], 16)
+        raw = raw[2:]
+    else:
+        alpha = 255
+    if len(raw) != 6:
+        return 255, 255, 255, alpha
+    return int(raw[0:2], 16), int(raw[2:4], 16), int(raw[4:6], 16), alpha
+
+
+def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: str) -> None:
+    text_node = node.find("Text")
+    if text_node is None:
+        return
+    font_node = text_node.find("Font")
+    if font_node is None:
+        return
+    template = font_node.find("Template")
+    if template is not None:
+        value = str(template.text or "").strip()
+        for parameter in template.findall("Parameter"):
+            value = value.replace("%s", _parameter_value(parameter.attrib.get("expression", ""), fixed_date), 1)
+        text = value
+    else:
+        text = str(font_node.text or "")
+    width = int(float(node.attrib.get("width", "0")))
+    height = int(float(node.attrib.get("height", "0")))
+    if width <= 0 or height <= 0:
+        return
+    layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    font = _font_for(xml_path, font_node.attrib)
+    align = text_node.attrib.get("align", "CENTER").upper()
+    x = 0 if align == "LEFT" else width if align == "RIGHT" else width / 2
+    anchor = "lm" if align == "LEFT" else "rm" if align == "RIGHT" else "mm"
+    draw.text((x, height / 2), text, font=font, fill=_color(font_node.attrib.get("color", "#FFFFFF")), anchor=anchor)
+    base.alpha_composite(layer, (int(float(node.attrib.get("x", "0"))), int(float(node.attrib.get("y", "0")))))
 
 
 def _part_image(base: Image.Image, node: ET.Element, drawable: Path) -> None:
@@ -62,7 +144,7 @@ def _hand(base: Image.Image, node: ET.Element, drawable: Path, fixed_time: str) 
     base.alpha_composite(rotated)
 
 
-def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = None) -> dict[str, str]:
+def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = None, fixed_date: str | None = None) -> dict[str, str]:
     """Render the compiled WFF XML using only its Scene and drawable resources.
 
     This is a deterministic format-level renderer for CI. A Wear OS device/emulator
@@ -72,6 +154,7 @@ def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = N
     drawable = xml_path.parent.parent / "drawable"
     metadata = {node.attrib.get("key"): node.attrib.get("value", "") for node in root.findall("Metadata")}
     render_time = fixed_time or metadata.get("PREVIEW_TIME", "10:08:30")
+    render_date = fixed_date or metadata.get("PREVIEW_DATE", "08.20")
     background = root.find("Scene")
     if background is None:
         raise ValueError("WFF XML has no Scene")
@@ -83,6 +166,8 @@ def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = N
     for node in background:
         if node.tag == "PartImage":
             _part_image(base, node, drawable)
+        elif node.tag == "PartText":
+            _part_text(base, node, xml_path, render_date)
         elif node.tag == "AnalogClock":
             for hand in node:
                 if hand.tag in {"HourHand", "MinuteHand", "SecondHand"}:

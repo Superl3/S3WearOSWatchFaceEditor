@@ -96,6 +96,7 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
     is_analog = any(element["type"] == "ANALOG_HAND" for element in scene["elements"])
     ET.SubElement(root, "Metadata", {"key": "CLOCK_TYPE", "value": "ANALOG" if is_analog else "DIGITAL"})
     ET.SubElement(root, "Metadata", {"key": "PREVIEW_TIME", "value": str(scene.get("preview", {}).get("time", "10:08:32"))})
+    ET.SubElement(root, "Metadata", {"key": "PREVIEW_DATE", "value": str(scene.get("preview", {}).get("date", "08.20"))})
     background = scene["background"]
     if str(background.get("type", "")).upper() not in {"SOLID", "UNKNOWN", "IMAGE"}:
         raise ValueError(f"background type '{background.get('type')}' needs a rasterized background asset before WFF compilation")
@@ -115,6 +116,11 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
             date_part = scene_node[-1]
             parameters = date_part.find("Text/Font/Template")
             ET.SubElement(parameters, "Parameter", {"expression": "[DAY_Z]"})
+        elif element_type == "DYNAMIC_SLOT":
+            if element.get("slotType") != "DATE_DAY_OF_MONTH":
+                raise ValueError(f"element '{element['id']}' has unsupported DYNAMIC_SLOT type")
+            expression = "[DAY_Z]" if element.get("format", "d") == "dd" else "[DAY]"
+            scene_node.append(_part_text(element, expression))
         elif element_type == "WEEKDAY":
             scene_node.append(_part_text(element, "[DAY_OF_WEEK_S]"))
         elif element_type == "BATTERY":

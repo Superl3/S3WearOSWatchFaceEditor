@@ -8,6 +8,7 @@ from typing import Any
 from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 from .display_geometry import RoundedRect, inverse_raster_map, map_structured_element
+from .date_review import generate_date_window_review_artifacts
 from .wff_render import render_wff_xml
 
 
@@ -434,6 +435,12 @@ def generate_human_review_artifacts(scene: dict[str, Any], output_root: Path, xm
         },
         "deviceOrEmulatorVerification": "deferred",
     }
+    date_slot = next((element for element in scene.get("elements", []) if element.get("type") == "DYNAMIC_SLOT"), None)
+    date_metadata_path = output_root / "date-window-metadata.json"
+    if date_slot is not None and date_metadata_path.exists():
+        manifest["milestone"] = "A2 Dynamic Date Window"
+        date_metadata = json.loads(date_metadata_path.read_text(encoding="utf-8"))
+        manifest["dateWindow"] = generate_date_window_review_artifacts(scene, output_root, xml_path, date_metadata)
     manifest_path = review_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest
