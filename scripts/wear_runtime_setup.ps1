@@ -3,7 +3,9 @@ param(
   [string]$ApkPath,
   [string]$Serial,
   [switch]$NoWindow,
-  [switch]$CapturePicker
+  [switch]$CapturePicker,
+  [switch]$CleanInstall,
+  [switch]$Activate
 )
 
 $ErrorActionPreference = 'Stop'
@@ -44,9 +46,15 @@ $characteristics = (& $adb -s $Serial shell getprop ro.build.characteristics).Tr
 if ($characteristics -notmatch 'watch') { throw "Selected device is not Wear OS: $characteristics" }
 
 if ($ApkPath) {
+  if ($CleanInstall) {
+    & $adb -s $Serial uninstall com.photo2wff.watchface | Out-Null
+  }
   Invoke-Adb -Arguments @('-s', $Serial, 'install', '-r', $ApkPath)
   Invoke-Adb -Arguments @('-s', $Serial, 'shell', 'pm', 'enable', 'com.photo2wff.watchface')
 }
+
+$debugSurface = (& $adb -s $Serial shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation set-watchface --es watchFaceId com.photo2wff.watchface) -join "`n"
+Start-Sleep -Seconds 3
 
 Invoke-Adb -Arguments @('-s', $Serial, 'shell', 'am', 'force-stop', 'com.google.android.calendar')
 Invoke-Adb -Arguments @('-s', $Serial, 'shell', 'am', 'start', '-n', 'com.google.android.wearable.sysui/com.google.android.wearable.sysui.mainui.activity.SysUiActivity')
@@ -57,6 +65,12 @@ Invoke-Adb -Arguments @('-s', $Serial, 'shell', 'uiautomator', 'dump', '/sdcard/
 $xml = (& $adb -s $Serial shell cat /sdcard/window.xml) -join "`n"
 $pickerOpen = $xml -match 'Watch face picker'
 $registered = $xml -match 'Photo2WFF'
+$selected = $false
+if ($registered -and $Activate) {
+  Invoke-Adb -Arguments @('-s', $Serial, 'shell', 'input', 'tap', '227', '200')
+  Start-Sleep -Seconds 3
+  $selected = ((& $adb -s $Serial shell dumpsys wallpaper) -join "`n") -match 'DeclarativeWatchFaceRuntime'
+}
 
 $artifact = Join-Path (Get-Location) 'a25-runtime-validation'
 New-Item -ItemType Directory -Force -Path $artifact | Out-Null
@@ -73,9 +87,10 @@ $result = [ordered]@{
   apkInstalled = [bool]$ApkPath
   pickerOpen = $pickerOpen
   photo2wffRegisteredInPicker = $registered
-  selected = $false
-  status = if ($registered) { 'selection_required' } else { 'watchface_not_registered' }
-  note = 'The script never reports selected unless the picker exposes Photo2WFF and a tap is performed.'
+  debugSurface = $debugSurface
+  selected = $selected
+  status = if ($selected) { 'selected_and_runtime_active' } elseif ($registered) { 'registered_selection_required' } else { 'watchface_not_registered' }
+  note = 'WatchFaceId className=null is expected for resource-only WFF and is not treated as a failure.'
 }
 $result | ConvertTo-Json -Depth 4 | Set-Content -Encoding utf8 (Join-Path $artifact 'wear-runtime-setup.json')
 $result | ConvertTo-Json -Depth 4

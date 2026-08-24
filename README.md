@@ -162,8 +162,8 @@ The project is resource-only (`android:hasCode="false"`). Dynamic time, date, we
 
 ## Wear OS emulator setup
 
-`scripts/wear_runtime_setup.ps1` boots the Wear OS AVD, verifies the `watch` device characteristic, installs a WFF APK, opens the real watch-face picker, captures its UI, and writes `a25-runtime-validation/wear-runtime-setup.json`. It distinguishes installation, picker visibility, picker registration, and actual selection; it never claims selection when the system picker does not expose the face.
+`scripts/wear_runtime_setup.ps1` boots the Wear OS AVD, verifies the `watch` device characteristic, clean-installs a WFF APK, activates it through the official `DEBUG_SURFACE` broadcast, opens the real watch-face picker, taps the face, captures its UI, and writes `a25-runtime-validation/wear-runtime-setup.json`. It treats `WatchFaceId[..., null]` as the normal resource-only WFF form and records picker/runtime activation separately.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/wear_runtime_setup.ps1 -ApkPath C:\path\to\watchface-debug.apk -NoWindow -CapturePicker
+powershell -ExecutionPolicy Bypass -File scripts/wear_runtime_setup.ps1 -ApkPath C:\path\to\watchface-debug.apk -NoWindow -CapturePicker -CleanInstall -Activate
 ```

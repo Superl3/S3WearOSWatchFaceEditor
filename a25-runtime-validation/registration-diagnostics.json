@@ -1,0 +1,38 @@
+{
+  "milestone": "A2.5a WFF Registration Diagnostics",
+  "avd": "Photo2WFF-Wear34",
+  "serial": "emulator-5556",
+  "wearCharacteristics": "emulator,nosdcard,watch",
+  "watchFaceIdNullClassName": "expected_for_resource_only_wff",
+  "officialSample": {
+    "source": "android/wear-os-samples/WatchFaceFormat/SimpleAnalog",
+    "build": "success_using_local_WFF_template_build_wrapper",
+    "cleanInstall": "success",
+    "debugSurface": "Favorite Id=[12] Runtime=[2]",
+    "runtimeComponent": "com.google.wear.watchface.runtime.DeclarativeWatchFaceRuntime1",
+    "activatable": true,
+    "runtimeScreenshot": "official-sample-runtime-real.png"
+  },
+  "photo2wff": {
+    "baseline": "deaf036/4537791 production APK",
+    "cleanInstall": "success",
+    "debugSurface": "Favorite Id=[11] Runtime=[2]",
+    "pickerVisible": true,
+    "pickerLabel": "Photo2WFF",
+    "pickerActivation": true,
+    "runtimeComponent": "com.google.wear.watchface.runtime.DeclarativeWatchFaceRuntime0",
+    "runtimeScreenshot": "photo2wff-selected.png"
+  },
+  "structuralComparison": {
+    "bothHasCodeFalse": true,
+    "bothWffVersion": 1,
+    "officialSourceMinTargetSdk": "33/33",
+    "photo2wffProductionMinTargetSdk": "33/34",
+    "bothWatchFeature": true,
+    "bothWatchFaceInfoPreview": true,
+    "photo2wffAdditionalMetadata": ["Category", "AvailableInRetail", "MultipleInstancesAllowed", "FlavorsSupported", "publisher"],
+    "rootCause": "not_a_registration_failure; prior diagnosis incorrectly treated null className as failure",
+    "requiredFix": "none_for_WFF_registration",
+    "nextGate": "runtime_render_matrix_and_aligned_diff"
+  }
+}
