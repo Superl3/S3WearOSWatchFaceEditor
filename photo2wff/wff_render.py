@@ -100,7 +100,11 @@ def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: 
     if template is not None:
         value = str(template.text or "").strip()
         for parameter in template.findall("Parameter"):
-            value = value.replace("%s", _parameter_value(parameter.attrib.get("expression", ""), fixed_date), 1)
+            parameter_value = _parameter_value(parameter.attrib.get("expression", ""), fixed_date)
+            if "%d" in value:
+                value = value.replace("%d", str(int(parameter_value)), 1)
+            else:
+                value = value.replace("%s", parameter_value, 1)
         text = value
     else:
         text = str(font_node.text or "")
@@ -113,21 +117,12 @@ def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: 
     if bitmap_font_node is not None:
         family = bitmap_font_node.attrib.get("family", "")
         catalog = bitmap_fonts.get(family, {})
-        fallback_family = bitmap_font_node.attrib.get("fallbackFamily", "Pretendard")
-        fallback = _font_for(xml_path, {"family": fallback_family, "size": bitmap_font_node.attrib.get("size", "24")})
         glyphs: list[Image.Image] = []
-        color = _color(bitmap_font_node.attrib.get("color", "#FFFFFF"))
         for character in text:
             definition = catalog.get(character)
-            if definition is not None:
-                glyphs.append(_resource(xml_path.parent.parent / "drawable", definition["resource"]))
-                continue
-            bounds = fallback.getbbox(character)
-            glyph_width = max(1, round(fallback.getlength(character))) if hasattr(fallback, "getlength") else max(1, bounds[2] - bounds[0])
-            glyph_height = max(1, bounds[3] - bounds[1])
-            fallback_glyph = Image.new("RGBA", (glyph_width, glyph_height), (0, 0, 0, 0))
-            ImageDraw.Draw(fallback_glyph).text((-bounds[0], -bounds[1]), character, font=fallback, fill=color)
-            glyphs.append(fallback_glyph)
+            if definition is None:
+                raise ValueError(f"BitmapFont '{family}' has no glyph for '{character}'")
+            glyphs.append(_resource(xml_path.parent.parent / "drawable", definition["resource"]))
         total_width = sum(glyph.width for glyph in glyphs)
         x = 0 if align == "LEFT" else width - total_width if align == "RIGHT" else (width - total_width) / 2
         y = max(0, (height - max((glyph.height for glyph in glyphs), default=0)) // 2)
@@ -172,6 +167,51 @@ def _hand(base: Image.Image, node: ET.Element, drawable: Path, fixed_time: str) 
     base.alpha_composite(rotated)
 
 
+def _condition_matches(expression: str, fixed_date: str) -> bool:
+    day = int(_day_value(fixed_date))
+    clauses = [clause.strip() for clause in expression.split("||")]
+    for clause in clauses:
+        if clause.startswith("[DAY] ==") and day == int(clause.split("==", 1)[1].strip()):
+            return True
+    return False
+
+
+def _condition_child(node: ET.Element, fixed_date: str) -> ET.Element | None:
+    expressions_node = node.find("Expressions")
+    expressions = {
+        expression.attrib.get("name", ""): str(expression.text or "").strip()
+        for expression in expressions_node.findall("Expression")
+    } if expressions_node is not None else {}
+    for compare in node.findall("Compare"):
+        if _condition_matches(expressions.get(compare.attrib.get("expression", ""), ""), fixed_date):
+            return next(iter(compare), None)
+    default = node.find("Default")
+    return next(iter(default), None) if default is not None else None
+
+
+def _render_node(
+    base: Image.Image,
+    node: ET.Element,
+    xml_path: Path,
+    drawable: Path,
+    fixed_time: str,
+    fixed_date: str,
+    bitmap_fonts: dict[str, dict[str, dict[str, str]]],
+) -> None:
+    if node.tag == "PartImage":
+        _part_image(base, node, drawable)
+    elif node.tag == "PartText":
+        _part_text(base, node, xml_path, fixed_date, bitmap_fonts)
+    elif node.tag == "AnalogClock":
+        for hand in node:
+            if hand.tag in {"HourHand", "MinuteHand", "SecondHand"}:
+                _hand(base, hand, drawable, fixed_time)
+    elif node.tag == "Condition":
+        selected = _condition_child(node, fixed_date)
+        if selected is not None:
+            _render_node(base, selected, xml_path, drawable, fixed_time, fixed_date, bitmap_fonts)
+
+
 def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = None, fixed_date: str | None = None) -> dict[str, str]:
     """Render the compiled WFF XML using only its Scene and drawable resources.
 
@@ -197,14 +237,7 @@ def render_wff_xml(xml_path: Path, output_path: Path, fixed_time: str | None = N
     else:
         base = Image.new("RGBA", (CANVAS_SIZE, CANVAS_SIZE), "black")
     for node in background:
-        if node.tag == "PartImage":
-            _part_image(base, node, drawable)
-        elif node.tag == "PartText":
-            _part_text(base, node, xml_path, render_date, bitmap_fonts)
-        elif node.tag == "AnalogClock":
-            for hand in node:
-                if hand.tag in {"HourHand", "MinuteHand", "SecondHand"}:
-                    _hand(base, hand, drawable, render_time)
+        _render_node(base, node, xml_path, drawable, render_time, render_date, bitmap_fonts)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     base.convert("RGB").save(output_path)
     return {"renderer": "photo2wff-wff-xml", "fixedTime": render_time, "sourceXml": str(xml_path)}

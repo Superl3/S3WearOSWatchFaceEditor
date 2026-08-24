@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - run: python -m pip install -e .
+      - name: Build pinned Google WFF validator
+        shell: pwsh
+        run: ./scripts/setup_wff_validator.ps1
+      - name: Test with mandatory official validation
+        run: python -m unittest discover -s tests -v
+      - name: Compile fixed sample through official validation gate
+        run: python -m photo2wff build samples/minimal.scene.json --out ci-sample-output

@@ -15,10 +15,11 @@ from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
+from photo2wff.measurement_correctness import FIDUCIALS, _fit_geometry
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
-from photo2wff.runtime_validation import run_runtime_gate
-from photo2wff.wff_validate import validate_wff_xml
+from photo2wff.runtime_validation import _region_masks, run_runtime_gate
+from photo2wff.wff_validate import WffValidationError, lint_wff_xml, validate_wff_xml
 from photo2wff.wff_render import render_wff_xml
 
 
@@ -85,7 +86,7 @@ class Photo2WFFTests(unittest.TestCase):
             render_wff_xml(xml_path, second, fixed_date="2024-08-31")
             self.assertNotEqual(first.read_bytes(), second.read_bytes())
 
-    def test_manual_glyph_override_uses_provided_digit_and_pretendard_fallback(self):
+    def test_manual_glyph_override_switches_whole_date_to_pretendard_fallback(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             drawable = root / "project" / "watchface" / "src" / "main" / "res" / "drawable"
@@ -120,8 +121,14 @@ class Photo2WFFTests(unittest.TestCase):
             xml_path.write_text(xml, encoding="utf-8")
             shutil_target = drawable / "manual_glyph_8.png"
             manual.save(shutil_target)
-            self.assertEqual(validate_wff_xml(xml_path), "structural validation passed")
-            self.assertIsNotNone(ET.fromstring(xml).find("./BitmapFonts/BitmapFont/Character[@name='8']"))
+            self.assertIn("PASSED", validate_wff_xml(xml_path))
+            parsed = ET.fromstring(xml)
+            self.assertIsNotNone(parsed.find("./BitmapFonts/BitmapFont/Character[@name='8']"))
+            self.assertIsNone(parsed.find(".//*[@fallbackFamily]"))
+            self.assertEqual(parsed.find(".//Condition/Expressions/Expression").text, "[DAY] == 8")
+            self.assertIsNotNone(parsed.find(".//Condition/Compare/PartText/Text/BitmapFont"))
+            self.assertIsNotNone(parsed.find(".//Condition/Default/PartText/Text/Font"))
+            self.assertIn("<Template>%d<Parameter expression=\"[DAY]\"/></Template>", xml)
             provided = root / "provided.png"
             fallback = root / "fallback.png"
             render_wff_xml(xml_path, provided, fixed_date="2024-08-08")
@@ -144,11 +151,59 @@ class Photo2WFFTests(unittest.TestCase):
             self.assertTrue(all(case["status"] == "blocked_by_runtime_environment" for case in report["cases"]))
             self.assertTrue((root / "runtime-validation" / "runtime-validation-report.json").exists())
 
-    def test_wff_structural_validation(self):
+    def test_wff_structural_lint_is_not_official_validation(self):
         with tempfile.TemporaryDirectory() as temp:
             xml_path = Path(temp) / "watchface.xml"
             xml_path.write_text(compile_watchface_xml(basic_scene(), {}), encoding="utf-8")
-            self.assertEqual(validate_wff_xml(xml_path), "structural validation passed")
+            self.assertEqual(lint_wff_xml(xml_path), "Photo2WFF structural lint passed")
+
+    def test_official_validation_fails_closed_without_validator(self):
+        with tempfile.TemporaryDirectory() as temp:
+            xml_path = Path(temp) / "watchface.xml"
+            xml_path.write_text(compile_watchface_xml(basic_scene(), {}), encoding="utf-8")
+            with self.assertRaises(WffValidationError):
+                validate_wff_xml(xml_path, validator_jar=Path(temp) / "missing-validator.jar")
+
+    def test_geometry_calibration_fits_fiducials_independently(self):
+        with tempfile.TemporaryDirectory() as temp:
+            image = Image.new("RGB", (500, 500), "black")
+            draw = ImageDraw.Draw(image)
+            for _, (x, y), color in FIDUCIALS:
+                runtime_x = 1.04 * x - 0.01 * y + 3.5
+                runtime_y = 0.01 * x + 1.03 * y + 4.25
+                draw.ellipse((runtime_x - 4, runtime_y - 4, runtime_x + 4, runtime_y + 4), fill=color)
+            path = Path(temp) / "fiducials.png"
+            image.save(path)
+            fitted = _fit_geometry(path)
+            self.assertEqual(fitted["status"], "measured")
+            self.assertLess(fitted["fitResidualRmsPx"], 0.5)
+            self.assertAlmostEqual(fitted["matrix"]["tx"], 3.5, delta=0.5)
+            self.assertAlmostEqual(fitted["matrix"]["ty"], 4.25, delta=0.5)
+
+    def test_hand_roi_uses_time_rotated_asset_alpha(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            asset = root / "assets" / "hand.png"
+            asset.parent.mkdir()
+            image = Image.new("RGBA", (9, 100), (0, 0, 0, 0))
+            ImageDraw.Draw(image).rectangle((3, 0, 5, 94), fill="white")
+            image.save(asset)
+            scene = basic_scene()
+            scene["elements"] = [{
+                "id": "minute",
+                "type": "ANALOG_HAND",
+                "role": "MINUTE",
+                "dynamic": True,
+                "bbox": {"x": 215, "y": 124, "width": 9, "height": 100},
+                "asset": "assets/hand.png",
+                "pivotX": 0.5,
+                "pivotY": 0.95,
+                "confidence": 1,
+            }]
+            north = _region_masks(scene, "00:00:00", root)["hands"]
+            east = _region_masks(scene, "03:15:00", root)["hands"]
+            self.assertNotEqual(north.getbbox(), east.getbbox())
+            self.assertNotEqual(north.tobytes(), east.tobytes())
 
     def test_split_time_primitives_compile(self):
         scene = basic_scene()

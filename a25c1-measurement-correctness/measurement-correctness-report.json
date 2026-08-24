@@ -1,0 +1,1714 @@
+{
+  "milestone": "A2.5c.1 Measurement Correctness",
+  "baseline": "d5d6c98",
+  "baselineStatus": "partial_with_invalid_metrics",
+  "experimentalBaselineTag": "experimental/a25c-invalid-metrics",
+  "status": "runtime_measured",
+  "officialValidation": {
+    "geometry": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\geometry\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_static": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-static\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_dynamic_hour": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_dynamic_minute": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_dynamic_second": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "text_off": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\text-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_off": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\production-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "text_manual": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\text-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_manual": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\production-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    }
+  },
+  "manualGlyphBehavior": {
+    "strategy": "whole-date BitmapFont only when every digit is available; otherwise whole-date Pretendard",
+    "manualEligibleDays": [
+      8
+    ],
+    "characterLevelFallback": false,
+    "fallbackFamilyAttributePresent": false
+  },
+  "geometryCalibration": {
+    "status": "measured",
+    "matrix": {
+      "a": 1.035402134377134,
+      "b": -3.2714109502598814e-05,
+      "c": -4.032599888947495e-05,
+      "d": 1.0353522428341808,
+      "tx": 0.3123802479315093,
+      "ty": 0.32436651997474825
+    },
+    "scaleX": 1.03540214,
+    "scaleY": 1.03535224,
+    "affineTranslation": {
+      "x": 0.3124,
+      "y": 0.3244
+    },
+    "mappedLogicalCenter": {
+      "x": 227.0583,
+      "y": 227.0577
+    },
+    "framebufferCenter": {
+      "x": 227.0,
+      "y": 227.0
+    },
+    "centerOffset": {
+      "x": 0.0583,
+      "y": 0.0577
+    },
+    "rotationDeg": -0.002232,
+    "fitResidualRmsPx": 0.0464,
+    "fiducialCount": 9,
+    "observations": {
+      "center": {
+        "logical": [
+          219,
+          219
+        ],
+        "runtime": [
+          227.0496894409938,
+          227.0496894409938
+        ],
+        "predicted": [
+          227.0582832865428,
+          227.05767630690355
+        ],
+        "residualPx": 0.0117
+      },
+      "north": {
+        "logical": [
+          219,
+          50
+        ],
+        "runtime": [
+          227.0496894409938,
+          52.04968944099379
+        ],
+        "predicted": [
+          227.06381197104872,
+          52.08314726792699
+        ],
+        "residualPx": 0.0363
+      },
+      "east": {
+        "logical": [
+          388,
+          219
+        ],
+        "runtime": [
+          402.0522875816994,
+          227.05228758169935
+        ],
+        "predicted": [
+          402.0412439962784,
+          227.05086121309122
+        ],
+        "residualPx": 0.0111
+      },
+      "south": {
+        "logical": [
+          219,
+          388
+        ],
+        "runtime": [
+          227.05228758169935,
+          402.0522875816994
+        ],
+        "predicted": [
+          227.05275460203686,
+          402.03220534588013
+        ],
+        "residualPx": 0.0201
+      },
+      "west": {
+        "logical": [
+          50,
+          219
+        ],
+        "runtime": [
+          52.012903225806454,
+          227.05161290322582
+        ],
+        "predicted": [
+          52.07532257680714,
+          227.06449140071587
+        ],
+        "residualPx": 0.0637
+      },
+      "north_west": {
+        "logical": [
+          100,
+          100
+        ],
+        "runtime": [
+          103.86363636363636,
+          103.86363636363636
+        ],
+        "predicted": [
+          103.84932227469466,
+          103.85555820350388
+        ],
+        "residualPx": 0.0164
+      },
+      "north_east": {
+        "logical": [
+          338,
+          100
+        ],
+        "runtime": [
+          350.3076923076923,
+          103.8923076923077
+        ],
+        "predicted": [
+          350.2750302564525,
+          103.84596061576818
+        ],
+        "residualPx": 0.0567
+      },
+      "south_east": {
+        "logical": [
+          338,
+          338
+        ],
+        "runtime": [
+          350.219696969697,
+          350.219696969697
+        ],
+        "predicted": [
+          350.2672442983909,
+          350.25979441030324
+        ],
+        "residualPx": 0.0622
+      },
+      "south_west": {
+        "logical": [
+          100,
+          338
+        ],
+        "runtime": [
+          103.91666666666667,
+          350.2878787878788
+        ],
+        "predicted": [
+          103.84153631663304,
+          350.26939199803894
+        ],
+        "residualPx": 0.0774
+      }
+    },
+    "framebufferSizeUsedAsMeasurement": false,
+    "fiducials": {
+      "center": {
+        "logical": {
+          "x": 219,
+          "y": 219
+        },
+        "color": [
+          255,
+          255,
+          255
+        ]
+      },
+      "north": {
+        "logical": {
+          "x": 219,
+          "y": 50
+        },
+        "color": [
+          255,
+          40,
+          40
+        ]
+      },
+      "east": {
+        "logical": {
+          "x": 388,
+          "y": 219
+        },
+        "color": [
+          40,
+          255,
+          40
+        ]
+      },
+      "south": {
+        "logical": {
+          "x": 219,
+          "y": 388
+        },
+        "color": [
+          40,
+          80,
+          255
+        ]
+      },
+      "west": {
+        "logical": {
+          "x": 50,
+          "y": 219
+        },
+        "color": [
+          255,
+          220,
+          40
+        ]
+      },
+      "north_west": {
+        "logical": {
+          "x": 100,
+          "y": 100
+        },
+        "color": [
+          255,
+          40,
+          220
+        ]
+      },
+      "north_east": {
+        "logical": {
+          "x": 338,
+          "y": 100
+        },
+        "color": [
+          40,
+          255,
+          220
+        ]
+      },
+      "south_east": {
+        "logical": {
+          "x": 338,
+          "y": 338
+        },
+        "color": [
+          255,
+          140,
+          40
+        ]
+      },
+      "south_west": {
+        "logical": {
+          "x": 100,
+          "y": 338
+        },
+        "color": [
+          150,
+          80,
+          255
+        ]
+      }
+    }
+  },
+  "handCalibration": {
+    "assetGeometry": {
+      "HOUR": {
+        "status": "measured",
+        "expectedForegroundSize": {
+          "width": 13,
+          "height": 105
+        },
+        "observedForegroundSizeLogicalPx": {
+          "width": 9.6581,
+          "height": 105.2782
+        },
+        "widthDifferencePx": -3.3419,
+        "lengthDifferencePx": 0.2782,
+        "runtimeForegroundBbox": [
+          79,
+          172,
+          89,
+          281
+        ],
+        "pivotErrorPx": null,
+        "pivotStatus": "unmeasured"
+      },
+      "MINUTE": {
+        "status": "measured",
+        "expectedForegroundSize": {
+          "width": 13,
+          "height": 185
+        },
+        "observedForegroundSizeLogicalPx": {
+          "width": 8.6923,
+          "height": 186.41
+        },
+        "widthDifferencePx": -4.3077,
+        "lengthDifferencePx": 1.41,
+        "runtimeForegroundBbox": [
+          209,
+          130,
+          218,
+          323
+        ],
+        "pivotErrorPx": null,
+        "pivotStatus": "unmeasured"
+      },
+      "SECOND": {
+        "status": "measured",
+        "expectedForegroundSize": {
+          "width": 3,
+          "height": 180
+        },
+        "observedForegroundSizeLogicalPx": {
+          "width": 3.8632,
+          "height": 181.5807
+        },
+        "widthDifferencePx": 0.8632,
+        "lengthDifferencePx": 1.5807,
+        "runtimeForegroundBbox": [
+          351,
+          133,
+          355,
+          321
+        ],
+        "pivotErrorPx": null,
+        "pivotStatus": "unmeasured"
+      }
+    },
+    "dynamicAngles": {
+      "HOUR": [
+        {
+          "time": "00:00:00",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 34.9 MB/s (1275998 bytes in 0.035s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[99] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723075200190\n1723075200481",
+            "runtimeEpochMsBeforeCapture": 1723075200190,
+            "runtimeEpochMsAfterCapture": 1723075200481,
+            "captureTimestampDeltaRangeMs": [
+              190,
+              481
+            ],
+            "captureTimeUncertaintyMs": 291,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-hour-00-00-00.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 2.0016,
+          "expectedAngleInterval": {
+            "startDeg": 0.001583,
+            "endDeg": 0.004008,
+            "uncertaintyDeg": 0.002425
+          },
+          "angleErrorToCaptureIntervalDeg": 1.9976,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "03:15:45",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 46.9 MB/s (1275998 bytes in 0.026s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[100] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723086945192\n1723086945479",
+            "runtimeEpochMsBeforeCapture": 1723086945192,
+            "runtimeEpochMsAfterCapture": 1723086945479,
+            "captureTimestampDeltaRangeMs": [
+              192,
+              479
+            ],
+            "captureTimeUncertaintyMs": 287,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-hour-03-15-45.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 99.6461,
+          "expectedAngleInterval": {
+            "startDeg": 97.8766,
+            "endDeg": 97.878992,
+            "uncertaintyDeg": 0.002392
+          },
+          "angleErrorToCaptureIntervalDeg": 1.7671,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "06:30:00",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 23.9 MB/s (1275998 bytes in 0.051s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[101] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723098600181\n1723098600531",
+            "runtimeEpochMsBeforeCapture": 1723098600181,
+            "runtimeEpochMsAfterCapture": 1723098600531,
+            "captureTimestampDeltaRangeMs": [
+              181,
+              531
+            ],
+            "captureTimeUncertaintyMs": 350,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-hour-06-30-00.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 195.1428,
+          "expectedAngleInterval": {
+            "startDeg": 195.001508,
+            "endDeg": 195.004425,
+            "uncertaintyDeg": 0.002917
+          },
+          "angleErrorToCaptureIntervalDeg": 0.1384,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "10:08:30",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 31.5 MB/s (1275998 bytes in 0.039s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[102] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723111710183\n1723111710452",
+            "runtimeEpochMsBeforeCapture": 1723111710183,
+            "runtimeEpochMsAfterCapture": 1723111710452,
+            "captureTimestampDeltaRangeMs": [
+              183,
+              452
+            ],
+            "captureTimeUncertaintyMs": 269,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-hour-10-08-30.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 304.0777,
+          "expectedAngleInterval": {
+            "startDeg": 304.251525,
+            "endDeg": 304.253767,
+            "uncertaintyDeg": 0.002242
+          },
+          "angleErrorToCaptureIntervalDeg": 0.1738,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        }
+      ],
+      "MINUTE": [
+        {
+          "time": "00:00:00",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 35.5 MB/s (1276112 bytes in 0.034s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[103] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723075200199\n1723075200468",
+            "runtimeEpochMsBeforeCapture": 1723075200199,
+            "runtimeEpochMsAfterCapture": 1723075200468,
+            "captureTimestampDeltaRangeMs": [
+              199,
+              468
+            ],
+            "captureTimeUncertaintyMs": 269,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-minute-00-00-00.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 1.0842,
+          "expectedAngleInterval": {
+            "startDeg": 0.0199,
+            "endDeg": 0.0468,
+            "uncertaintyDeg": 0.0269
+          },
+          "angleErrorToCaptureIntervalDeg": 1.0374,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "03:15:45",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 23.9 MB/s (1276112 bytes in 0.051s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[104] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723086945213\n1723086945492",
+            "runtimeEpochMsBeforeCapture": 1723086945213,
+            "runtimeEpochMsAfterCapture": 1723086945492,
+            "captureTimestampDeltaRangeMs": [
+              213,
+              492
+            ],
+            "captureTimeUncertaintyMs": 279,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-minute-03-15-45.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 95.6779,
+          "expectedAngleInterval": {
+            "startDeg": 94.5213,
+            "endDeg": 94.5492,
+            "uncertaintyDeg": 0.0279
+          },
+          "angleErrorToCaptureIntervalDeg": 1.1287,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "06:30:00",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 42.8 MB/s (1276112 bytes in 0.028s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[105] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723098600187\n1723098600468",
+            "runtimeEpochMsBeforeCapture": 1723098600187,
+            "runtimeEpochMsAfterCapture": 1723098600468,
+            "captureTimestampDeltaRangeMs": [
+              187,
+              468
+            ],
+            "captureTimeUncertaintyMs": 281,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-minute-06-30-00.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 180.2587,
+          "expectedAngleInterval": {
+            "startDeg": 180.0187,
+            "endDeg": 180.0468,
+            "uncertaintyDeg": 0.0281
+          },
+          "angleErrorToCaptureIntervalDeg": 0.2119,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "10:08:30",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 26.9 MB/s (1276112 bytes in 0.045s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[106] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723111710163\n1723111710436",
+            "runtimeEpochMsBeforeCapture": 1723111710163,
+            "runtimeEpochMsAfterCapture": 1723111710436,
+            "captureTimestampDeltaRangeMs": [
+              163,
+              436
+            ],
+            "captureTimeUncertaintyMs": 273,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-minute-10-08-30.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 52.1881,
+          "expectedAngleInterval": {
+            "startDeg": 51.0163,
+            "endDeg": 51.0436,
+            "uncertaintyDeg": 0.0273
+          },
+          "angleErrorToCaptureIntervalDeg": 1.1445,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        }
+      ],
+      "SECOND": [
+        {
+          "time": "00:00:00",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 27.3 MB/s (1275968 bytes in 0.045s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[107] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723075200247\n1723075200553",
+            "runtimeEpochMsBeforeCapture": 1723075200247,
+            "runtimeEpochMsAfterCapture": 1723075200553,
+            "captureTimestampDeltaRangeMs": [
+              247,
+              553
+            ],
+            "captureTimeUncertaintyMs": 306,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-second-00-00-00.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 2.6182,
+          "expectedAngleInterval": {
+            "startDeg": 1.482,
+            "endDeg": 3.318,
+            "uncertaintyDeg": 1.836
+          },
+          "angleErrorToCaptureIntervalDeg": 0.0,
+          "withinCaptureInterval": true,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "03:15:45",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 30.8 MB/s (1275968 bytes in 0.040s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[108] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723086945188\n1723086945500",
+            "runtimeEpochMsBeforeCapture": 1723086945188,
+            "runtimeEpochMsAfterCapture": 1723086945500,
+            "captureTimestampDeltaRangeMs": [
+              188,
+              500
+            ],
+            "captureTimeUncertaintyMs": 312,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-second-03-15-45.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 270.934,
+          "expectedAngleInterval": {
+            "startDeg": 271.128,
+            "endDeg": 273.0,
+            "uncertaintyDeg": 1.872
+          },
+          "angleErrorToCaptureIntervalDeg": 0.194,
+          "withinCaptureInterval": false,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "06:30:00",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 35.7 MB/s (1275968 bytes in 0.034s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[109] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723098600224\n1723098600538",
+            "runtimeEpochMsBeforeCapture": 1723098600224,
+            "runtimeEpochMsAfterCapture": 1723098600538,
+            "captureTimestampDeltaRangeMs": [
+              224,
+              538
+            ],
+            "captureTimeUncertaintyMs": 314,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-second-06-30-00.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 2.6109,
+          "expectedAngleInterval": {
+            "startDeg": 1.344,
+            "endDeg": 3.228,
+            "uncertaintyDeg": 1.884
+          },
+          "angleErrorToCaptureIntervalDeg": 0.0,
+          "withinCaptureInterval": true,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        },
+        {
+          "time": "10:08:30",
+          "capture": {
+            "activation": {
+              "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+              "installOk": true,
+              "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 26.8 MB/s (1275968 bytes in 0.045s)",
+              "broadcastOk": true,
+              "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[110] Runtime=[2]\"",
+              "runtimeActive": true
+            },
+            "clockSet": true,
+            "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+            "captureOk": true,
+            "captureOutput": "1723111710225\n1723111710513",
+            "runtimeEpochMsBeforeCapture": 1723111710225,
+            "runtimeEpochMsAfterCapture": 1723111710513,
+            "captureTimestampDeltaRangeMs": [
+              225,
+              513
+            ],
+            "captureTimeUncertaintyMs": 288,
+            "path": "a25c1-measurement-correctness\\runtime\\hand-second-10-08-30.png",
+            "activeWatchFace": true
+          },
+          "observedAngleDeg": 181.9187,
+          "expectedAngleInterval": {
+            "startDeg": 181.35,
+            "endDeg": 183.078,
+            "uncertaintyDeg": 1.728
+          },
+          "angleErrorToCaptureIntervalDeg": 0.0,
+          "withinCaptureInterval": true,
+          "detectorToleranceDeg": 2.0,
+          "withinCaptureIntervalWithDetectorTolerance": true
+        }
+      ]
+    },
+    "pivot": "unmeasured"
+  },
+  "textCalibration": [
+    {
+      "mode": "off",
+      "day": 1,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 21.7 MB/s (1275594 bytes in 0.056s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[111] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1722506910208\n1722506910499",
+        "runtimeEpochMsBeforeCapture": 1722506910208,
+        "runtimeEpochMsAfterCapture": 1722506910499,
+        "captureTimestampDeltaRangeMs": [
+          208,
+          499
+        ],
+        "captureTimeUncertaintyMs": 291,
+        "path": "a25c1-measurement-correctness\\runtime\\text-off-day-01.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          378,
+          220,
+          386,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          364.7806,
+          212.189,
+          372.5076,
+          230.5405
+        ],
+        "deterministicForegroundBboxLogical": [
+          366,
+          213,
+          372,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -0.8559,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.3559,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5405
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-off-day-01.png"
+    },
+    {
+      "mode": "off",
+      "day": 8,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 36.8 MB/s (1275594 bytes in 0.033s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[112] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1723111710238\n1723111710515",
+        "runtimeEpochMsBeforeCapture": 1723111710238,
+        "runtimeEpochMsAfterCapture": 1723111710515,
+        "captureTimestampDeltaRangeMs": [
+          238,
+          515
+        ],
+        "captureTimeUncertaintyMs": 277,
+        "path": "a25c1-measurement-correctness\\runtime\\text-off-day-08.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          376,
+          220,
+          390,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          362.8489,
+          212.1889,
+          376.3708,
+          230.5407
+        ],
+        "deterministicForegroundBboxLogical": [
+          364,
+          213,
+          376,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": 0.1099,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.3901,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5407
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-off-day-08.png"
+    },
+    {
+      "mode": "off",
+      "day": 11,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 49.8 MB/s (1275594 bytes in 0.024s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[113] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1723370910170\n1723370910440",
+        "runtimeEpochMsBeforeCapture": 1723370910170,
+        "runtimeEpochMsAfterCapture": 1723370910440,
+        "captureTimestampDeltaRangeMs": [
+          170,
+          440
+        ],
+        "captureTimeUncertaintyMs": 270,
+        "path": "a25c1-measurement-correctness\\runtime\\text-off-day-11.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          372,
+          220,
+          391,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          358.9857,
+          212.1888,
+          377.3366,
+          230.5407
+        ],
+        "deterministicForegroundBboxLogical": [
+          361,
+          213,
+          377,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -1.3388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.8388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5407
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-off-day-11.png"
+    },
+    {
+      "mode": "off",
+      "day": 20,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 55.2 MB/s (1275594 bytes in 0.022s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[114] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1724148510176\n1724148510483",
+        "runtimeEpochMsBeforeCapture": 1724148510176,
+        "runtimeEpochMsAfterCapture": 1724148510483,
+        "captureTimestampDeltaRangeMs": [
+          176,
+          483
+        ],
+        "captureTimeUncertaintyMs": 307,
+        "path": "a25c1-measurement-correctness\\runtime\\text-off-day-20.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          369,
+          220,
+          396,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          356.0883,
+          212.1886,
+          382.1657,
+          230.5409
+        ],
+        "deterministicForegroundBboxLogical": [
+          358,
+          213,
+          383,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -0.373,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -1.373,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5409
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-off-day-20.png"
+    },
+    {
+      "mode": "off",
+      "day": 31,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 51.0 MB/s (1275594 bytes in 0.024s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[115] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1725098910178\n1725098910470",
+        "runtimeEpochMsBeforeCapture": 1725098910178,
+        "runtimeEpochMsAfterCapture": 1725098910470,
+        "captureTimestampDeltaRangeMs": [
+          178,
+          470
+        ],
+        "captureTimeUncertaintyMs": 292,
+        "path": "a25c1-measurement-correctness\\runtime\\text-off-day-31.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          370,
+          220,
+          393,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          357.0541,
+          212.1887,
+          379.2683,
+          230.5408
+        ],
+        "deterministicForegroundBboxLogical": [
+          359,
+          213,
+          379,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -1.3388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.8388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5408
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-off-day-31.png"
+    },
+    {
+      "mode": "manual",
+      "day": 1,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 43.8 MB/s (1290191 bytes in 0.028s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[116] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1722506910160\n1722506910440",
+        "runtimeEpochMsBeforeCapture": 1722506910160,
+        "runtimeEpochMsAfterCapture": 1722506910440,
+        "captureTimestampDeltaRangeMs": [
+          160,
+          440
+        ],
+        "captureTimeUncertaintyMs": 280,
+        "path": "a25c1-measurement-correctness\\runtime\\text-manual-day-01.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          378,
+          220,
+          386,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          364.7806,
+          212.189,
+          372.5076,
+          230.5405
+        ],
+        "deterministicForegroundBboxLogical": [
+          366,
+          213,
+          372,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -0.8559,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.3559,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5405
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-manual-day-01.png"
+    },
+    {
+      "mode": "manual",
+      "day": 8,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 47.3 MB/s (1290191 bytes in 0.026s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[117] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1723111710195\n1723111710490",
+        "runtimeEpochMsBeforeCapture": 1723111710195,
+        "runtimeEpochMsAfterCapture": 1723111710490,
+        "captureTimestampDeltaRangeMs": [
+          195,
+          490
+        ],
+        "captureTimeUncertaintyMs": 295,
+        "path": "a25c1-measurement-correctness\\runtime\\text-manual-day-08.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          377,
+          219,
+          392,
+          242
+        ],
+        "runtimeForegroundBboxLogical": [
+          363.8147,
+          211.2231,
+          378.3025,
+          233.4383
+        ],
+        "deterministicForegroundBboxLogical": [
+          353,
+          228,
+          393,
+          236
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": 1.5586,
+          "y": 0.8307
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -1.9414,
+          "y": -9.6693
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": -2.5617
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-manual-day-08.png"
+    },
+    {
+      "mode": "manual",
+      "day": 11,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 41.7 MB/s (1290191 bytes in 0.030s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[118] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1723370910175\n1723370910462",
+        "runtimeEpochMsBeforeCapture": 1723370910175,
+        "runtimeEpochMsAfterCapture": 1723370910462,
+        "captureTimestampDeltaRangeMs": [
+          175,
+          462
+        ],
+        "captureTimeUncertaintyMs": 287,
+        "path": "a25c1-measurement-correctness\\runtime\\text-manual-day-11.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          372,
+          220,
+          391,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          358.9857,
+          212.1888,
+          377.3366,
+          230.5407
+        ],
+        "deterministicForegroundBboxLogical": [
+          361,
+          213,
+          377,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -1.3388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.8388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5407
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-manual-day-11.png"
+    },
+    {
+      "mode": "manual",
+      "day": 20,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 41.6 MB/s (1290191 bytes in 0.030s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[119] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1724148510186\n1724148510453",
+        "runtimeEpochMsBeforeCapture": 1724148510186,
+        "runtimeEpochMsAfterCapture": 1724148510453,
+        "captureTimestampDeltaRangeMs": [
+          186,
+          453
+        ],
+        "captureTimeUncertaintyMs": 267,
+        "path": "a25c1-measurement-correctness\\runtime\\text-manual-day-20.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          369,
+          220,
+          396,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          356.0883,
+          212.1886,
+          382.1657,
+          230.5409
+        ],
+        "deterministicForegroundBboxLogical": [
+          358,
+          213,
+          383,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -0.373,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -1.373,
+          "y": -0.1352
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5409
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-manual-day-20.png"
+    },
+    {
+      "mode": "manual",
+      "day": 31,
+      "capture": {
+        "activation": {
+          "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+          "installOk": true,
+          "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 18.4 MB/s (1290191 bytes in 0.067s)",
+          "broadcastOk": true,
+          "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[120] Runtime=[2]\"",
+          "runtimeActive": true
+        },
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 10:08:30 GMT 2024",
+        "captureOk": true,
+        "captureOutput": "1725098910193\n1725098910458",
+        "runtimeEpochMsBeforeCapture": 1725098910193,
+        "runtimeEpochMsAfterCapture": 1725098910458,
+        "captureTimestampDeltaRangeMs": [
+          193,
+          458
+        ],
+        "captureTimeUncertaintyMs": 265,
+        "path": "a25c1-measurement-correctness\\runtime\\text-manual-day-31.png",
+        "activeWatchFace": true
+      },
+      "measurement": {
+        "visible": true,
+        "runtimeForegroundBbox": [
+          370,
+          220,
+          393,
+          239
+        ],
+        "runtimeForegroundBboxLogical": [
+          357.0541,
+          212.1887,
+          379.2683,
+          230.5408
+        ],
+        "deterministicForegroundBboxLogical": [
+          359,
+          213,
+          379,
+          230
+        ],
+        "expectedRuntimeRoi": [
+          358,
+          214,
+          408,
+          245
+        ],
+        "clipped": false,
+        "runtimeCenteringErrorLogicalPx": {
+          "x": -1.3388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.8388,
+          "y": -0.1353
+        },
+        "runtimeVsDeterministicBaselineDifferencePx": 0.5408
+      },
+      "deterministic": "a25c1-measurement-correctness\\deterministic\\text-manual-day-31.png"
+    }
+  ],
+  "validMetrics": {
+    "officialValidatorPass": true,
+    "geometryFitResidualMeasured": true,
+    "handAssetGeometryMeasured": true,
+    "captureTimeUncertaintyMeasured": true,
+    "dynamicHandAnglesMeasured": true,
+    "dynamicHandAnglesWithinCaptureBracket": false,
+    "dynamicHandAnglesWithinCaptureBracketWithDetectorTolerance": true,
+    "dateRuntimeVisible": true
+  },
+  "invalidatedOldMetrics": [
+    "A2.5c global/static/hand/date MAE computed from production screenshots",
+    "expected-angle-constrained production hand detector",
+    "hardcoded 0px pivot error",
+    "framebuffer-derived viewport and transform",
+    "inverse-resampling winner treated as the platform filter"
+  ],
+  "remainingIssues": [
+    "pivot remains unmeasured unless independently detectable from a dedicated target"
+  ],
+  "regressions": [],
+  "runtimeEnvironment": {
+    "status": "runtime_available",
+    "reason": null,
+    "devices": [
+      {
+        "serial": "emulator-5554",
+        "wearOs": false,
+        "properties": {
+          "ro.product.model": "sdk_gphone64_x86_64",
+          "ro.product.name": "sdk_gphone64_x86_64",
+          "ro.build.characteristics": "emulator",
+          "ro.build.version.release": "15"
+        },
+        "watchFeature": false
+      },
+      {
+        "serial": "emulator-5556",
+        "wearOs": true,
+        "properties": {
+          "ro.product.model": "sdk_gwear_x86_64",
+          "ro.product.name": "sdk_gwear_x86_64",
+          "ro.build.characteristics": "emulator,nosdcard,watch",
+          "ro.build.version.release": "14"
+        },
+        "watchFeature": true
+      }
+    ],
+    "selectedDevice": "emulator-5556",
+    "adb": "C:\\Users\\bug95\\Android\\Sdk\\platform-tools\\adb.EXE"
+  },
+  "projects": {
+    "geometry": {
+      "name": "geometry",
+      "root": "a25c1-measurement-correctness\\geometry",
+      "scene": "a25c1-measurement-correctness\\geometry\\scene.json",
+      "project": "a25c1-measurement-correctness\\geometry\\project",
+      "xml": "a25c1-measurement-correctness\\geometry\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\geometry\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_static": {
+      "name": "hand-static",
+      "root": "a25c1-measurement-correctness\\hand-static",
+      "scene": "a25c1-measurement-correctness\\hand-static\\scene.json",
+      "project": "a25c1-measurement-correctness\\hand-static\\project",
+      "xml": "a25c1-measurement-correctness\\hand-static\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-static\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_dynamic_hour": {
+      "name": "hand-dynamic-hour",
+      "root": "a25c1-measurement-correctness\\hand-dynamic-hour",
+      "scene": "a25c1-measurement-correctness\\hand-dynamic-hour\\scene.json",
+      "project": "a25c1-measurement-correctness\\hand-dynamic-hour\\project",
+      "xml": "a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_dynamic_minute": {
+      "name": "hand-dynamic-minute",
+      "root": "a25c1-measurement-correctness\\hand-dynamic-minute",
+      "scene": "a25c1-measurement-correctness\\hand-dynamic-minute\\scene.json",
+      "project": "a25c1-measurement-correctness\\hand-dynamic-minute\\project",
+      "xml": "a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "hand_dynamic_second": {
+      "name": "hand-dynamic-second",
+      "root": "a25c1-measurement-correctness\\hand-dynamic-second",
+      "scene": "a25c1-measurement-correctness\\hand-dynamic-second\\scene.json",
+      "project": "a25c1-measurement-correctness\\hand-dynamic-second\\project",
+      "xml": "a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "text_off": {
+      "name": "text-off",
+      "root": "a25c1-measurement-correctness\\text-off",
+      "scene": "a25c1-measurement-correctness\\text-off\\scene.json",
+      "project": "a25c1-measurement-correctness\\text-off\\project",
+      "xml": "a25c1-measurement-correctness\\text-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\text-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_off": {
+      "name": "production-off",
+      "root": "a25c1-measurement-correctness\\production-off",
+      "scene": "a25c1-measurement-correctness\\production-off\\scene.json",
+      "project": "a25c1-measurement-correctness\\production-off\\project",
+      "xml": "a25c1-measurement-correctness\\production-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\production-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "text_manual": {
+      "name": "text-manual",
+      "root": "a25c1-measurement-correctness\\text-manual",
+      "scene": "a25c1-measurement-correctness\\text-manual\\scene.json",
+      "project": "a25c1-measurement-correctness\\text-manual\\project",
+      "xml": "a25c1-measurement-correctness\\text-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\text-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_manual": {
+      "name": "production-manual",
+      "root": "a25c1-measurement-correctness\\production-manual",
+      "scene": "a25c1-measurement-correctness\\production-manual\\scene.json",
+      "project": "a25c1-measurement-correctness\\production-manual\\project",
+      "xml": "a25c1-measurement-correctness\\production-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c1-measurement-correctness\\production-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    }
+  },
+  "builds": {
+    "geometry": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\geometry\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "hand_static": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-static\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "hand_dynamic_hour": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-hour\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "hand_dynamic_minute": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-minute\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "hand_dynamic_second": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-dynamic-second\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "text_off": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "production_off": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\production-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "text_manual": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\text-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "production_manual": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\production-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    }
+  },
+  "captures": {
+    "geometry": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\geometry\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\geometry\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 80.3 MB/s (25958 bytes in 0.000s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[97] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "clockSet": true,
+      "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+      "captureOk": true,
+      "captureOutput": "1723111710253\n1723111710591",
+      "runtimeEpochMsBeforeCapture": 1723111710253,
+      "runtimeEpochMsAfterCapture": 1723111710591,
+      "captureTimestampDeltaRangeMs": [
+        253,
+        591
+      ],
+      "captureTimeUncertaintyMs": 338,
+      "path": "a25c1-measurement-correctness\\runtime\\geometry.png",
+      "activeWatchFace": true
+    },
+    "hand_static": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-static\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c1-measurement-correctness\\hand-static\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 33.7 MB/s (1276974 bytes in 0.036s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[98] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "clockSet": true,
+      "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+      "captureOk": true,
+      "captureOutput": "1723111710205\n1723111710501",
+      "runtimeEpochMsBeforeCapture": 1723111710205,
+      "runtimeEpochMsAfterCapture": 1723111710501,
+      "captureTimestampDeltaRangeMs": [
+        205,
+        501
+      ],
+      "captureTimeUncertaintyMs": 296,
+      "path": "a25c1-measurement-correctness\\runtime\\hand-static.png",
+      "activeWatchFace": true
+    }
+  },
+  "acceptanceUsesGlobalMae": false
+}

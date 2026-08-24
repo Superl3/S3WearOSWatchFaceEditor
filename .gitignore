@@ -5,8 +5,12 @@
 .pytest_cache/
 .venv/
 env/
+tools/wff-validator/source/
+tools/wff-validator/*.jar
+a25c1-measurement-correctness/*/project/
+a25c1-measurement-correctness/*/scene.json
+a25c1-measurement-correctness/sources/
 
 # Generated APKs and intermediate reports
 **/*.apk
 **/comparison.json
-

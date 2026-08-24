@@ -44,14 +44,6 @@ def _adb_run(adb: str, serial: str, arguments: list[str]) -> tuple[int, str]:
     return _run([adb, "-s", serial, *arguments])
 
 
-def _runtime_epoch_ms(adb: str, serial: str) -> int | None:
-    code, output = _adb_run(adb, serial, ["shell", "date", "+%s%3N"])
-    if code != 0:
-        return None
-    match = re.search(r"(\d{10,})", output)
-    return int(match.group(1)) if match else None
-
-
 def _utc_iso(epoch_ms: int | None = None) -> str:
     instant = datetime.now(timezone.utc) if epoch_ms is None else datetime.fromtimestamp(epoch_ms / 1000.0, timezone.utc)
     return instant.isoformat()
@@ -72,6 +64,15 @@ def _set_runtime_clock(adb: str, serial: str, time_value: str, day: int) -> tupl
     value = f"2024-08-{day:02d}T{time_value}"
     code, output = _adb_run(adb, serial, ["shell", "su", "0", "date", "-s", value])
     return code == 0, output
+
+
+def _capture_with_device_bracket(adb: str, serial: str, remote: str) -> tuple[int, str, int | None, int | None]:
+    command = f'date +%s%3N; screencap -p "{remote}"; date +%s%3N'
+    code, output = _adb_run(adb, serial, ["shell", command])
+    timestamps = [int(value) for value in re.findall(r"(?m)^\s*(\d{10,})\s*$", output)]
+    before = timestamps[0] if timestamps else None
+    after = timestamps[-1] if len(timestamps) >= 2 else None
+    return code, output, before, after
 
 
 def _activate_runtime_face(adb: str, serial: str, apk_path: Path) -> dict[str, Any]:
@@ -105,6 +106,37 @@ def _activate_runtime_face(adb: str, serial: str, apk_path: Path) -> dict[str, A
     }
 
 
+def capture_runtime_image(
+    adb: str,
+    serial: str,
+    apk_path: Path,
+    destination: Path,
+    time_value: str = "10:08:30",
+    day: int = 8,
+) -> dict[str, Any]:
+    activation = _activate_runtime_face(adb, serial, apk_path)
+    clock_ok, clock_output = _set_runtime_clock(adb, serial, time_value, day)
+    _adb_run(adb, serial, ["shell", "input", "keyevent", "224"])
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    remote = f"/sdcard/photo2wff-diagnostic-{destination.stem}.png"
+    capture_code, capture_output, before, after = _capture_with_device_bracket(adb, serial, remote)
+    pull_code, pull_output = _run([adb, "-s", serial, "pull", remote, str(destination)])
+    expected_epoch = _expected_epoch_ms(time_value, day)
+    return {
+        "activation": activation,
+        "clockSet": clock_ok,
+        "clockOutput": clock_output,
+        "captureOk": capture_code == 0 and pull_code == 0 and destination.exists(),
+        "captureOutput": capture_output or pull_output,
+        "runtimeEpochMsBeforeCapture": before,
+        "runtimeEpochMsAfterCapture": after,
+        "captureTimestampDeltaRangeMs": [before - expected_epoch, after - expected_epoch] if before is not None and after is not None else None,
+        "captureTimeUncertaintyMs": after - before if before is not None and after is not None else None,
+        "path": str(destination),
+        "activeWatchFace": _runtime_is_active(adb, serial),
+    }
+
+
 def capture_runtime_matrix(
     adb: str,
     serial: str,
@@ -126,10 +158,8 @@ def capture_runtime_matrix(
                 remote = f"/sdcard/photo2wff-{mode}.png"
                 capture_started = time.perf_counter()
                 capture_started_utc = _utc_iso()
-                runtime_epoch_before_capture = _runtime_epoch_ms(adb, serial)
-                capture_code, capture_output = _adb_run(adb, serial, ["shell", "screencap", "-p", remote])
+                capture_code, capture_output, runtime_epoch_before_capture, runtime_epoch_after_capture = _capture_with_device_bracket(adb, serial, remote)
                 pull_code, pull_output = _run([adb, "-s", serial, "pull", remote, str(destination)])
-                runtime_epoch_after_capture = _runtime_epoch_ms(adb, serial)
                 capture_completed_utc = _utc_iso()
                 with Image.open(destination) as screenshot:
                     size = list(screenshot.size)
@@ -145,11 +175,13 @@ def capture_runtime_matrix(
                         "expectedEpochMs": _expected_epoch_ms(time_value, day),
                         "runtimeEpochMsBeforeCapture": runtime_epoch_before_capture,
                         "runtimeEpochMsAfterCapture": runtime_epoch_after_capture,
-                        "captureTimestampUtc": _utc_iso(runtime_epoch_before_capture),
+                        "captureTimestampUtc": _utc_iso(round((runtime_epoch_before_capture + runtime_epoch_after_capture) / 2)) if runtime_epoch_before_capture is not None and runtime_epoch_after_capture is not None else None,
                         "captureStartedUtc": capture_started_utc,
                         "captureCompletedUtc": capture_completed_utc,
                         "captureLatencyMs": round((time.perf_counter() - capture_started) * 1000.0, 3),
-                        "captureTimestampDeltaMs": round(runtime_epoch_before_capture - _expected_epoch_ms(time_value, day), 3) if runtime_epoch_before_capture is not None else None,
+                        "captureTimestampDeltaMs": round((runtime_epoch_before_capture + runtime_epoch_after_capture) / 2 - _expected_epoch_ms(time_value, day), 3) if runtime_epoch_before_capture is not None and runtime_epoch_after_capture is not None else None,
+                        "captureTimestampDeltaRangeMs": [runtime_epoch_before_capture - _expected_epoch_ms(time_value, day), runtime_epoch_after_capture - _expected_epoch_ms(time_value, day)] if runtime_epoch_before_capture is not None and runtime_epoch_after_capture is not None else None,
+                        "captureTimeUncertaintyMs": runtime_epoch_after_capture - runtime_epoch_before_capture if runtime_epoch_before_capture is not None and runtime_epoch_after_capture is not None else None,
                         "activeWatchFace": _runtime_is_active(adb, serial),
                         "captureOk": capture_code == 0 and pull_code == 0,
                         "captureOutput": capture_output or pull_output,
@@ -199,22 +231,64 @@ def render_deterministic_matrix(xml_path: Path, output_root: Path, mode: str) ->
     return records
 
 
-def _region_masks(scene: dict[str, Any]) -> dict[str, Image.Image]:
+def _expected_hand_angle(role: str, time_value: str) -> float:
+    hour, minute, second = (int(part) for part in time_value.split(":"))
+    if role == "HOUR":
+        return ((hour % 12) + minute / 60 + second / 3600) * 30
+    if role == "MINUTE":
+        return (minute + second / 60) * 6
+    return second * 6
+
+
+def _rotated_hand_masks(scene: dict[str, Any], time_value: str, source_root: Path | None = None) -> dict[str, Image.Image]:
+    masks: dict[str, Image.Image] = {}
+    for element in scene.get("elements", []):
+        if element.get("type") != "ANALOG_HAND":
+            continue
+        bbox = element.get("bbox", {})
+        width = int(bbox.get("width", 0))
+        height = int(bbox.get("height", 0))
+        x = int(bbox.get("x", 0))
+        y = int(bbox.get("y", 0))
+        if width <= 0 or height <= 0:
+            continue
+        asset_mask = None
+        if source_root is not None and element.get("asset"):
+            asset_path = source_root / str(element["asset"])
+            if asset_path.exists():
+                asset_mask = Image.open(asset_path).convert("RGBA").getchannel("A")
+                if asset_mask.size != (width, height):
+                    asset_mask = asset_mask.resize((width, height), Image.Resampling.LANCZOS)
+        if asset_mask is None:
+            asset_mask = Image.new("L", (width, height), 255)
+        canvas = Image.new("L", CANVAS_SIZE, 0)
+        canvas.paste(asset_mask, (x, y))
+        pivot = (
+            x + width * float(element.get("pivotX", 0.5)),
+            y + height * float(element.get("pivotY", 0.5)),
+        )
+        role = str(element.get("role", "SECOND"))
+        masks[role] = canvas.rotate(-_expected_hand_angle(role, time_value), resample=Image.Resampling.BICUBIC, center=pivot)
+    return masks
+
+
+def _region_masks(scene: dict[str, Any], time_value: str = "10:08:30", source_root: Path | None = None) -> dict[str, Image.Image]:
     masks: dict[str, Image.Image] = {
         "staticDial": Image.new("L", CANVAS_SIZE, 255),
         "hands": Image.new("L", CANVAS_SIZE, 0),
         "date": Image.new("L", CANVAS_SIZE, 0),
     }
     dynamic = Image.new("L", CANVAS_SIZE, 0)
+    hand_masks = _rotated_hand_masks(scene, time_value, source_root)
+    for hand_mask in hand_masks.values():
+        masks["hands"] = ImageChops.lighter(masks["hands"], hand_mask)
+        dynamic = ImageChops.lighter(dynamic, hand_mask)
     for element in scene.get("elements", []):
         bbox = element.get("bbox", {})
         if not all(key in bbox for key in ("x", "y", "width", "height")):
             continue
         box = (bbox["x"], bbox["y"], bbox["x"] + bbox["width"], bbox["y"] + bbox["height"])
-        if element.get("type") == "ANALOG_HAND":
-            ImageDraw.Draw(masks["hands"]).rectangle(box, fill=255)
-            ImageDraw.Draw(dynamic).rectangle(box, fill=255)
-        elif element.get("type") == "DYNAMIC_SLOT":
+        if element.get("type") == "DYNAMIC_SLOT":
             ImageDraw.Draw(masks["date"]).rectangle(box, fill=255)
             ImageDraw.Draw(dynamic).rectangle(box, fill=255)
     masks["staticDial"] = ImageChops.subtract(masks["staticDial"], dynamic)
@@ -263,7 +337,7 @@ def _foreground_points(image: Image.Image, box: tuple[int, int, int, int]) -> li
     return points
 
 
-def _angle_from_points(points: list[tuple[int, int]], center: tuple[float, float], expected: float | None = None, max_radius: float | None = None) -> float | None:
+def _angle_from_points(points: list[tuple[int, int]], center: tuple[float, float], max_radius: float | None = None) -> float | None:
     if not points:
         return None
     histogram = [0.0] * 360
@@ -279,10 +353,7 @@ def _angle_from_points(points: list[tuple[int, int]], center: tuple[float, float
         histogram[angle] += radius
     if max(histogram, default=0.0) == 0.0:
         return None
-    if expected is None:
-        return float(max(range(360), key=lambda index: histogram[index]))
-    candidates = [index for index in range(360) if abs((index - expected + 180.0) % 360.0 - 180.0) <= 25.0]
-    return float(max(candidates, key=lambda index: histogram[index])) if candidates else None
+    return float(max(range(360), key=lambda index: histogram[index]))
 
 
 def _circular_error(expected: float | None, observed: float | None) -> float | None:
@@ -327,7 +398,7 @@ def _runtime_geometry_metrics(
             expected_width = bbox.get("width") if role == "HOUR" else bbox.get("height")
         expected_width = float(expected_width) * scale_x if expected_width else None
         points = _foreground_points(runtime, (0, 0, runtime.width, runtime.height))
-        observed_angle = _angle_from_points(points, center, expected=expected_angle, max_radius=expected_length * 1.2)
+        observed_angle = _angle_from_points(points, center, max_radius=expected_length * 1.2)
         if observed_angle is not None and expected_angle is not None:
             points = [point for point in points if abs((math.degrees(math.atan2(point[0] - center[0], -(point[1] - center[1]))) - observed_angle + 180.0) % 360.0 - 180.0) <= 10.0]
             angle_radians = math.radians(observed_angle)
@@ -359,7 +430,7 @@ def _runtime_geometry_metrics(
             "observedAngleDegApprox": round(observed_angle, 4) if observed_angle is not None else None,
             "angleErrorDegApprox": _circular_error(expected.get(role), observed_angle),
             "expectedPivot": {"x": round(center[0], 4), "y": round(center[1], 4)},
-            "pivotErrorPx": 0.0,
+            "pivotErrorPx": None,
             "expectedLength": round(expected_length, 4),
             "observedLengthApprox": round(max(radial_lengths), 4) if radial_lengths else None,
             "lengthDifferencePxApprox": round(max(radial_lengths) - expected_length, 4) if radial_lengths else None,
@@ -367,7 +438,7 @@ def _runtime_geometry_metrics(
             "observedWidthApprox": round(observed_width, 4) if observed_width is not None else None,
             "widthDifferencePxApprox": round(observed_width - expected_width, 4) if observed_width is not None and expected_width is not None else None,
             "clipped": bool(points and any(x <= 0 or y <= 0 or x >= runtime.width - 1 or y >= runtime.height - 1 for x, y in points)),
-            "method": "bright-pixel radial histogram; approximate",
+            "method": "unconstrained bright-pixel radial histogram; approximate; pivot unmeasured",
         }
     date_metrics: dict[str, Any] = {"bbox": date_bbox, "baselineErrorPxApprox": None, "centeringErrorPxApprox": None, "clipped": False}
     if date_bbox:
@@ -397,9 +468,10 @@ def _save_region_difference(difference: Image.Image, mask: Image.Image, destinat
     masked.save(destination)
 
 
-def compare_runtime_case(deterministic_path: Path, runtime_path: Path | None, scene: dict[str, Any], time_value: str, day: int, output_root: Path, mode: str) -> dict[str, Any]:
+def compare_runtime_case(deterministic_path: Path, runtime_path: Path | None, scene: dict[str, Any], time_value: str, day: int, output_root: Path, mode: str, source_root: Path | None = None) -> dict[str, Any]:
     deterministic = Image.open(deterministic_path).convert("RGB")
-    masks = _region_masks(scene)
+    masks = _region_masks(scene, time_value, source_root)
+    role_masks = _rotated_hand_masks(scene, time_value, source_root)
     hands = [element for element in scene.get("elements", []) if element.get("type") == "ANALOG_HAND"]
     hand_angles = {}
     hour, minute, second = (int(part) for part in time_value.split(":"))
@@ -439,16 +511,14 @@ def compare_runtime_case(deterministic_path: Path, runtime_path: Path | None, sc
         record["alignedDifference"] = str(aligned_path)
         record["mae"] = {region: _mae(deterministic, runtime, mask) for region, mask in masks.items()}
         record["mae"]["global"] = _mae(deterministic, runtime)
-        hand_boxes = []
-        for element in hands:
-            bbox = element.get("bbox", {})
-            hand_boxes.append((int(bbox.get("x", 0)), int(bbox.get("y", 0)), int(bbox.get("x", 0) + bbox.get("width", 0)), int(bbox.get("y", 0) + bbox.get("height", 0))))
         date_box = None
         if date_bbox:
             date_box = (int(date_bbox["x"]), int(date_bbox["y"]), int(date_bbox["x"] + date_bbox["width"]), int(date_bbox["y"] + date_bbox["height"]))
         roi_root = output_root / mode / "roi-difference"
-        for index, box in enumerate(hand_boxes):
-            _save_region_difference(difference, masks["hands"], roi_root / f"{time_value.replace(':', '-')}_day-{day:02d}_hand-{index}.png", box)
+        for role, role_mask in role_masks.items():
+            box = role_mask.getbbox()
+            if box:
+                _save_region_difference(difference, role_mask, roi_root / f"{time_value.replace(':', '-')}_day-{day:02d}_hand-{role.lower()}.png", box)
         if date_box:
             _save_region_difference(difference, masks["date"], roi_root / f"{time_value.replace(':', '-')}_day-{day:02d}_date.png", date_box)
         _save_region_difference(difference, masks["staticDial"], output_root / mode / "static-dial-difference" / f"{time_value.replace(':', '-')}_day-{day:02d}.png")
@@ -701,7 +771,7 @@ def run_runtime_calibration(
             difference_path = output_root / mode / "normalized-difference" / Path(item["path"]).name
             difference_path.parent.mkdir(parents=True, exist_ok=True)
             difference.save(difference_path)
-            masks = _region_masks(scene)
+            masks = _region_masks(scene, item["time"], scene_path.parent)
             for region, mask in masks.items():
                 _save_region_difference(difference, mask, output_root / mode / "normalized-roi-difference" / region / Path(item["path"]).name)
             timestamp_delta_ms = float(capture.get("captureTimestampDeltaMs") or 0.0)
@@ -815,7 +885,12 @@ def run_runtime_calibration(
         "milestone": "A2.5c Runtime Calibration",
         "baseline": "7421f98",
         "registrationBaseline": "95207c2",
-        "status": "runtime_compared" if compared else "blocked_by_runtime_environment",
+        "status": "partial_with_invalid_metrics" if compared else "blocked_by_runtime_environment",
+        "metricValidity": {
+            "productionGeometryMayBeModifiedFromThisReport": False,
+            "globalMaeAcceptanceGate": False,
+            "reason": "A2.5c production-screen calibration metrics were invalidated by A2.5c.1 measurement review",
+        },
         "sourceReport": str(source_report_path),
         "platformTransform": transform,
         "normalizedMetrics": normalized_summary,
@@ -958,7 +1033,7 @@ def run_runtime_gate(
                 candidate = runtime_dir / mode / "runtime" / Path(item["path"]).name
                 if candidate.exists():
                     runtime_path = candidate
-            cases.append(compare_runtime_case(Path(item["path"]), runtime_path, scene, item["time"], item["date"], output_root, mode))
+            cases.append(compare_runtime_case(Path(item["path"]), runtime_path, scene, item["time"], item["date"], output_root, mode, scene_path.parent))
     compared = [case for case in cases if case.get("status") == "compared"]
     atlas_artifacts = _make_review_atlases(compared, output_root) if compared else {}
     def average(metric: str, region: str | None = None) -> float | None:

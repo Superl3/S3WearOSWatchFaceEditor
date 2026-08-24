@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import re
 import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from xml.dom import minidom
 from typing import Any
+from xml.dom import minidom
 
 from .model import validate_scene
 from .render import render_shape_asset
@@ -47,7 +48,7 @@ def _part_text(element: dict[str, Any], expression: str | None = None, template:
     part = ET.Element("PartText", {"x": str(bbox["x"]), "y": str(bbox["y"]), "width": str(bbox["width"]), "height": str(bbox["height"])})
     text = ET.SubElement(part, "Text", {"align": str(style.get("alignment", "center")).upper()})
     if manual_glyphs:
-        font = ET.SubElement(text, "BitmapFont", {"family": str(manual_glyphs["family"]), "size": str(int(style.get("fontSize", 24))), "color": _xml_color(style.get("color", "#FFFFFF")), "fallbackFamily": str(manual_glyphs.get("fallbackFamily", "Pretendard"))})
+        font = ET.SubElement(text, "BitmapFont", {"family": str(manual_glyphs["family"]), "size": str(int(style.get("fontSize", 24))), "color": _xml_color(style.get("color", "#FFFFFF"))})
     else:
         font = ET.SubElement(text, "Font", _font_attributes(style))
     if template is not None:
@@ -56,7 +57,7 @@ def _part_text(element: dict[str, Any], expression: str | None = None, template:
         ET.SubElement(template_node, "Parameter", {"expression": expression or "[DAY]"})
     elif expression is not None:
         template_node = ET.SubElement(font, "Template")
-        template_node.text = "%s"
+        template_node.text = "%d" if expression == "[DAY]" else "%s"
         ET.SubElement(template_node, "Parameter", {"expression": expression})
     else:
         font.text = str(element.get("text", ""))
@@ -98,7 +99,7 @@ def _append_manual_glyph_fonts(root: ET.Element, scene: dict[str, Any], resource
         return
     fonts_node = ET.SubElement(root, "BitmapFonts")
     for family, manual in sorted(definitions.items()):
-        font_node = ET.SubElement(fonts_node, "BitmapFont", {"name": family, "fallbackFamily": str(manual.get("fallbackFamily", "Pretendard"))})
+        font_node = ET.SubElement(fonts_node, "BitmapFont", {"name": family})
         metrics = manual.get("metrics", {})
         for character, asset in sorted(manual.get("resources", {}).items()):
             if asset not in resource_names:
@@ -107,9 +108,48 @@ def _append_manual_glyph_fonts(root: ET.Element, scene: dict[str, Any], resource
             ET.SubElement(font_node, "Character", {"name": str(character), "resource": resource_names[asset], "width": str(int(glyph_metrics.get("width", 1))), "height": str(int(glyph_metrics.get("height", 1)))})
 
 
+def _manual_days(manual: dict[str, Any], padded: bool) -> list[int]:
+    available = set(str(character) for character in manual.get("resources", {}))
+    return [
+        day
+        for day in range(1, 32)
+        if set(f"{day:02d}" if padded else str(day)).issubset(available)
+    ]
+
+
+def _dynamic_day_part(element: dict[str, Any]) -> ET.Element:
+    padded = element.get("format", "d") == "dd"
+    expression = "[DAY_Z]" if padded else "[DAY]"
+    fallback = _part_text(element, expression)
+    manual = element.get("manualGlyphs") or {}
+    if not manual.get("resources"):
+        return fallback
+    manual_days = _manual_days(manual, padded)
+    if not manual_days:
+        return fallback
+    if len(manual_days) == 31:
+        return _part_text(element, expression, manual_glyphs=manual)
+    condition = ET.Element("Condition")
+    expressions = ET.SubElement(condition, "Expressions")
+    availability = " || ".join(f"[DAY] == {day}" for day in manual_days)
+    ET.SubElement(expressions, "Expression", {"name": "manual_date_available"}).text = availability
+    ET.SubElement(condition, "Compare", {"expression": "manual_date_available"}).append(
+        _part_text(element, expression, manual_glyphs=manual)
+    )
+    ET.SubElement(condition, "Default").append(fallback)
+    return condition
+
+
 def _pretty_xml(root: ET.Element) -> str:
     raw = ET.tostring(root, encoding="utf-8", xml_declaration=True)
-    return minidom.parseString(raw).toprettyxml(indent="  ", encoding="utf-8").decode("utf-8")
+    formatted = minidom.parseString(raw).toprettyxml(indent="  ", encoding="utf-8").decode("utf-8")
+    template_pattern = re.compile(r"<Template>\s*([^<]*?)\s*((?:<Parameter\b[^>]*/>\s*)+)</Template>", re.DOTALL)
+
+    def compact_template(match: re.Match[str]) -> str:
+        parameters = re.sub(r">\s+<", "><", match.group(2).strip())
+        return f"<Template>{match.group(1).strip()}{parameters}</Template>"
+
+    return template_pattern.sub(compact_template, formatted)
 
 
 def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str]) -> str:
@@ -142,9 +182,7 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
         elif element_type == "DYNAMIC_SLOT":
             if element.get("slotType") != "DATE_DAY_OF_MONTH":
                 raise ValueError(f"element '{element['id']}' has unsupported DYNAMIC_SLOT type")
-            expression = "[DAY_Z]" if element.get("format", "d") == "dd" else "[DAY]"
-            manual = element.get("manualGlyphs")
-            scene_node.append(_part_text(element, expression, manual_glyphs=manual if manual and manual.get("resources") else None))
+            scene_node.append(_dynamic_day_part(element))
         elif element_type == "WEEKDAY":
             scene_node.append(_part_text(element, "[DAY_OF_WEEK_S]"))
         elif element_type == "BATTERY":

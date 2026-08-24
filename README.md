@@ -101,8 +101,10 @@ it to the product-photo command:
 python -m photo2wff product-photo path\to\product-photo.webp --out manual-glyph-output --manual-glyph-dir path\to\manual-glyphs
 ```
 
-The PNGs are copied at their original resolution. Supplied digits are used by
-the date slot; absent digits use the Pretendard fallback. No automatic glyph
+The PNGs are copied at their original resolution. WFF has no character-level
+BitmapFont fallback: the date uses BitmapFont only when every digit in the
+current value is supplied, and otherwise renders the entire value with
+Pretendard. No automatic glyph
 extraction, synthesis, style fitting, or topology reconstruction is performed
 on production `main`.
 
@@ -132,8 +134,37 @@ artifacts.
 The gate never labels a phone emulator as Wear OS and reports
 `blocked_by_runtime_environment` when no Wear OS runtime is available.
 
-A2.5c calibrates an existing A2.5b capture set into logical 438×438 space
-without changing the production scene or WFF renderer:
+A2.5c is retained as `partial_with_invalid_metrics` and tagged
+`experimental/a25c-invalid-metrics`. Its production-screen MAE, constrained
+hand detector, hardcoded pivot error, and framebuffer-derived transform must
+not drive production geometry changes.
+
+A2.5c.1 uses separate diagnostic WFFs for fiducial geometry, static hand asset
+geometry, dynamic hand angles, and isolated text. It does not use global MAE as
+an acceptance gate:
+
+```powershell
+python -m photo2wff measurement-correctness hermes-a2-output\scene.json `
+  --manual-scene path\to\manual-output\scene.json `
+  --out a25c1-measurement-correctness --capture --serial emulator-5556
+```
+
+The runtime capture records `t_before -> screencap -> t_after` in one remote
+device command and evaluates moving hands against the resulting angle interval.
+Pivot error remains `unmeasured` unless it can be independently detected.
+
+Google's official WFF validator is mandatory for compilation and tests. Build
+the pinned validator once before development or CI validation:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\setup_wff_validator.ps1
+```
+
+If the validator is absent or cannot execute, WFF validation fails closed.
+`lint_wff_xml` is only a Photo2WFF structural lint and is never reported as
+official WFF validation.
+
+The legacy A2.5c command can still reproduce the invalidated research artifact:
 
 ```powershell
 python -m photo2wff runtime-calibration path\to\scene.json path\to\manual-off\watchface.xml runtime-validation --manual-xml path\to\manual-on\watchface.xml --out runtime-calibration

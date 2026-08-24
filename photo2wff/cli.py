@@ -15,6 +15,7 @@ from .runtime_validation import run_runtime_calibration, run_runtime_gate
 from .wff_validate import validate_wff_xml
 from .wff_render import render_wff_xml
 from .human_review import generate_human_review_artifacts
+from .measurement_correctness import run_measurement_correctness
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -186,6 +187,14 @@ def main() -> None:
     calibration_parser.add_argument("runtime_dir", type=Path, help="A2.5b active-runtime screenshot directory")
     calibration_parser.add_argument("--out", type=Path, default=Path("runtime-calibration"))
     calibration_parser.add_argument("--manual-xml", type=Path, help="optional manual-override-on WFF XML")
+    correctness_parser = subparsers.add_parser("measurement-correctness")
+    correctness_parser.add_argument("scene", type=Path)
+    correctness_parser.add_argument("--manual-scene", type=Path)
+    correctness_parser.add_argument("--out", type=Path, default=Path("a25c1-measurement-correctness"))
+    correctness_parser.add_argument("--build", action="store_true")
+    correctness_parser.add_argument("--capture", action="store_true")
+    correctness_parser.add_argument("--adb", type=Path)
+    correctness_parser.add_argument("--serial", type=str)
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -210,3 +219,5 @@ def main() -> None:
         print(json.dumps(run_runtime_gate(args.scene, args.xml, args.out, manual_xml=args.manual_xml, adb=args.adb, runtime_dir=args.runtime_dir, capture=args.capture, apk_off=args.apk_off, apk_on=args.apk_on, serial=args.serial), ensure_ascii=False, indent=2))
     elif args.command == "runtime-calibration":
         print(json.dumps(run_runtime_calibration(args.scene, args.xml, args.runtime_dir, args.out, manual_xml=args.manual_xml), ensure_ascii=False, indent=2))
+    elif args.command == "measurement-correctness":
+        print(json.dumps(run_measurement_correctness(args.scene, args.out, manual_scene_path=args.manual_scene, build=args.build, capture=args.capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))
