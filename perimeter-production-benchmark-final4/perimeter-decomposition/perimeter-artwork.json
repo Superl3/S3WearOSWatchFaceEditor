@@ -1,0 +1,554 @@
+{
+  "sourceShape": {
+    "shape": "ROUNDED_RECT",
+    "width": 397.0,
+    "height": 418.0,
+    "radius": 44.0,
+    "centerX": 218.5,
+    "centerY": 219.0,
+    "isCircleSpecialCase": false
+  },
+  "backgroundColor": "#000000",
+  "minimumNormalizedRadius": 0.62,
+  "grouping": {
+    "coordinateSystem": "normalized_perimeter_s_d",
+    "slotCount": 12,
+    "componentCount": 14,
+    "sGapLimit": 0.022
+  },
+  "elementCount": 12,
+  "elements": [
+    {
+      "id": "perimeter_slot_00",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 217,
+        "y": 9,
+        "width": 59,
+        "height": 8
+      },
+      "anchor": {
+        "x": 246.0,
+        "y": 12.5
+      },
+      "sourceAngleDeg": 7.5856,
+      "perimeterPosition": 0.017906,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9145,
+      "asset": "assets/perimeter/perimeter_slot_00.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "2.0"
+        ],
+        "normalizedRadius": 0.988187,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.0,
+          "dMax": 4.1389
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_01",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 383,
+        "y": 10,
+        "width": 16,
+        "height": 14
+      },
+      "anchor": {
+        "x": 391.5833,
+        "y": 16.6667
+      },
+      "sourceAngleDeg": 40.5449,
+      "perimeterPosition": 0.112817,
+      "rotation": 40.4742,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9175,
+      "asset": "assets/perimeter/perimeter_slot_01.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          4
+        ],
+        "normalizedRadius": 0.991813,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 0.0,
+          "dMax": 5.488
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_02",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 388,
+        "y": 32,
+        "width": 31,
+        "height": 132
+      },
+      "anchor": {
+        "x": 404.2961,
+        "y": 97.1269
+      },
+      "sourceAngleDeg": 56.7371,
+      "perimeterPosition": 0.166453,
+      "rotation": 86.9642,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8775,
+      "asset": "assets/perimeter/perimeter_slot_02.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "6.0"
+        ],
+        "normalizedRadius": 0.941846,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.0512,
+          "dMax": 30.0122
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_03",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 393,
+        "y": 163,
+        "width": 26,
+        "height": 128
+      },
+      "anchor": {
+        "x": 406.6777,
+        "y": 226.6459
+      },
+      "sourceAngleDeg": 92.3267,
+      "perimeterPosition": 0.255195,
+      "rotation": -89.9994,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8824,
+      "asset": "assets/perimeter/perimeter_slot_03.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "8.0"
+        ],
+        "normalizedRadius": 0.947998,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.0,
+          "dMax": 23.2364
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_04",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 390,
+        "y": 289,
+        "width": 29,
+        "height": 132
+      },
+      "anchor": {
+        "x": 404.2809,
+        "y": 346.5998
+      },
+      "sourceAngleDeg": 124.4824,
+      "perimeterPosition": 0.337283,
+      "rotation": 88.2323,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8761,
+      "asset": "assets/perimeter/perimeter_slot_04.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "10.0"
+        ],
+        "normalizedRadius": 0.940171,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.077,
+          "dMax": 32.6244
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_05",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 362,
+        "y": 408,
+        "width": 32,
+        "height": 22
+      },
+      "anchor": {
+        "x": 378.4641,
+        "y": 420.8523
+      },
+      "sourceAngleDeg": 141.6038,
+      "perimeterPosition": 0.394117,
+      "rotation": -21.9226,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9026,
+      "asset": "assets/perimeter/perimeter_slot_05.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          12
+        ],
+        "normalizedRadius": 0.973302,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 0.825,
+          "dMax": 18.5288
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_06",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 45,
+        "y": 400,
+        "width": 47,
+        "height": 30
+      },
+      "anchor": {
+        "x": 66.608,
+        "y": 418.2822
+      },
+      "sourceAngleDeg": 217.3145,
+      "perimeterPosition": 0.602152,
+      "rotation": 8.4352,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8904,
+      "asset": "assets/perimeter/perimeter_slot_06.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          11
+        ],
+        "normalizedRadius": 0.957978,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 0.5613,
+          "dMax": 30.1725
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_07",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 21,
+        "y": 288,
+        "width": 49,
+        "height": 125
+      },
+      "anchor": {
+        "x": 44.7278,
+        "y": 349.135
+      },
+      "sourceAngleDeg": 233.1711,
+      "perimeterPosition": 0.655211,
+      "rotation": 89.0665,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8339,
+      "asset": "assets/perimeter/perimeter_slot_07.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "9.0"
+        ],
+        "normalizedRadius": 0.887391,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 3.2962,
+          "dMax": 58.7448
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_08",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 21,
+        "y": 50,
+        "width": 58,
+        "height": 241
+      },
+      "anchor": {
+        "x": 50.0181,
+        "y": 181.5782
+      },
+      "sourceAngleDeg": 282.5228,
+      "perimeterPosition": 0.779628,
+      "rotation": -84.973,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8048,
+      "asset": "assets/perimeter/perimeter_slot_08.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "7.0"
+        ],
+        "normalizedRadius": 0.850996,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 3.0,
+          "dMax": 70.7866
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_09",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 21,
+        "y": 26,
+        "width": 28,
+        "height": 137
+      },
+      "anchor": {
+        "x": 31.8845,
+        "y": 95.762
+      },
+      "sourceAngleDeg": 303.4401,
+      "perimeterPosition": 0.834097,
+      "rotation": -86.4971,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8805,
+      "asset": "assets/perimeter/perimeter_slot_09.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "5.0"
+        ],
+        "normalizedRadius": 0.945652,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 3.1519,
+          "dMax": 25.6124
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_10",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 40,
+        "y": 8,
+        "width": 43,
+        "height": 26
+      },
+      "anchor": {
+        "x": 58.7554,
+        "y": 18.0272
+      },
+      "sourceAngleDeg": 321.5203,
+      "perimeterPosition": 0.892306,
+      "rotation": -18.4581,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.907,
+      "asset": "assets/perimeter/perimeter_slot_10.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 2,
+        "componentIndices": [
+          0,
+          3
+        ],
+        "normalizedRadius": 0.978698,
+        "normalizedPerimeterRange": {
+          "s": 0.007856,
+          "dMin": 0.0,
+          "dMax": 18.917
+        },
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_slot_11",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 163,
+        "y": 8,
+        "width": 58,
+        "height": 9
+      },
+      "anchor": {
+        "x": 194.2021,
+        "y": 12.3723
+      },
+      "sourceAngleDeg": 353.2932,
+      "perimeterPosition": 0.976571,
+      "rotation": 0.7089,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9155,
+      "asset": "assets/perimeter/perimeter_slot_11.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 2,
+        "componentIndices": [
+          1,
+          "2.1"
+        ],
+        "normalizedRadius": 0.989418,
+        "normalizedPerimeterRange": {
+          "s": 0.019912,
+          "dMin": 0.0,
+          "dMax": 4.1291
+        },
+        "semanticIdentificationRequired": false
+      }
+    }
+  ],
+  "mask": "perimeter-production-benchmark-final4\\perimeter-decomposition\\perimeter-artwork-mask.png",
+  "unwrap": "perimeter-production-benchmark-final4\\perimeter-decomposition\\perimeter-sd-unwrap.png"
+}

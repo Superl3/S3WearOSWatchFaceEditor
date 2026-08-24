@@ -1,0 +1,879 @@
+{
+  "schemaVersion": "1.0",
+  "canvas": {
+    "width": 438,
+    "height": 438,
+    "shape": "CIRCLE",
+    "centerX": 219,
+    "centerY": 219
+  },
+  "displayGeometry": {
+    "source": {
+      "shape": "ROUNDED_RECT",
+      "width": 397.0,
+      "height": 418.0,
+      "radius": 44.0,
+      "centerX": 218.5,
+      "centerY": 219.0,
+      "isCircleSpecialCase": false
+    },
+    "target": {
+      "shape": "CIRCLE",
+      "width": 438.0,
+      "height": 438.0,
+      "radius": 219.0,
+      "centerX": 219.0,
+      "centerY": 219.0,
+      "isCircleSpecialCase": true
+    },
+    "mappingPolicy": "ELEMENT_PRESERVING",
+    "availableMappings": [
+      "RASTER_WARP",
+      "ELEMENT_PRESERVING"
+    ]
+  },
+  "normalization": {
+    "inputType": "PHOTOGRAPH",
+    "rotationDegrees": 0.0,
+    "confidence": 0.78,
+    "requiresPerspectiveCorrection": false,
+    "sourceSize": [
+      1728,
+      1080
+    ],
+    "displayBounds": {
+      "x": 610,
+      "y": 260,
+      "width": 505,
+      "height": 531
+    }
+  },
+  "background": {
+    "type": "SOLID",
+    "color": "#000000"
+  },
+  "preview": {
+    "time": "10:08:30",
+    "date": "08.20",
+    "weekday": "THU",
+    "battery": 82,
+    "steps": 5240,
+    "heartRate": 68
+  },
+  "clock": {
+    "type": "ANALOG",
+    "centerX": 219.9251,
+    "centerY": 226.2764,
+    "confidence": 0.91,
+    "method": "A1b red pivot blob detection"
+  },
+  "elements": [
+    {
+      "id": "dial_element_base",
+      "type": "STATIC_IMAGE",
+      "dynamic": false,
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 438,
+        "height": 438
+      },
+      "asset": "assets/dial-element-base.png",
+      "confidence": 1.0,
+      "zIndex": 0,
+      "mappingMode": "RASTER_WARP"
+    },
+    {
+      "id": "perimeter_slot_00",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 217,
+        "y": 1,
+        "width": 61,
+        "height": 8
+      },
+      "anchor": {
+        "x": 247.5636,
+        "y": 4.5132
+      },
+      "sourceAngleDeg": 7.5856,
+      "perimeterPosition": 0.017906,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9145,
+      "asset": "assets/perimeter/artwork_00.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "2.0"
+        ],
+        "normalizedRadius": 0.988187,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.0,
+          "dMax": 4.1389
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_00.png",
+        "mappedUniformScale": 1.038677
+      }
+    },
+    {
+      "id": "perimeter_slot_01",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 354,
+        "y": 49,
+        "width": 13,
+        "height": 11
+      },
+      "anchor": {
+        "x": 360.1064,
+        "y": 54.0475
+      },
+      "sourceAngleDeg": 40.5449,
+      "perimeterPosition": 0.112817,
+      "rotation": 40.4742,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9175,
+      "asset": "assets/perimeter/artwork_01.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          4
+        ],
+        "normalizedRadius": 0.991813,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 0.0,
+          "dMax": 5.488
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_01.png",
+        "mappedUniformScale": 0.815252
+      }
+    },
+    {
+      "id": "perimeter_slot_02",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 376,
+        "y": 46,
+        "width": 29,
+        "height": 122
+      },
+      "anchor": {
+        "x": 390.4001,
+        "y": 106.57
+      },
+      "sourceAngleDeg": 56.7371,
+      "perimeterPosition": 0.166453,
+      "rotation": 86.9642,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8775,
+      "asset": "assets/perimeter/artwork_02.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "6.0"
+        ],
+        "normalizedRadius": 0.941846,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.0512,
+          "dMax": 30.0122
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_02.png",
+        "mappedUniformScale": 0.922517
+      }
+    },
+    {
+      "id": "perimeter_slot_03",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 412,
+        "y": 157,
+        "width": 26,
+        "height": 141
+      },
+      "anchor": {
+        "x": 426.4405,
+        "y": 227.4286
+      },
+      "sourceAngleDeg": 92.3267,
+      "perimeterPosition": 0.255195,
+      "rotation": -89.9994,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8824,
+      "asset": "assets/perimeter/artwork_03.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "8.0"
+        ],
+        "normalizedRadius": 0.947998,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.0,
+          "dMax": 23.2364
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_03.png",
+        "mappedUniformScale": 1.102365
+      }
+    },
+    {
+      "id": "perimeter_slot_04",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 375,
+        "y": 275,
+        "width": 26,
+        "height": 120
+      },
+      "anchor": {
+        "x": 387.9546,
+        "y": 335.043
+      },
+      "sourceAngleDeg": 124.4824,
+      "perimeterPosition": 0.337283,
+      "rotation": 88.2323,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8761,
+      "asset": "assets/perimeter/artwork_04.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "10.0"
+        ],
+        "normalizedRadius": 0.940171,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 1.077,
+          "dMax": 32.6244
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_04.png",
+        "mappedUniformScale": 0.909429
+      }
+    },
+    {
+      "id": "perimeter_slot_05",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 338,
+        "y": 377,
+        "width": 26,
+        "height": 18
+      },
+      "anchor": {
+        "x": 351.123,
+        "y": 385.7208
+      },
+      "sourceAngleDeg": 141.6038,
+      "perimeterPosition": 0.394117,
+      "rotation": -21.9226,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9026,
+      "asset": "assets/perimeter/artwork_05.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          12
+        ],
+        "normalizedRadius": 0.973302,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 0.825,
+          "dMax": 18.5288
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_05.png",
+        "mappedUniformScale": 0.825954
+      }
+    },
+    {
+      "id": "perimeter_slot_06",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 73,
+        "y": 373,
+        "width": 39,
+        "height": 25
+      },
+      "anchor": {
+        "x": 92.2701,
+        "y": 385.2696
+      },
+      "sourceAngleDeg": 217.3145,
+      "perimeterPosition": 0.602152,
+      "rotation": 8.4352,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8904,
+      "asset": "assets/perimeter/artwork_06.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          11
+        ],
+        "normalizedRadius": 0.957978,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 0.5613,
+          "dMax": 30.1725
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_06.png",
+        "mappedUniformScale": 0.834342
+      }
+    },
+    {
+      "id": "perimeter_slot_07",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 44,
+        "y": 279,
+        "width": 43,
+        "height": 110
+      },
+      "anchor": {
+        "x": 65.543,
+        "y": 333.9213
+      },
+      "sourceAngleDeg": 233.1711,
+      "perimeterPosition": 0.655211,
+      "rotation": 89.0665,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8339,
+      "asset": "assets/perimeter/artwork_07.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "9.0"
+        ],
+        "normalizedRadius": 0.887391,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 3.2962,
+          "dMax": 58.7448
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_07.png",
+        "mappedUniformScale": 0.883093
+      }
+    },
+    {
+      "id": "perimeter_slot_08",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 7,
+        "y": 49,
+        "width": 62,
+        "height": 260
+      },
+      "anchor": {
+        "x": 37.5404,
+        "y": 178.6957
+      },
+      "sourceAngleDeg": 282.5228,
+      "perimeterPosition": 0.779628,
+      "rotation": -84.973,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8048,
+      "asset": "assets/perimeter/artwork_08.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "7.0"
+        ],
+        "normalizedRadius": 0.850996,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 3.0,
+          "dMax": 70.7866
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_08.png",
+        "mappedUniformScale": 1.077028
+      }
+    },
+    {
+      "id": "perimeter_slot_09",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 34,
+        "y": 43,
+        "width": 26,
+        "height": 126
+      },
+      "anchor": {
+        "x": 47.1942,
+        "y": 105.5421
+      },
+      "sourceAngleDeg": 303.4401,
+      "perimeterPosition": 0.834097,
+      "rotation": -86.4971,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.8805,
+      "asset": "assets/perimeter/artwork_09.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 1,
+        "componentIndices": [
+          "5.0"
+        ],
+        "normalizedRadius": 0.945652,
+        "normalizedPerimeterRange": {
+          "s": 0.0,
+          "dMin": 3.1519,
+          "dMax": 25.6124
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_09.png",
+        "mappedUniformScale": 0.920641
+      }
+    },
+    {
+      "id": "perimeter_slot_10",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 70,
+        "y": 43,
+        "width": 35,
+        "height": 21
+      },
+      "anchor": {
+        "x": 87.147,
+        "y": 53.1173
+      },
+      "sourceAngleDeg": 321.5203,
+      "perimeterPosition": 0.892306,
+      "rotation": -18.4581,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.907,
+      "asset": "assets/perimeter/artwork_10.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 2,
+        "componentIndices": [
+          0,
+          3
+        ],
+        "normalizedRadius": 0.978698,
+        "normalizedPerimeterRange": {
+          "s": 0.007856,
+          "dMin": 0.0,
+          "dMax": 18.917
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_10.png",
+        "mappedUniformScale": 0.825399
+      }
+    },
+    {
+      "id": "perimeter_slot_11",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 164,
+        "y": 0,
+        "width": 60,
+        "height": 8
+      },
+      "anchor": {
+        "x": 193.7138,
+        "y": 3.9674
+      },
+      "sourceAngleDeg": 353.2932,
+      "perimeterPosition": 0.976571,
+      "rotation": 0.7089,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.9155,
+      "asset": "assets/perimeter/artwork_11.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "normalized rounded-rectangle perimeter slot grouping",
+        "componentCount": 2,
+        "componentIndices": [
+          1,
+          "2.1"
+        ],
+        "normalizedRadius": 0.989418,
+        "normalizedPerimeterRange": {
+          "s": 0.019912,
+          "dMin": 0.0,
+          "dMax": 4.1291
+        },
+        "semanticIdentificationRequired": false,
+        "sourceAsset": "assets/perimeter/perimeter_slot_11.png",
+        "mappedUniformScale": 1.040676
+      }
+    },
+    {
+      "id": "weekday",
+      "type": "WEEKDAY",
+      "dynamic": true,
+      "bbox": {
+        "x": 163,
+        "y": 117,
+        "width": 71,
+        "height": 33
+      },
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 28,
+        "alignment": "center",
+        "color": "#FFFFFF"
+      },
+      "confidence": 0.7,
+      "zIndex": 6,
+      "relationships": {
+        "detection": "central aligned component row",
+        "semanticHeuristic": "WEEKDAY"
+      },
+      "mappingMode": "ELEMENT_PRESERVING"
+    },
+    {
+      "id": "day_of_month",
+      "type": "DYNAMIC_SLOT",
+      "slotType": "DATE_DAY_OF_MONTH",
+      "dynamic": true,
+      "bbox": {
+        "x": 233,
+        "y": 123,
+        "width": 42,
+        "height": 31
+      },
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 28,
+        "alignment": "center",
+        "color": "#FFFFFF"
+      },
+      "confidence": 0.66,
+      "zIndex": 6,
+      "relationships": {
+        "detection": "central aligned component row",
+        "semanticHeuristic": "DATE_DAY_OF_MONTH"
+      },
+      "mappingMode": "ELEMENT_PRESERVING"
+    },
+    {
+      "id": "hour_hand",
+      "type": "ANALOG_HAND",
+      "role": "HOUR",
+      "dynamic": true,
+      "bbox": {
+        "x": 207,
+        "y": 127,
+        "width": 25,
+        "height": 110
+      },
+      "asset": "assets/hour_hand.png",
+      "observedAngleDeg": 306.0,
+      "length": 99.075,
+      "thickness": 7.1405,
+      "pivotX": 0.5,
+      "pivotY": 0.902439,
+      "confidence": 0.79,
+      "zIndex": 10,
+      "uncertainty": [
+        "Radial-ray extraction is conservative and remains adjustable",
+        "Observed angle is from the supplied product photograph"
+      ],
+      "relationships": {
+        "mapping": {
+          "id": "hour_hand",
+          "role": "HOUR",
+          "sourcePivot": {
+            "x": 219.39,
+            "y": 226.0
+          },
+          "targetPivot": {
+            "x": 219.9251361549111,
+            "y": 226.2763517801996
+          },
+          "observedAngleDeg": 306.0,
+          "normalizedLength": 0.4523974124716332,
+          "sourceBoundaryDistance": 245.3594935337082,
+          "targetBoundaryDistance": 219.0,
+          "sourceLength": 111.0,
+          "targetLength": 99.07503333128767,
+          "thicknessPreserved": 8.0,
+          "targetBbox": {
+            "x": 139.771750471635,
+            "y": 168.0415083176835,
+            "width": 82.50452669244598,
+            "height": 61.4709114400159
+          }
+        },
+        "pipeline": "existing A1 analog hand extraction"
+      }
+    },
+    {
+      "id": "minute_hand",
+      "type": "ANALOG_HAND",
+      "role": "MINUTE",
+      "dynamic": true,
+      "bbox": {
+        "x": 207,
+        "y": 62,
+        "width": 25,
+        "height": 173
+      },
+      "asset": "assets/minute_hand.png",
+      "observedAngleDeg": 54.0,
+      "length": 164.2325,
+      "thickness": 7.1405,
+      "pivotX": 0.5,
+      "pivotY": 0.948454,
+      "confidence": 0.79,
+      "zIndex": 20,
+      "uncertainty": [
+        "Radial-ray extraction is conservative and remains adjustable",
+        "Observed angle is from the supplied product photograph"
+      ],
+      "relationships": {
+        "mapping": {
+          "id": "minute_hand",
+          "role": "MINUTE",
+          "sourcePivot": {
+            "x": 219.39,
+            "y": 226.0
+          },
+          "targetPivot": {
+            "x": 219.9251361549111,
+            "y": 226.2763517801996
+          },
+          "observedAngleDeg": 54.0,
+          "normalizedLength": 0.7499200350881123,
+          "sourceBoundaryDistance": 245.3594935337083,
+          "targetBoundaryDistance": 219.0,
+          "sourceLength": 184.0,
+          "targetLength": 164.23248768429661,
+          "thicknessPreserved": 8.0,
+          "targetBbox": {
+            "x": 217.5739951457412,
+            "y": 129.7429175720648,
+            "width": 135.2180145742401,
+            "height": 99.7695021856346
+          }
+        },
+        "pipeline": "existing A1 analog hand extraction"
+      }
+    },
+    {
+      "id": "second_hand",
+      "type": "ANALOG_HAND",
+      "role": "SECOND",
+      "dynamic": true,
+      "bbox": {
+        "x": 215,
+        "y": 132,
+        "width": 10,
+        "height": 104
+      },
+      "asset": "assets/second_hand.png",
+      "observedAngleDeg": 173.91,
+      "length": 94.3054,
+      "thickness": 3.1258,
+      "pivotX": 0.5,
+      "pivotY": 0.9051,
+      "confidence": 0.84,
+      "zIndex": 30,
+      "uncertainty": [
+        "Radial-ray extraction is conservative and remains adjustable",
+        "Observed angle is from the supplied product photograph"
+      ],
+      "sweepFrequency": 15,
+      "relationships": {
+        "mapping": {
+          "id": "second_hand",
+          "role": "SECOND",
+          "sourcePivot": {
+            "x": 219.39,
+            "y": 226.0
+          },
+          "targetPivot": {
+            "x": 219.9251361549111,
+            "y": 226.2763517801996
+          },
+          "observedAngleDeg": 173.91,
+          "normalizedLength": 0.4306182038451279,
+          "sourceBoundaryDistance": 210.18619090369896,
+          "targetBoundaryDistance": 219.0,
+          "sourceLength": 90.51,
+          "targetLength": 94.30538664208301,
+          "thicknessPreserved": 3.0,
+          "targetBbox": {
+            "x": 218.43360144155955,
+            "y": 226.1172159926867,
+            "width": 11.496442693348541,
+            "height": 93.93230767598303
+          }
+        },
+        "pipeline": "existing A1 analog hand extraction"
+      }
+    },
+    {
+      "id": "center_cap",
+      "type": "STATIC_IMAGE",
+      "dynamic": false,
+      "bbox": {
+        "x": 208,
+        "y": 214,
+        "width": 24,
+        "height": 24
+      },
+      "asset": "assets/center_cap.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "confidence": 0.78,
+      "zIndex": 100,
+      "uncertainty": [
+        "Center cap is preserved as a static foreground layer"
+      ]
+    }
+  ],
+  "analysis": {
+    "watchFaceCategory": "MINIMAL_ANALOG",
+    "overallConfidence": 0.68,
+    "requiresStaticAssetExtraction": true,
+    "requiresHumanReview": true,
+    "method": "generic perimeter decomposition + existing analog pipeline",
+    "componentCount": 1,
+    "groupCount": 4,
+    "manualGlyphOverride": null
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "elements": [
+    {
+      "id": "weekday",
+      "type": "WEEKDAY",
+      "dynamic": true,
+      "bbox": {
+        "x": 144,
+        "y": 204,
+        "width": 67,
+        "height": 30
+      },
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 26,
+        "alignment": "center",
+        "color": "#FFFFFF"
+      },
+      "confidence": 0.7,
+      "zIndex": 6,
+      "relationships": {
+        "detection": "central aligned component row",
+        "semanticHeuristic": "WEEKDAY"
+      }
+    },
+    {
+      "id": "day_of_month",
+      "type": "DYNAMIC_SLOT",
+      "slotType": "DATE_DAY_OF_MONTH",
+      "dynamic": true,
+      "bbox": {
+        "x": 253,
+        "y": 204,
+        "width": 38,
+        "height": 30
+      },
+      "style": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": 26,
+        "alignment": "center",
+        "color": "#FFFFFF"
+      },
+      "confidence": 0.66,
+      "zIndex": 6,
+      "relationships": {
+        "detection": "central aligned component row",
+        "semanticHeuristic": "DATE_DAY_OF_MONTH"
+      }
+    }
+  ],
+  "candidateComponentCount": 5,
+  "detected": true,
+  "removalMask": "perimeter-production-benchmark-final4\\generic-fixtures\\dynamic-text\\dynamic-text-mask.png",
+  "cleanBackground": "perimeter-production-benchmark-final4\\generic-fixtures\\dynamic-text\\dynamic-text-removed.png",
+  "reconstruction": "existing deterministic simple-background reconstruction",
+  "requiresHumanReview": false
+}

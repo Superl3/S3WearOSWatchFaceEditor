@@ -15,6 +15,7 @@ from .dynamic_text import extract_center_dynamic_text
 from .generic_fixtures import run_generic_fixtures
 from .human_review import REVIEW_TIMES
 from .model import save_scene, validate_scene
+from .occlusion import _hand_masks, _source_foreground_mask
 from .perimeter_artwork import decompose_perimeter_artwork, draw_perimeter_overlay, remove_perimeter_artwork
 from .production_port import _build_project, _copy_gradle_wrapper, _panel_atlas
 from .render import render_scene
@@ -158,6 +159,33 @@ def _mapped_center_cap(source_scene: dict[str, Any], source_root: Path, output_r
     return clone
 
 
+def _hand_cleanup_checks(source_scene: dict[str, Any], raw_root: Path) -> dict[str, Any]:
+    reference = Image.open(raw_root / "reference.png").convert("RGB")
+    completed = Image.open(raw_root / "assets" / "dial-completed.png").convert("RGB")
+    hands = {element["role"]: element for element in source_scene["elements"] if element["type"] == "ANALOG_HAND"}
+    masks = _hand_masks(reference, (float(source_scene["clock"]["centerX"]), float(source_scene["clock"]["centerY"])), hands, assets_dir=raw_root / "assets", margin=1)
+    source_foreground = _source_foreground_mask(reference)
+    completed_foreground = _source_foreground_mask(completed)
+    records: dict[str, Any] = {}
+    for role, mask in masks.items():
+        source_count = 0
+        remaining_count = 0
+        red_remaining = 0
+        for y in range(reference.height):
+            for x in range(reference.width):
+                if not mask.getpixel((x, y)):
+                    continue
+                if source_foreground.getpixel((x, y)):
+                    source_count += 1
+                if completed_foreground.getpixel((x, y)):
+                    remaining_count += 1
+                red, green, blue = completed.getpixel((x, y))
+                if red >= 65 and red >= green * 1.25 and red >= blue * 1.15:
+                    red_remaining += 1
+        records[role] = {"sourceForegroundPixels": source_count, "remainingForegroundPixels": remaining_count, "remainingForegroundRatio": round(remaining_count / max(1, source_count), 4), "remainingRedPixels": red_remaining, "maskBbox": list(mask.getbbox() or (0, 0, 0, 0))}
+    return {"roles": records, "redResidualPass": all(record["remainingRedPixels"] == 0 for record in records.values()), "whiteForegroundRatioPass": all(record["remainingForegroundRatio"] <= 0.25 for role, record in records.items() if role != "SECOND")}
+
+
 def _scene(source_scene: dict[str, Any], static_elements: list[dict[str, Any]], dynamic: list[dict[str, Any]], hands: list[dict[str, Any]], cap: dict[str, Any], target_center: tuple[float, float], mode: str) -> dict[str, Any]:
     scene = copy.deepcopy(source_scene)
     scene["clock"] = {**scene["clock"], "centerX": round(target_center[0], 4), "centerY": round(target_center[1], 4)}
@@ -222,7 +250,11 @@ def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool =
     dynamic_removed = Image.open(dynamic_report["cleanBackground"]).convert("RGB")
     dynamic_removed.save(review / "dynamic-text-removal-result.png")
     perimeter_report = decompose_perimeter_artwork(dynamic_removed, source, output_root / "perimeter-decomposition")
+    hand_cleanup = _hand_cleanup_checks(source_scene, raw)
     draw_perimeter_overlay(normalized, perimeter_report["elements"], review / "detected-perimeter-elements-overlay.png")
+    if (raw / "assets" / "hand-mask-overlay.png").exists():
+        shutil.copy2(raw / "assets" / "hand-mask-overlay.png", review / "source-hand-mask-overlay.png")
+    shutil.copy2(perimeter_report["unwrap"], review / "perimeter-sd-unwrap.png")
 
     raster_dial = inverse_raster_map(dynamic_removed, source, target).convert("RGBA")
     raster_dial.save(assets / "dial-raster-warp.png")
@@ -287,13 +319,13 @@ def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool =
     official_pass = all("PASSED" in record["officialValidation"] for record in projects.values())
     build_pass = all(record["build"].get("success") for record in projects.values()) if build else True
     automated_pipeline_pass = len(perimeter_report["elements"]) > 0 and dynamic_report["detected"] and len(hands) == 3 and official_pass and build_pass and runtime.get("status") == "runtime_verified"
-    benchmark_pass = False
+    benchmark_pass = automated_pipeline_pass and hand_cleanup["redResidualPass"] and hand_cleanup["whiteForegroundRatioPass"]
     report = {
         "milestone": "General Rounded-Rectangle Perimeter Analog Support",
         "system": {"pass": fixtures["systemPass"], "fixtures": fixtures, "officialValidatorPass": official_pass, "buildPass": build_pass},
-        "benchmark": {"pass": benchmark_pass, "automatedPipelinePass": automated_pipeline_pass, "humanReviewStatus": "required", "reference": str(reference), "perimeterElements": perimeter_report["elementCount"], "dynamicText": dynamic_report, "hands": [element["role"] for element in hands], "runtime": runtime},
+        "benchmark": {"pass": benchmark_pass, "automatedPipelinePass": automated_pipeline_pass, "humanReviewStatus": "required", "reference": str(reference), "perimeterElements": perimeter_report["elementCount"], "dynamicText": dynamic_report, "handCleanup": hand_cleanup, "hands": [element["role"] for element in hands], "runtime": runtime},
         "projects": projects,
-        "humanReview": {"sourceNormalized": str(review / "source-normalized.png"), "perimeterOverlay": str(review / "detected-perimeter-elements-overlay.png"), "extractedArtworkSheet": str(review / "extracted-artwork-sheet.png"), "rasterWarp": str(review / "raster-warp-result.png"), "elementPreserving": str(review / "element-preserving-result.png"), "mappingSideBySide": str(review / "mapping-mode-side-by-side.png"), "handsOff": str(review / "hands-off-static-dial.png"), "dynamicTextRemoval": str(review / "dynamic-text-removal-result.png"), "nineTimeAtlas": review_report["timeAtlas"], "weekdayDateAtlas": review_report["dateAtlas"], "runtimeNineTimeAtlas": runtime.get("nineTimeAtlas"), "finalPreview": str(review / "final-full-watch-preview.png")},
+        "humanReview": {"sourceNormalized": str(review / "source-normalized.png"), "sourceHandMaskOverlay": str(review / "source-hand-mask-overlay.png"), "perimeterOverlay": str(review / "detected-perimeter-elements-overlay.png"), "perimeterSdUnwrap": str(review / "perimeter-sd-unwrap.png"), "extractedArtworkSheet": str(review / "extracted-artwork-sheet.png"), "rasterWarp": str(review / "raster-warp-result.png"), "elementPreserving": str(review / "element-preserving-result.png"), "mappingSideBySide": str(review / "mapping-mode-side-by-side.png"), "handsOff": str(review / "hands-off-static-dial.png"), "dynamicTextRemoval": str(review / "dynamic-text-removal-result.png"), "nineTimeAtlas": review_report["timeAtlas"], "weekdayDateAtlas": review_report["dateAtlas"], "runtimeNineTimeAtlas": runtime.get("nineTimeAtlas"), "finalPreview": str(review / "final-full-watch-preview.png")},
         "overfittingGuard": {"targetReferenceUsedForFixtureCalibration": False, "referenceSpecificCoordinatesInImplementation": False},
     }
     _write_json(output_root / "perimeter-benchmark-report.json", report)

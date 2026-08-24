@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="ANALOG"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:30"/>
+  <Metadata key="PREVIEW_DATE" value="08.20"/>
+  <Scene backgroundColor="#000000">
+    <PartImage x="0" y="0" width="438" height="438">
+      <Image resource="dial_raster_warp"/>
+    </PartImage>
+    <PartText x="163" y="117" width="71" height="33">
+      <Text align="CENTER">
+        <Font family="pretendard" size="28" weight="NORMAL" slant="NORMAL" color="#FFFFFF">
+          <Template>%s<Parameter expression="[DAY_OF_WEEK_S]"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+    <PartText x="233" y="123" width="42" height="31">
+      <Text align="CENTER">
+        <Font family="pretendard" size="28" weight="NORMAL" slant="NORMAL" color="#FFFFFF">
+          <Template>%d<Parameter expression="[DAY]"/></Template>
+        </Font>
+      </Text>
+    </PartText>
+    <AnalogClock x="0" y="0" width="438" height="438" pivotX="0.5" pivotY="0.5">
+      <HourHand resource="hour_hand" x="207" y="127" width="25" height="110" pivotX="0.5" pivotY="0.902439"/>
+      <MinuteHand resource="minute_hand" x="207" y="62" width="25" height="173" pivotX="0.5" pivotY="0.948454"/>
+      <SecondHand resource="second_hand" x="215" y="132" width="10" height="104" pivotX="0.5" pivotY="0.9051">
+        <Sweep frequency="15"/>
+      </SecondHand>
+    </AnalogClock>
+    <PartImage x="208" y="214" width="24" height="24">
+      <Image resource="center_cap"/>
+    </PartImage>
+  </Scene>
+</WatchFace>

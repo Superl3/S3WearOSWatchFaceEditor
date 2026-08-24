@@ -1,0 +1,80 @@
+{
+  "engine": "Occlusion Reconstruction Engine",
+  "version": "A1d.1",
+  "reference": "perimeter-production-benchmark-final4\\raw-analysis\\reference.png",
+  "marginPixels": 4,
+  "sourceHandRoles": [
+    "HOUR",
+    "MINUTE",
+    "SECOND"
+  ],
+  "regions": [
+    {
+      "id": "hour",
+      "sourceHandRole": "HOUR",
+      "class": "numeral_text_logo",
+      "classReason": "outer_dial_glyph_band_intersection",
+      "bbox": [
+        119,
+        150,
+        240,
+        246
+      ],
+      "method": "visible_glyph_stroke_continuation",
+      "confidence": 0.48,
+      "reconstructedPixelCount": 3779,
+      "requiresHumanReview": true,
+      "fallback": null,
+      "beforeChangedByRegion": true
+    },
+    {
+      "id": "minute",
+      "sourceHandRole": "MINUTE",
+      "class": "numeral_text_logo",
+      "classReason": "outer_dial_glyph_band_intersection",
+      "bbox": [
+        201,
+        106,
+        379,
+        244
+      ],
+      "method": "visible_glyph_stroke_continuation",
+      "confidence": 0.48,
+      "reconstructedPixelCount": 5786,
+      "requiresHumanReview": true,
+      "fallback": null,
+      "beforeChangedByRegion": true
+    },
+    {
+      "id": "second",
+      "sourceHandRole": "SECOND",
+      "class": "numeral_text_logo",
+      "classReason": "outer_dial_glyph_band_intersection",
+      "bbox": [
+        209,
+        194,
+        247,
+        417
+      ],
+      "method": "visible_glyph_stroke_continuation",
+      "confidence": 0.48,
+      "reconstructedPixelCount": 3414,
+      "requiresHumanReview": true,
+      "fallback": null,
+      "beforeChangedByRegion": true
+    }
+  ],
+  "fallback": {
+    "status": "not_configured",
+    "candidate": null
+  },
+  "pixelCounts": {
+    "observed": 180944,
+    "occluded": 11595,
+    "reconstructed": 11591,
+    "unresolved": 4
+  },
+  "requiresHumanReview": true,
+  "generatedPixelsAreObservedTruth": false,
+  "status": "completed_with_review"
+}

@@ -18,7 +18,7 @@ from photo2wff.dynamic_text import extract_center_dynamic_text
 from photo2wff.generic_fixtures import run_generic_fixtures
 from photo2wff.model import SceneValidationError, apply_patches, load_scene, validate_scene
 from photo2wff.measurement_correctness import FIDUCIALS, _fit_geometry
-from photo2wff.occlusion import reconstruct_occluded_dial
+from photo2wff.occlusion import _hand_masks, reconstruct_occluded_dial
 from photo2wff.production_port import _make_production_dial, _production_scene
 from photo2wff.perimeter_artwork import decompose_perimeter_artwork
 from photo2wff.render import render_scene
@@ -449,6 +449,26 @@ class Photo2WFFTests(unittest.TestCase):
             self.assertEqual(element["mappingMode"], "ELEMENT_PRESERVING")
             for key in ("bbox", "anchor", "sourceAngleDeg", "perimeterPosition", "rotation", "scale", "confidence", "asset"):
                 self.assertIn(key, element)
+
+    def test_hand_mask_reprojects_canonical_alpha_asset_at_observed_angle(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "assets"
+            assets.mkdir()
+            asset = Image.new("RGBA", (9, 44), (0, 0, 0, 0))
+            ImageDraw.Draw(asset).line((4, 0, 4, 40), fill=(255, 255, 255, 255), width=3)
+            asset.save(assets / "hour.png")
+            reference = Image.new("RGB", (100, 100), "black")
+            masks = _hand_masks(
+                reference,
+                (50, 50),
+                {"HOUR": {"asset": "assets/hour.png", "bbox": {"width": 9, "height": 44}, "pivotX": 0.5, "pivotY": 0.9, "observedAngleDeg": 90, "length": 40, "thickness": 3}},
+                assets_dir=assets,
+                margin=1,
+            )
+            bbox = masks["HOUR"].getbbox()
+            self.assertIsNotNone(bbox)
+            self.assertGreater(bbox[2] - bbox[0], bbox[3] - bbox[1])
 
     def test_center_dynamic_text_extracts_weekday_and_day(self):
         with tempfile.TemporaryDirectory() as temp:

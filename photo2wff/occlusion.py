@@ -33,9 +33,133 @@ def _is_second_hand_red(pixel: tuple[int, int, int]) -> bool:
     return red >= 85 and red >= green * 1.35 and red >= blue * 1.15
 
 
-def _hand_masks(reference: Image.Image, center: tuple[float, float], hands: dict[str, dict[str, Any]], margin: int = 4) -> dict[str, Image.Image]:
+def _asset_path(assets_dir: Path, asset: str) -> Path:
+    path = Path(asset)
+    return assets_dir.parent / path if path.parts and path.parts[0] == "assets" else assets_dir / path
+
+
+def _background_color(image: Image.Image) -> tuple[int, int, int]:
+    rgb = image.convert("RGB")
+    inset_x = max(1, rgb.width // 16)
+    inset_y = max(1, rgb.height // 16)
+    samples = (
+        rgb.getpixel((inset_x, inset_y)),
+        rgb.getpixel((rgb.width - inset_x - 1, inset_y)),
+        rgb.getpixel((inset_x, rgb.height - inset_y - 1)),
+        rgb.getpixel((rgb.width - inset_x - 1, rgb.height - inset_y - 1)),
+    )
+    return tuple(sorted(pixel[channel] for pixel in samples)[len(samples) // 2] for channel in range(3))
+
+
+def _source_foreground_mask(image: Image.Image, threshold: int = 24) -> Image.Image:
+    background = _background_color(image)
+    source = image.convert("RGB")
+    mask = Image.new("L", image.size, 0)
+    source_pixels = source.load()
+    mask_pixels = mask.load()
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = source_pixels[x, y]
+            if max(abs(pixel[channel] - background[channel]) for channel in range(3)) >= threshold:
+                mask_pixels[x, y] = 255
+    return mask
+
+
+def _project_canonical_hand(
+    reference: Image.Image,
+    assets_dir: Path,
+    center: tuple[float, float],
+    hand: dict[str, Any],
+    margin: int,
+) -> Image.Image | None:
+    asset_name = hand.get("asset")
+    if not asset_name:
+        return None
+    asset_path = _asset_path(assets_dir, str(asset_name))
+    if not asset_path.exists():
+        return None
+    asset = Image.open(asset_path).convert("RGBA")
+    bbox = hand.get("bbox", {})
+    width = max(1, round(float(bbox.get("width", asset.width))))
+    height = max(1, round(float(bbox.get("height", asset.height))))
+    if asset.size != (width, height):
+        asset = asset.resize((width, height), Image.Resampling.LANCZOS)
+    local = Image.new("L", asset.size, 0)
+    local = asset.getchannel("A")
+    layer = Image.new("L", reference.size, 0)
+    pivot_x = float(hand.get("pivotX", 0.5)) * width
+    pivot_y = float(hand.get("pivotY", 0.9)) * height
+    left = round(center[0] - pivot_x)
+    top = round(center[1] - pivot_y)
+    layer.paste(local, (left, top), local)
+    rotated = layer.rotate(-float(hand.get("observedAngleDeg", 0.0)), resample=Image.Resampling.BICUBIC, center=center)
+    thickness = max(1.0, float(hand.get("thickness", 1.0)))
+    adaptive_margin = max(1, round(thickness * 0.18)) + max(0, int(margin))
+    edge_mask = rotated.filter(ImageFilter.MaxFilter(adaptive_margin * 2 + 1))
+    connected = ImageChops.multiply(_source_foreground_mask(reference), edge_mask.filter(ImageFilter.MaxFilter(3)))
+    projected = ImageChops.lighter(edge_mask, connected)
+    source = reference.convert("RGB")
+    source_pixels = source.load()
+    asset_pixels = asset.load()
+    foreground_asset = [asset_pixels[x, y][:3] for y in range(asset.height) for x in range(asset.width) if asset_pixels[x, y][3] >= 100]
+    expected_red = bool(foreground_asset) and sum(pixel[0] for pixel in foreground_asset) / len(foreground_asset) > sum(pixel[1] for pixel in foreground_asset) / len(foreground_asset) * 1.35
+    if not expected_red:
+        return projected
+    direction_angle = math.radians(float(hand.get("observedAngleDeg", 0.0)))
+    base_direction = (math.sin(direction_angle), -math.cos(direction_angle))
+    corridor = max(2, round(thickness + adaptive_margin * 2))
+    max_radius = round(math.hypot(reference.width, reference.height))
+    extension = Image.new("L", reference.size, 0)
+    extension_draw = ImageDraw.Draw(extension)
+    for sign in (1.0, -1.0):
+        direction = (base_direction[0] * sign, base_direction[1] * sign)
+        normal = (-direction[1], direction[0])
+        last_found = 0.0
+        missing = 0
+        saw_foreground = False
+        for radius in range(max_radius):
+            found = False
+            for lateral in range(-corridor, corridor + 1):
+                x = round(center[0] + direction[0] * radius + normal[0] * lateral)
+                y = round(center[1] + direction[1] * radius + normal[1] * lateral)
+                if not (0 <= x < reference.width and 0 <= y < reference.height):
+                    continue
+                red, green, blue = source_pixels[x, y]
+                found = red >= 65 and red >= green * 1.25 and red >= blue * 1.15
+                if found:
+                    break
+            if found:
+                saw_foreground = True
+                last_found = float(radius)
+                missing = 0
+            elif saw_foreground:
+                missing += 1
+                if missing > max(5, adaptive_margin * 3):
+                    break
+        if last_found > 0:
+            extension_draw.line(
+                (center[0], center[1], center[0] + direction[0] * last_found, center[1] + direction[1] * last_found),
+                fill=255,
+                width=corridor,
+            )
+    projected = ImageChops.lighter(projected, extension.filter(ImageFilter.MaxFilter(3)))
+    return projected
+
+
+def _hand_masks(
+    reference: Image.Image,
+    center: tuple[float, float],
+    hands: dict[str, dict[str, Any]],
+    margin: int = 1,
+    assets_dir: Path | None = None,
+) -> dict[str, Image.Image]:
     masks: dict[str, Image.Image] = {}
     for role, hand in hands.items():
+        if assets_dir is not None:
+            projected = _project_canonical_hand(reference, assets_dir, center, hand, margin)
+            if projected is not None:
+                masks[role] = projected
+                continue
         mask = Image.new("L", reference.size, 0)
         draw = ImageDraw.Draw(mask)
         thickness = max(2, round(float(hand.get("thickness", 1))))
@@ -53,7 +177,7 @@ def _hand_masks(reference: Image.Image, center: tuple[float, float], hands: dict
         draw.line((tail_endpoint[0], tail_endpoint[1], center[0], center[1]), fill=255, width=width)
         # One-pixel max filter accounts for antialiased hand edges without
         # reopening the broad corridor used by the old A1 cleanup pass.
-        masks[role] = mask.filter(ImageFilter.MaxFilter(3))
+        masks[role] = mask.filter(ImageFilter.MaxFilter(max(3, margin * 2 + 1)))
     return masks
 
 
@@ -244,7 +368,7 @@ def reconstruct_occluded_dial(
     center: tuple[float, float],
     hands: dict[str, dict[str, Any]],
     generative_fallback_path: Path | None = None,
-    margin: int = 4,
+    margin: int = 1,
 ) -> dict[str, Any]:
     """Complete static artwork without treating synthesized pixels as observed truth."""
 
@@ -253,7 +377,7 @@ def reconstruct_occluded_dial(
     if not dial_path.exists():
         raise FileNotFoundError(f"dial-before source not found: {dial_path}")
     before = Image.open(dial_path).convert("RGB")
-    masks = _hand_masks(reference, center, hands, margin=margin)
+    masks = _hand_masks(reference, center, hands, margin=margin, assets_dir=assets_dir)
     union = _union_masks(masks)
     observed = ImageChops.invert(union)
     reconstructed = Image.new("L", reference.size, 0)
@@ -266,6 +390,8 @@ def reconstruct_occluded_dial(
         method = "deterministic_background"
         confidence = class_confidence
         requires_review = False
+        completed = completed.copy()
+        completed.paste(_background_color(reference), mask=mask)
         completed, background_reconstructed = _fill_simple_background(reference, completed, mask, center)
         region_reconstructed = ImageChops.lighter(region_reconstructed, background_reconstructed)
         if region_class == "line_geometry":
@@ -315,6 +441,13 @@ def reconstruct_occluded_dial(
     completed.save(assets_dir / "dial-completed.png")
     completed.save(assets_dir / "dial_clean.png")
     unresolved.save(assets_dir / "unresolved-mask.png")
+    overlay = reference.convert("RGBA")
+    overlay_colors = {"HOUR": (255, 90, 70, 150), "MINUTE": (70, 180, 255, 150), "SECOND": (255, 220, 60, 150)}
+    for role, mask in masks.items():
+        tint = Image.new("RGBA", reference.size, overlay_colors.get(role, (255, 255, 255, 140)))
+        tint.putalpha(mask.point(lambda value: round(value * 0.58)))
+        overlay.alpha_composite(tint)
+    overlay.convert("RGB").save(assets_dir / "hand-mask-overlay.png")
     unresolved_count = _count_mask_pixels(unresolved)
     report = {
         "engine": "Occlusion Reconstruction Engine",

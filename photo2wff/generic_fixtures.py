@@ -74,6 +74,20 @@ def _fixture_hands(root: Path) -> Path:
     return path
 
 
+def _fixture_disconnected_marker(root: Path, shape: RoundedRect) -> Path:
+    image = Image.new("RGB", (438, 438), "black")
+    draw = ImageDraw.Draw(image)
+    for index in range(1, 12):
+        anchor = _point(shape, index * 30.0)
+        draw.rectangle((round(anchor[0] - 5), round(anchor[1] - 8), round(anchor[0] + 5), round(anchor[1] + 8)), fill="white")
+    top = _point(shape, 0.0)
+    draw.rectangle((round(top[0] - 15), round(top[1] - 9), round(top[0] - 8), round(top[1] + 9)), fill="white")
+    draw.rectangle((round(top[0] - 2), round(top[1] - 9), round(top[0] + 5), round(top[1] + 9)), fill="white")
+    path = root / "disconnected-multipart-marker.png"
+    image.save(path)
+    return path
+
+
 def run_generic_fixtures(output_root: Path) -> dict[str, Any]:
     """Verify generic geometry before any real reference is admitted as input."""
 
@@ -84,6 +98,7 @@ def run_generic_fixtures(output_root: Path) -> dict[str, Any]:
     glyph_path, _ = _fixture_perimeter(output_root, source, glyph_like=True)
     dynamic_path = _fixture_dynamic_text(output_root)
     hand_path = _fixture_hands(output_root)
+    multipart_path = _fixture_disconnected_marker(output_root, source)
 
     rectangle_report = decompose_perimeter_artwork(Image.open(rectangle_path), source, output_root / "rectangle-decomposition", minimum_area=40)
     glyph_report = decompose_perimeter_artwork(Image.open(glyph_path), source, output_root / "glyph-decomposition", minimum_area=10)
@@ -93,6 +108,7 @@ def run_generic_fixtures(output_root: Path) -> dict[str, Any]:
     )
     mapped.convert("RGB").save(output_root / "element-preserving-circle.png")
     dynamic_report = extract_center_dynamic_text(Image.open(dynamic_path), output_root / "dynamic-text")
+    multipart_report = decompose_perimeter_artwork(Image.open(multipart_path), source, output_root / "multipart-decomposition", minimum_area=12)
 
     detected = rectangle_report["elements"]
     detected_anchors = [(float(element["anchor"]["x"]), float(element["anchor"]["y"])) for element in detected]
@@ -116,6 +132,8 @@ def run_generic_fixtures(output_root: Path) -> dict[str, Any]:
         "weekdayAndDateDetected": dynamic_report["detected"],
         "dynamicTextRemoved": Path(dynamic_report["cleanBackground"]).exists(),
         "analogHandFixtureCreated": hand_path.exists(),
+        "multipartMarkerGrouped": any(element.get("relationships", {}).get("componentCount", 0) >= 2 for element in multipart_report["elements"]),
+        "multipartMarkerSlotCount": multipart_report["elementCount"],
     }
     system_pass = (
         checks["twelveRectanglesDetected"]
@@ -126,12 +144,14 @@ def run_generic_fixtures(output_root: Path) -> dict[str, Any]:
         and checks["weekdayAndDateDetected"]
         and checks["dynamicTextRemoved"]
         and checks["analogHandFixtureCreated"]
+        and checks["multipartMarkerGrouped"]
+        and checks["multipartMarkerSlotCount"] == 12
     )
     report = {
         "milestone": "Generic Rounded-Rectangle Analog Fixtures",
         "systemPass": system_pass,
         "checks": checks,
-        "fixtures": {"rectangles": str(rectangle_path), "rotatedGlyphs": str(glyph_path), "dynamicText": str(dynamic_path), "analogHands": str(hand_path)},
+        "fixtures": {"rectangles": str(rectangle_path), "rotatedGlyphs": str(glyph_path), "dynamicText": str(dynamic_path), "analogHands": str(hand_path), "disconnectedMultipart": str(multipart_path)},
         "targetReferenceUsed": False,
     }
     (output_root / "generic-fixture-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n")
