@@ -11,7 +11,7 @@ from .compiler import compile_project
 from .analog_validate import validate_dynamic_renders
 from .model import apply_patches, editable_yaml, load_scene, save_scene, validate_scene
 from .render import render_scene
-from .runtime_validation import run_runtime_gate
+from .runtime_validation import run_runtime_calibration, run_runtime_gate
 from .wff_validate import validate_wff_xml
 from .wff_render import render_wff_xml
 from .human_review import generate_human_review_artifacts
@@ -180,6 +180,12 @@ def main() -> None:
     runtime_parser.add_argument("--apk-off", type=Path, help="manual-override-off APK for --capture")
     runtime_parser.add_argument("--apk-on", type=Path, help="manual-override-on APK for --capture")
     runtime_parser.add_argument("--serial", type=str, help="Wear OS adb serial for --capture")
+    calibration_parser = subparsers.add_parser("runtime-calibration")
+    calibration_parser.add_argument("scene", type=Path)
+    calibration_parser.add_argument("xml", type=Path, help="deterministic WFF XML, normally the manual-override-off project")
+    calibration_parser.add_argument("runtime_dir", type=Path, help="A2.5b active-runtime screenshot directory")
+    calibration_parser.add_argument("--out", type=Path, default=Path("runtime-calibration"))
+    calibration_parser.add_argument("--manual-xml", type=Path, help="optional manual-override-on WFF XML")
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -202,3 +208,5 @@ def main() -> None:
         human_review(args.output)
     elif args.command == "runtime-gate":
         print(json.dumps(run_runtime_gate(args.scene, args.xml, args.out, manual_xml=args.manual_xml, adb=args.adb, runtime_dir=args.runtime_dir, capture=args.capture, apk_off=args.apk_off, apk_on=args.apk_on, serial=args.serial), ensure_ascii=False, indent=2))
+    elif args.command == "runtime-calibration":
+        print(json.dumps(run_runtime_calibration(args.scene, args.xml, args.runtime_dir, args.out, manual_xml=args.manual_xml), ensure_ascii=False, indent=2))

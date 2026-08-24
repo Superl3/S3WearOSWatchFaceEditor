@@ -1,0 +1,5891 @@
+{
+  "milestone": "A2.5b Runtime Fidelity Validation",
+  "baseline": "95207c2",
+  "status": "runtime_compared",
+  "runtimeEnvironment": {
+    "status": "runtime_available",
+    "reason": null,
+    "devices": [
+      {
+        "serial": "adb-R5CY53FABQH-J8SJX3._adb-tls-connect._tcp",
+        "wearOs": false,
+        "properties": {
+          "ro.product.model": "SM-S937N",
+          "ro.product.name": "psqksx",
+          "ro.build.characteristics": "phone",
+          "ro.build.version.release": "16"
+        },
+        "watchFeature": false
+      },
+      {
+        "serial": "emulator-5554",
+        "wearOs": false,
+        "properties": {
+          "ro.product.model": "sdk_gphone64_x86_64",
+          "ro.product.name": "sdk_gphone64_x86_64",
+          "ro.build.characteristics": "emulator",
+          "ro.build.version.release": "15"
+        },
+        "watchFeature": false
+      },
+      {
+        "serial": "emulator-5556",
+        "wearOs": true,
+        "properties": {
+          "ro.product.model": "sdk_gwear_x86_64",
+          "ro.product.name": "sdk_gwear_x86_64",
+          "ro.build.characteristics": "emulator,nosdcard,watch",
+          "ro.build.version.release": "14"
+        },
+        "watchFeature": true
+      }
+    ],
+    "selectedDevice": "emulator-5556",
+    "adb": "C:\\Users\\bug95\\Android\\Sdk\\platform-tools\\adb.EXE"
+  },
+  "verificationSet": {
+    "times": [
+      "00:00:00",
+      "03:15:45",
+      "06:30:00",
+      "10:08:30"
+    ],
+    "dates": [
+      1,
+      8,
+      11,
+      20,
+      31
+    ],
+    "modes": [
+      "manual_override_off",
+      "manual_override_on"
+    ]
+  },
+  "caseCount": 40,
+  "cases": [
+    {
+      "time": "00:00:00",
+      "date": 1,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\00-00-00_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1041,
+          "lengthDifferencePxApprox": 23.7069,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 26.3304,
+          "widthDifferencePxApprox": 18.0382,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 6.0,
+          "angleErrorDegApprox": 6.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.228,
+          "widthDifferencePxApprox": 24.9358,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 6.0,
+          "angleErrorDegApprox": 6.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 32.8832,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.2246,
+          "widthDifferencePxApprox": 10.1151,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.6703,
+        "runtimeHighFrequencyMean": 3.8447,
+        "difference": -0.8256,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\00-00-00_day-01.png",
+      "mae": {
+        "staticDial": 1.3339,
+        "hands": 17.7737,
+        "date": 6.5181,
+        "global": 1.84
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3339,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 8,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\00-00-00_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1499,
+          "lengthDifferencePxApprox": 23.7526,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 25.1684,
+          "widthDifferencePxApprox": 16.8762,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.643,
+          "widthDifferencePxApprox": 25.3508,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.5828,
+          "widthDifferencePxApprox": 9.4733,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.6956,
+        "runtimeHighFrequencyMean": 3.7685,
+        "difference": -0.9271,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\00-00-00_day-08.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 16.6689,
+        "date": 13.4729,
+        "global": 1.854
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 11,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\00-00-00_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1499,
+          "lengthDifferencePxApprox": 23.7526,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 24.959,
+          "widthDifferencePxApprox": 16.6668,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.643,
+          "widthDifferencePxApprox": 25.3508,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.5447,
+          "widthDifferencePxApprox": 9.4351,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.7045,
+        "runtimeHighFrequencyMean": 3.7674,
+        "difference": -0.9371,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\00-00-00_day-11.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 16.5455,
+        "date": 12.9632,
+        "global": 1.8466
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 20,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\00-00-00_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1041,
+          "lengthDifferencePxApprox": 23.7069,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 24.6449,
+          "widthDifferencePxApprox": 16.3526,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.5034,
+          "widthDifferencePxApprox": 25.2112,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.5384,
+          "widthDifferencePxApprox": 9.4288,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 1.5,
+        "centeringErrorPxApprox": 23.5478,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.7401,
+        "runtimeHighFrequencyMean": 3.7718,
+        "difference": -0.9683,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\00-00-00_day-20.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 15.4395,
+        "date": 22.8486,
+        "global": 1.8894
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 31,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\00-00-00_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1041,
+          "lengthDifferencePxApprox": 23.7069,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 24.61,
+          "widthDifferencePxApprox": 16.3177,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.4336,
+          "widthDifferencePxApprox": 25.1414,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.513,
+          "widthDifferencePxApprox": 9.4035,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.7206,
+        "runtimeHighFrequencyMean": 3.7734,
+        "difference": -0.9472,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\00-00-00_day-31.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 15.15,
+        "date": 17.4396,
+        "global": 1.8406
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 1,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\03-15-45_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.837,
+        "runtimeHighFrequencyMean": 3.978,
+        "difference": -0.859,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\03-15-45_day-01.png",
+      "mae": {
+        "staticDial": 1.6884,
+        "hands": 3.5719,
+        "date": 9.2632,
+        "global": 1.7988
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6884,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 8,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\03-15-45_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8551,
+        "runtimeHighFrequencyMean": 3.978,
+        "difference": -0.8771,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\03-15-45_day-08.png",
+      "mae": {
+        "staticDial": 1.6885,
+        "hands": 3.5719,
+        "date": 14.1417,
+        "global": 1.8355
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6885,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 11,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\03-15-45_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8652,
+        "runtimeHighFrequencyMean": 3.9786,
+        "difference": -0.8866,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\03-15-45_day-11.png",
+      "mae": {
+        "staticDial": 1.6802,
+        "hands": 3.5708,
+        "date": 14.7528,
+        "global": 1.832
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6802,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 20,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\03-15-45_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 4.5,
+        "centeringErrorPxApprox": 4.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8849,
+        "runtimeHighFrequencyMean": 3.9751,
+        "difference": -0.9098,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\03-15-45_day-20.png",
+      "mae": {
+        "staticDial": 1.7285,
+        "hands": 3.5858,
+        "date": 20.4014,
+        "global": 1.9215
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7285,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 31,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\03-15-45_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8747,
+        "runtimeHighFrequencyMean": 3.9773,
+        "difference": -0.8974,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\03-15-45_day-31.png",
+      "mae": {
+        "staticDial": 1.6936,
+        "hands": 3.5739,
+        "date": 17.1576,
+        "global": 1.8631
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6936,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 1,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\06-30-00_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.9854,
+        "runtimeHighFrequencyMean": 4.1056,
+        "difference": -0.8798,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\06-30-00_day-01.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 12.1146,
+        "date": 6.5181,
+        "global": 1.7994
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 8,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\06-30-00_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.2604,
+          "widthDifferencePxApprox": 7.1508,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0107,
+        "runtimeHighFrequencyMean": 4.1057,
+        "difference": -0.905,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\06-30-00_day-08.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 11.6005,
+        "date": 13.4729,
+        "global": 1.837
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 11,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\06-30-00_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0196,
+        "runtimeHighFrequencyMean": 4.1056,
+        "difference": -0.914,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\06-30-00_day-11.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 12.1146,
+        "date": 12.9632,
+        "global": 1.8478
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 20,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\06-30-00_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 1.5,
+        "centeringErrorPxApprox": 23.5478,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0552,
+        "runtimeHighFrequencyMean": 4.1069,
+        "difference": -0.9483,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\06-30-00_day-20.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 11.7113,
+        "date": 22.8486,
+        "global": 1.9106
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 31,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\06-30-00_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0357,
+        "runtimeHighFrequencyMean": 4.1057,
+        "difference": -0.93,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\06-30-00_day-31.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 11.7122,
+        "date": 17.4396,
+        "global": 1.87
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 1,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\10-08-30_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4945,
+          "widthDifferencePxApprox": 10.3849,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0664,
+        "runtimeHighFrequencyMean": 4.1595,
+        "difference": -0.9069,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\10-08-30_day-01.png",
+      "mae": {
+        "staticDial": 1.7292,
+        "hands": 3.8028,
+        "date": 6.5181,
+        "global": 1.8241
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7292,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 8,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\10-08-30_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4945,
+          "widthDifferencePxApprox": 10.3849,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0917,
+        "runtimeHighFrequencyMean": 4.1595,
+        "difference": -0.9322,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\10-08-30_day-08.png",
+      "mae": {
+        "staticDial": 1.7292,
+        "hands": 3.8028,
+        "date": 13.4729,
+        "global": 1.8763
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7292,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 11,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\10-08-30_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4945,
+          "widthDifferencePxApprox": 10.3849,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.1005,
+        "runtimeHighFrequencyMean": 4.1589,
+        "difference": -0.9416,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\10-08-30_day-11.png",
+      "mae": {
+        "staticDial": 1.7345,
+        "hands": 3.8047,
+        "date": 12.9632,
+        "global": 1.8776
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7345,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 20,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\10-08-30_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4596,
+          "widthDifferencePxApprox": 10.35,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 1.5,
+        "centeringErrorPxApprox": 23.5478,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.1361,
+        "runtimeHighFrequencyMean": 4.1611,
+        "difference": -0.975,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\10-08-30_day-20.png",
+      "mae": {
+        "staticDial": 1.7265,
+        "hands": 3.8025,
+        "date": 22.8486,
+        "global": 1.9441
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7265,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 31,
+      "mode": "manual_override_off",
+      "deterministic": "a25c-runtime-calibration\\manual_override_off\\deterministic\\10-08-30_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4596,
+          "widthDifferencePxApprox": 10.35,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.1167,
+        "runtimeHighFrequencyMean": 4.1592,
+        "difference": -0.9575,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_off\\aligned-difference\\10-08-30_day-31.png",
+      "mae": {
+        "staticDial": 1.732,
+        "hands": 3.8036,
+        "date": 17.4396,
+        "global": 1.9087
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.732,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1499,
+          "lengthDifferencePxApprox": 23.7526,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 25.1684,
+          "widthDifferencePxApprox": 16.8762,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.643,
+          "widthDifferencePxApprox": 25.3508,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.5447,
+          "widthDifferencePxApprox": 9.4351,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.6703,
+        "runtimeHighFrequencyMean": 3.7678,
+        "difference": -0.9025,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\00-00-00_day-01.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 16.6458,
+        "date": 6.5174,
+        "global": 1.8011
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1041,
+          "lengthDifferencePxApprox": 23.7069,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 24.61,
+          "widthDifferencePxApprox": 16.3177,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.4336,
+          "widthDifferencePxApprox": 25.1414,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.513,
+          "widthDifferencePxApprox": 9.4035,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 0.5,
+        "centeringErrorPxApprox": 1.5811,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.6846,
+        "runtimeHighFrequencyMean": 3.7952,
+        "difference": -0.8894,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\00-00-00_day-08.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 15.1515,
+        "date": 35.4146,
+        "global": 1.9755
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1499,
+          "lengthDifferencePxApprox": 23.7526,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 25.1684,
+          "widthDifferencePxApprox": 16.8762,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.643,
+          "widthDifferencePxApprox": 25.3508,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.5828,
+          "widthDifferencePxApprox": 9.4733,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.7045,
+        "runtimeHighFrequencyMean": 3.7685,
+        "difference": -0.936,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\00-00-00_day-11.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 16.6689,
+        "date": 12.9632,
+        "global": 1.8501
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1041,
+          "lengthDifferencePxApprox": 23.7069,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 24.5751,
+          "widthDifferencePxApprox": 16.2828,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.4336,
+          "widthDifferencePxApprox": 25.1414,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.513,
+          "widthDifferencePxApprox": 9.4035,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.7401,
+        "runtimeHighFrequencyMean": 3.7745,
+        "difference": -0.9656,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\00-00-00_day-20.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 15.0418,
+        "date": 22.6153,
+        "global": 1.8763
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "00:00:00",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.1041,
+          "lengthDifferencePxApprox": 23.7069,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 24.5751,
+          "widthDifferencePxApprox": 16.2828,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 28.2189,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.4336,
+          "widthDifferencePxApprox": 25.1414,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 12.513,
+          "widthDifferencePxApprox": 9.4035,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.7206,
+        "runtimeHighFrequencyMean": 3.7745,
+        "difference": -0.9461,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\00-00-00_day-31.png",
+      "mae": {
+        "staticDial": 1.3268,
+        "hands": 15.0418,
+        "date": 17.4396,
+        "global": 1.8375
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.3268,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8368,
+        "runtimeHighFrequencyMean": 3.978,
+        "difference": -0.8588,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\03-15-45_day-01.png",
+      "mae": {
+        "staticDial": 1.6884,
+        "hands": 3.5719,
+        "date": 9.2438,
+        "global": 1.7987
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6884,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 2.0,
+        "centeringErrorPxApprox": 2.0,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.812,
+        "runtimeHighFrequencyMean": 3.9956,
+        "difference": -0.8164,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\03-15-45_day-08.png",
+      "mae": {
+        "staticDial": 1.6801,
+        "hands": 3.5704,
+        "date": 13.1819,
+        "global": 1.8202
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6801,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8652,
+        "runtimeHighFrequencyMean": 3.9784,
+        "difference": -0.8868,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\03-15-45_day-11.png",
+      "mae": {
+        "staticDial": 1.6829,
+        "hands": 3.5708,
+        "date": 14.7528,
+        "global": 1.8347
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6829,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8849,
+        "runtimeHighFrequencyMean": 3.9749,
+        "difference": -0.91,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\03-15-45_day-20.png",
+      "mae": {
+        "staticDial": 1.7239,
+        "hands": 3.5827,
+        "date": 20.2785,
+        "global": 1.916
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7239,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "03:15:45",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 97.875,
+          "expectedAngleAtCaptureDeg": 97.875,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.875,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.337,
+          "lengthDifferencePxApprox": 23.9398,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 20.44,
+          "widthDifferencePxApprox": 12.1478,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5,
+          "expectedAngleAtCaptureDeg": 94.5,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 185.6071,
+          "lengthDifferencePxApprox": 4.2144,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 23.0634,
+          "widthDifferencePxApprox": 14.7712,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.0,
+          "expectedAngleAtCaptureDeg": 270.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 179.0447,
+          "lengthDifferencePxApprox": 2.3164,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.5716,
+          "widthDifferencePxApprox": 7.462,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 10.5,
+        "centeringErrorPxApprox": 10.5,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.8747,
+        "runtimeHighFrequencyMean": 3.9783,
+        "difference": -0.8964,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\03-15-45_day-31.png",
+      "mae": {
+        "staticDial": 1.6862,
+        "hands": 3.5715,
+        "date": 17.1576,
+        "global": 1.8559
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.6862,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.9854,
+        "runtimeHighFrequencyMean": 4.1057,
+        "difference": -0.8797,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\06-30-00_day-01.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 12.015,
+        "date": 6.5174,
+        "global": 1.7966
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 0.5,
+        "centeringErrorPxApprox": 1.5811,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 4.9997,
+        "runtimeHighFrequencyMean": 4.1275,
+        "difference": -0.8722,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\06-30-00_day-08.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 11.8147,
+        "date": 35.4146,
+        "global": 2.0078
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0196,
+        "runtimeHighFrequencyMean": 4.1061,
+        "difference": -0.9135,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\06-30-00_day-11.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 11.719,
+        "date": 12.9632,
+        "global": 1.8366
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 3.0,
+          "angleErrorDegApprox": 3.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.6115,
+          "lengthDifferencePxApprox": 32.8832,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.2239,
+          "widthDifferencePxApprox": 7.1143,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0552,
+        "runtimeHighFrequencyMean": 4.1056,
+        "difference": -0.9496,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\06-30-00_day-20.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 14.5805,
+        "date": 22.6153,
+        "global": 1.9903
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "06:30:00",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0,
+          "expectedAngleAtCaptureDeg": 195.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 120.4865,
+          "lengthDifferencePxApprox": 24.0893,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 27.9744,
+          "widthDifferencePxApprox": 19.6822,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 216.0579,
+          "lengthDifferencePxApprox": 34.6652,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 33.8754,
+          "widthDifferencePxApprox": 25.5832,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.0,
+          "expectedAngleAtCaptureDeg": 0.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 209.5376,
+          "lengthDifferencePxApprox": 32.8093,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 10.3112,
+          "widthDifferencePxApprox": 7.2016,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0357,
+        "runtimeHighFrequencyMean": 4.1061,
+        "difference": -0.9296,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\06-30-00_day-31.png",
+      "mae": {
+        "staticDial": 1.4586,
+        "hands": 11.6108,
+        "date": 17.4396,
+        "global": 1.8671
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.4586,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-01.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-01.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.3898,
+          "widthDifferencePxApprox": 10.2802,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0663,
+        "runtimeHighFrequencyMean": 4.1642,
+        "difference": -0.9021,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\10-08-30_day-01.png",
+      "mae": {
+        "staticDial": 1.677,
+        "hands": 3.7971,
+        "date": 6.5174,
+        "global": 1.7736
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.677,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-08.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-08.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4945,
+          "widthDifferencePxApprox": 10.3849,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": 0.5,
+        "centeringErrorPxApprox": 1.5811,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.0806,
+        "runtimeHighFrequencyMean": 4.1808,
+        "difference": -0.8998,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\10-08-30_day-08.png",
+      "mae": {
+        "staticDial": 1.7346,
+        "hands": 3.8047,
+        "date": 35.4146,
+        "global": 2.0463
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7346,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-11.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-11.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4945,
+          "widthDifferencePxApprox": 10.3849,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.1005,
+        "runtimeHighFrequencyMean": 4.159,
+        "difference": -0.9415,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\10-08-30_day-11.png",
+      "mae": {
+        "staticDial": 1.7346,
+        "hands": 3.8047,
+        "date": 12.9632,
+        "global": 1.8777
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7346,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-20.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-20.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 1.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.037,
+          "lengthDifferencePxApprox": 39.3087,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4596,
+          "widthDifferencePxApprox": 10.35,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.1361,
+        "runtimeHighFrequencyMean": 4.1592,
+        "difference": -0.9769,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\10-08-30_day-20.png",
+      "mae": {
+        "staticDial": 1.732,
+        "hands": 3.8036,
+        "date": 22.6153,
+        "global": 1.9476
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.732,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    },
+    {
+      "time": "10:08:30",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-31.png",
+      "runtime": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-31.png",
+      "handPivotAngle": {
+        "HOUR": {
+          "expectedAngleDeg": 304.25,
+          "expectedAngleAtCaptureDeg": 304.25,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 302.0,
+          "angleErrorDegApprox": 2.25,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 96.3973,
+          "observedLengthApprox": 94.8736,
+          "lengthDifferencePxApprox": -1.5237,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 11.8851,
+          "widthDifferencePxApprox": 3.5928,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0,
+          "expectedAngleAtCaptureDeg": 51.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 181.3927,
+          "observedLengthApprox": 200.8084,
+          "lengthDifferencePxApprox": 19.4157,
+          "expectedWidth": 8.2922,
+          "observedWidthApprox": 13.0511,
+          "widthDifferencePxApprox": 4.7589,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.0,
+          "expectedAngleAtCaptureDeg": 180.0,
+          "captureTimestampDeltaMs": 0.0,
+          "observedAngleDegApprox": 182.0,
+          "angleErrorDegApprox": 2.0,
+          "expectedPivot": {
+            "x": 227.0,
+            "y": 227.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 176.7283,
+          "observedLengthApprox": 216.0093,
+          "lengthDifferencePxApprox": 39.2809,
+          "expectedWidth": 3.1096,
+          "observedWidthApprox": 13.4141,
+          "widthDifferencePxApprox": 10.3045,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "imageScaling": {
+        "deterministicSize": [
+          438,
+          438
+        ],
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "status": "runtime_scaling_required"
+      },
+      "dateBaselineCentering": {
+        "bbox": {
+          "x": 346,
+          "y": 207,
+          "width": 47,
+          "height": 29
+        },
+        "baselineErrorPxApprox": null,
+        "centeringErrorPxApprox": null,
+        "clipped": false
+      },
+      "clipping": {
+        "deterministicCanvasBoundsPass": true,
+        "runtimeObserved": false
+      },
+      "antiAliasingBlur": {
+        "deterministicHighFrequencyMean": 5.1167,
+        "runtimeHighFrequencyMean": 4.1513,
+        "difference": -0.9654,
+        "interpretation": "positive means runtime has more high-frequency energy; negative means blurrier"
+      },
+      "alignedDifference": "a25c-runtime-calibration\\manual_override_on\\aligned-difference\\10-08-30_day-31.png",
+      "mae": {
+        "staticDial": 1.7687,
+        "hands": 3.8103,
+        "date": 17.4396,
+        "global": 1.9443
+      },
+      "staticImageScalingDifference": {
+        "mae": 1.7687,
+        "runtimeSize": [
+          454,
+          454
+        ],
+        "alignedSize": [
+          438,
+          438
+        ]
+      },
+      "status": "compared"
+    }
+  ],
+  "globalMaeIsNotSoleGate": true,
+  "regionMetrics": [
+    "staticDial",
+    "hands",
+    "date",
+    "global"
+  ],
+  "runtimeScreenshots": {
+    "activation": {
+      "manual_override_off": {
+        "apk": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-a25-no-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-a25-no-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 22.6 MB/s (1360466 bytes in 0.057s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[23] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "manual_override_on": {
+        "apk": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 32.2 MB/s (1374106 bytes in 0.041s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[24] Runtime=[2]\"",
+        "runtimeActive": true
+      }
+    },
+    "captures": [
+      {
+        "mode": "manual_override_off",
+        "time": "00:00:00",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 00:00:00 GMT 2024",
+        "expectedEpochMs": 1722470400000,
+        "runtimeEpochMsBeforeCapture": 1722470400172,
+        "runtimeEpochMsAfterCapture": 1722470400822,
+        "captureTimestampUtc": "2024-08-01T00:00:00.172000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:44.129209+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:44.867110+00:00",
+        "captureLatencyMs": 741.634,
+        "captureTimestampDeltaMs": 172,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 23.2 MB/s (97012 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "00:00:00",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+        "expectedEpochMs": 1723075200000,
+        "runtimeEpochMsBeforeCapture": 1723075200177,
+        "runtimeEpochMsAfterCapture": 1723075200555,
+        "captureTimestampUtc": "2024-08-08T00:00:00.177000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:45.135745+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:45.584366+00:00",
+        "captureLatencyMs": 448.643,
+        "captureTimestampDeltaMs": 177,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 7.1 MB/s (97097 bytes in 0.013s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "00:00:00",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 00:00:00 GMT 2024",
+        "expectedEpochMs": 1723334400000,
+        "runtimeEpochMsBeforeCapture": 1723334400181,
+        "runtimeEpochMsAfterCapture": 1723334400494,
+        "captureTimestampUtc": "2024-08-11T00:00:00.181000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:45.882559+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:46.248654+00:00",
+        "captureLatencyMs": 366.272,
+        "captureTimestampDeltaMs": 181,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 18.8 MB/s (97072 bytes in 0.005s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "00:00:00",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 00:00:00 GMT 2024",
+        "expectedEpochMs": 1724112000000,
+        "runtimeEpochMsBeforeCapture": 1724112000161,
+        "runtimeEpochMsAfterCapture": 1724112000467,
+        "captureTimestampUtc": "2024-08-20T00:00:00.161000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:46.537948+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:46.894801+00:00",
+        "captureLatencyMs": 356.914,
+        "captureTimestampDeltaMs": 161,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 32.6 MB/s (97049 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "00:00:00",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\00-00-00_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 00:00:00 GMT 2024",
+        "expectedEpochMs": 1725062400000,
+        "runtimeEpochMsBeforeCapture": 1725062400159,
+        "runtimeEpochMsAfterCapture": 1725062400444,
+        "captureTimestampUtc": "2024-08-31T00:00:00.159000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:47.164633+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:47.496987+00:00",
+        "captureLatencyMs": 331.883,
+        "captureTimestampDeltaMs": 159,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 26.8 MB/s (97026 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "03:15:45",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 03:15:45 GMT 2024",
+        "expectedEpochMs": 1722482145000,
+        "runtimeEpochMsBeforeCapture": 1722482145158,
+        "runtimeEpochMsAfterCapture": 1722482145510,
+        "captureTimestampUtc": "2024-08-01T03:15:45.158000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:47.786755+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:48.188540+00:00",
+        "captureLatencyMs": 401.446,
+        "captureTimestampDeltaMs": 158,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 14.2 MB/s (99103 bytes in 0.007s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "03:15:45",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+        "expectedEpochMs": 1723086945000,
+        "runtimeEpochMsBeforeCapture": 1723086945143,
+        "runtimeEpochMsAfterCapture": 1723086945465,
+        "captureTimestampUtc": "2024-08-08T03:15:45.143000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:48.437809+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:48.810228+00:00",
+        "captureLatencyMs": 372.28,
+        "captureTimestampDeltaMs": 143,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 24.8 MB/s (99103 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "03:15:45",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 03:15:45 GMT 2024",
+        "expectedEpochMs": 1723346145000,
+        "runtimeEpochMsBeforeCapture": 1723346145141,
+        "runtimeEpochMsAfterCapture": 1723346145426,
+        "captureTimestampUtc": "2024-08-11T03:15:45.141000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:49.039488+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:49.380910+00:00",
+        "captureLatencyMs": 342.217,
+        "captureTimestampDeltaMs": 141,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 33.4 MB/s (99116 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "03:15:45",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 03:15:45 GMT 2024",
+        "expectedEpochMs": 1724123745000,
+        "runtimeEpochMsBeforeCapture": 1724123745174,
+        "runtimeEpochMsAfterCapture": 1724123745510,
+        "captureTimestampUtc": "2024-08-20T03:15:45.174000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:49.671824+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:50.072208+00:00",
+        "captureLatencyMs": 401.521,
+        "captureTimestampDeltaMs": 174,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 25.7 MB/s (99181 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "03:15:45",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\03-15-45_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 03:15:45 GMT 2024",
+        "expectedEpochMs": 1725074145000,
+        "runtimeEpochMsBeforeCapture": 1725074145164,
+        "runtimeEpochMsAfterCapture": 1725074145527,
+        "captureTimestampUtc": "2024-08-31T03:15:45.164000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:50.400323+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:50.813940+00:00",
+        "captureLatencyMs": 413.335,
+        "captureTimestampDeltaMs": 164,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 28.0 MB/s (99081 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "06:30:00",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 06:30:00 GMT 2024",
+        "expectedEpochMs": 1722493800000,
+        "runtimeEpochMsBeforeCapture": 1722493800155,
+        "runtimeEpochMsAfterCapture": 1722493800472,
+        "captureTimestampUtc": "2024-08-01T06:30:00.155000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:51.086441+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:51.462350+00:00",
+        "captureLatencyMs": 376.099,
+        "captureTimestampDeltaMs": 155,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 32.5 MB/s (96559 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "06:30:00",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+        "expectedEpochMs": 1723098600000,
+        "runtimeEpochMsBeforeCapture": 1723098600152,
+        "runtimeEpochMsAfterCapture": 1723098600458,
+        "captureTimestampUtc": "2024-08-08T06:30:00.152000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:51.737561+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:52.095764+00:00",
+        "captureLatencyMs": 358.393,
+        "captureTimestampDeltaMs": 152,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 24.1 MB/s (96580 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "06:30:00",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 06:30:00 GMT 2024",
+        "expectedEpochMs": 1723357800000,
+        "runtimeEpochMsBeforeCapture": 1723357800141,
+        "runtimeEpochMsAfterCapture": 1723357800468,
+        "captureTimestampUtc": "2024-08-11T06:30:00.141000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:52.358094+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:52.738424+00:00",
+        "captureLatencyMs": 381.659,
+        "captureTimestampDeltaMs": 141,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 17.8 MB/s (96559 bytes in 0.005s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "06:30:00",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 06:30:00 GMT 2024",
+        "expectedEpochMs": 1724135400000,
+        "runtimeEpochMsBeforeCapture": 1724135400156,
+        "runtimeEpochMsAfterCapture": 1724135400478,
+        "captureTimestampUtc": "2024-08-20T06:30:00.156000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:53.040364+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:53.414061+00:00",
+        "captureLatencyMs": 374.276,
+        "captureTimestampDeltaMs": 156,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 23.9 MB/s (96622 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "06:30:00",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\06-30-00_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 06:30:00 GMT 2024",
+        "expectedEpochMs": 1725085800000,
+        "runtimeEpochMsBeforeCapture": 1725085800153,
+        "runtimeEpochMsAfterCapture": 1725085800501,
+        "captureTimestampUtc": "2024-08-31T06:30:00.153000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:53.679740+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:54.085915+00:00",
+        "captureLatencyMs": 406.212,
+        "captureTimestampDeltaMs": 153,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 17.7 MB/s (96557 bytes in 0.005s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "10:08:30",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 10:08:30 GMT 2024",
+        "expectedEpochMs": 1722506910000,
+        "runtimeEpochMsBeforeCapture": 1722506910162,
+        "runtimeEpochMsAfterCapture": 1722506910494,
+        "captureTimestampUtc": "2024-08-01T10:08:30.162000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:54.364929+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:54.747795+00:00",
+        "captureLatencyMs": 383.821,
+        "captureTimestampDeltaMs": 162,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 29.6 MB/s (103800 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "10:08:30",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+        "expectedEpochMs": 1723111710000,
+        "runtimeEpochMsBeforeCapture": 1723111710154,
+        "runtimeEpochMsAfterCapture": 1723111710470,
+        "captureTimestampUtc": "2024-08-08T10:08:30.154000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:55.043020+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:55.420369+00:00",
+        "captureLatencyMs": 378.272,
+        "captureTimestampDeltaMs": 154,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 27.0 MB/s (103800 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "10:08:30",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 10:08:30 GMT 2024",
+        "expectedEpochMs": 1723370910000,
+        "runtimeEpochMsBeforeCapture": 1723370910155,
+        "runtimeEpochMsAfterCapture": 1723370910475,
+        "captureTimestampUtc": "2024-08-11T10:08:30.155000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:55.677554+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:56.053675+00:00",
+        "captureLatencyMs": 376.282,
+        "captureTimestampDeltaMs": 155,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 32.3 MB/s (103832 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "10:08:30",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 10:08:30 GMT 2024",
+        "expectedEpochMs": 1724148510000,
+        "runtimeEpochMsBeforeCapture": 1724148510117,
+        "runtimeEpochMsAfterCapture": 1724148510456,
+        "captureTimestampUtc": "2024-08-20T10:08:30.117000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:56.307801+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:56.693881+00:00",
+        "captureLatencyMs": 386.869,
+        "captureTimestampDeltaMs": 117,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 22.4 MB/s (103930 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_off",
+        "time": "10:08:30",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_off\\runtime\\10-08-30_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 10:08:30 GMT 2024",
+        "expectedEpochMs": 1725098910000,
+        "runtimeEpochMsBeforeCapture": 1725098910139,
+        "runtimeEpochMsAfterCapture": 1725098910495,
+        "captureTimestampUtc": "2024-08-31T10:08:30.139000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:56.967405+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:57.381017+00:00",
+        "captureLatencyMs": 414.709,
+        "captureTimestampDeltaMs": 139,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_off.png: 1 file pulled, 0 skipped. 26.3 MB/s (103817 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 00:00:00 GMT 2024",
+        "expectedEpochMs": 1722470400000,
+        "runtimeEpochMsBeforeCapture": 1722470400183,
+        "runtimeEpochMsAfterCapture": 1722470400505,
+        "captureTimestampUtc": "2024-08-01T00:00:00.183000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:58.727435+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:59.120394+00:00",
+        "captureLatencyMs": 394.095,
+        "captureTimestampDeltaMs": 183,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 37.1 MB/s (97101 bytes in 0.002s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+        "expectedEpochMs": 1723075200000,
+        "runtimeEpochMsBeforeCapture": 1723075200130,
+        "runtimeEpochMsAfterCapture": 1723075200501,
+        "captureTimestampUtc": "2024-08-08T00:00:00.130000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:59.381113+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:59.799763+00:00",
+        "captureLatencyMs": 419.087,
+        "captureTimestampDeltaMs": 130,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 20.3 MB/s (97965 bytes in 0.005s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 00:00:00 GMT 2024",
+        "expectedEpochMs": 1723334400000,
+        "runtimeEpochMsBeforeCapture": 1723334400143,
+        "runtimeEpochMsAfterCapture": 1723334400568,
+        "captureTimestampUtc": "2024-08-11T00:00:00.143000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:00.047509+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:00.533339+00:00",
+        "captureLatencyMs": 486.425,
+        "captureTimestampDeltaMs": 143,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 8.6 MB/s (97097 bytes in 0.011s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 00:00:00 GMT 2024",
+        "expectedEpochMs": 1724112000000,
+        "runtimeEpochMsBeforeCapture": 1724112000139,
+        "runtimeEpochMsAfterCapture": 1724112000486,
+        "captureTimestampUtc": "2024-08-20T00:00:00.139000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:00.788050+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:01.189437+00:00",
+        "captureLatencyMs": 401.882,
+        "captureTimestampDeltaMs": 139,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 30.3 MB/s (97007 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 00:00:00 GMT 2024",
+        "expectedEpochMs": 1725062400000,
+        "runtimeEpochMsBeforeCapture": 1725062400123,
+        "runtimeEpochMsAfterCapture": 1725062400475,
+        "captureTimestampUtc": "2024-08-31T00:00:00.123000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:01.414191+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:01.814425+00:00",
+        "captureLatencyMs": 400.197,
+        "captureTimestampDeltaMs": 123,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 13.2 MB/s (97007 bytes in 0.007s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 03:15:45 GMT 2024",
+        "expectedEpochMs": 1722482145000,
+        "runtimeEpochMsBeforeCapture": 1722482145147,
+        "runtimeEpochMsAfterCapture": 1722482145452,
+        "captureTimestampUtc": "2024-08-01T03:15:45.147000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:02.073066+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:02.445429+00:00",
+        "captureLatencyMs": 373.14,
+        "captureTimestampDeltaMs": 147,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 20.7 MB/s (99103 bytes in 0.005s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+        "expectedEpochMs": 1723086945000,
+        "runtimeEpochMsBeforeCapture": 1723086945135,
+        "runtimeEpochMsAfterCapture": 1723086945425,
+        "captureTimestampUtc": "2024-08-08T03:15:45.135000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:02.693912+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:03.028907+00:00",
+        "captureLatencyMs": 335.258,
+        "captureTimestampDeltaMs": 135,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 35.5 MB/s (99840 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 03:15:45 GMT 2024",
+        "expectedEpochMs": 1723346145000,
+        "runtimeEpochMsBeforeCapture": 1723346145120,
+        "runtimeEpochMsAfterCapture": 1723346145405,
+        "captureTimestampUtc": "2024-08-11T03:15:45.120000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:03.248072+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:03.577050+00:00",
+        "captureLatencyMs": 329.521,
+        "captureTimestampDeltaMs": 120,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 25.9 MB/s (99115 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 03:15:45 GMT 2024",
+        "expectedEpochMs": 1724123745000,
+        "runtimeEpochMsBeforeCapture": 1724123745161,
+        "runtimeEpochMsAfterCapture": 1724123745523,
+        "captureTimestampUtc": "2024-08-20T03:15:45.161000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:03.869594+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:04.292144+00:00",
+        "captureLatencyMs": 422.911,
+        "captureTimestampDeltaMs": 161,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 23.3 MB/s (99115 bytes in 0.004s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 03:15:45 GMT 2024",
+        "expectedEpochMs": 1725074145000,
+        "runtimeEpochMsBeforeCapture": 1725074145123,
+        "runtimeEpochMsAfterCapture": 1725074145421,
+        "captureTimestampUtc": "2024-08-31T03:15:45.123000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:04.510041+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:04.852643+00:00",
+        "captureLatencyMs": 342.79,
+        "captureTimestampDeltaMs": 123,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 13.4 MB/s (99085 bytes in 0.007s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 06:30:00 GMT 2024",
+        "expectedEpochMs": 1722493800000,
+        "runtimeEpochMsBeforeCapture": 1722493800148,
+        "runtimeEpochMsAfterCapture": 1722493800445,
+        "captureTimestampUtc": "2024-08-01T06:30:00.148000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:05.105357+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:05.453578+00:00",
+        "captureLatencyMs": 348.475,
+        "captureTimestampDeltaMs": 148,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 35.5 MB/s (96533 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+        "expectedEpochMs": 1723098600000,
+        "runtimeEpochMsBeforeCapture": 1723098600163,
+        "runtimeEpochMsAfterCapture": 1723098600482,
+        "captureTimestampUtc": "2024-08-08T06:30:00.163000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:05.733430+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:06.118236+00:00",
+        "captureLatencyMs": 384.166,
+        "captureTimestampDeltaMs": 163,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 28.8 MB/s (97477 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 06:30:00 GMT 2024",
+        "expectedEpochMs": 1723357800000,
+        "runtimeEpochMsBeforeCapture": 1723357800133,
+        "runtimeEpochMsAfterCapture": 1723357801016,
+        "captureTimestampUtc": "2024-08-11T06:30:00.133000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:06.389908+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:07.342600+00:00",
+        "captureLatencyMs": 953.064,
+        "captureTimestampDeltaMs": 133,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 6.6 MB/s (96574 bytes in 0.014s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 06:30:00 GMT 2024",
+        "expectedEpochMs": 1724135400000,
+        "runtimeEpochMsBeforeCapture": 1724135400318,
+        "runtimeEpochMsAfterCapture": 1724135400702,
+        "captureTimestampUtc": "2024-08-20T06:30:00.318000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:07.949252+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:08.423163+00:00",
+        "captureLatencyMs": 474.957,
+        "captureTimestampDeltaMs": 318,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 19.9 MB/s (96773 bytes in 0.005s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 06:30:00 GMT 2024",
+        "expectedEpochMs": 1725085800000,
+        "runtimeEpochMsBeforeCapture": 1725085800131,
+        "runtimeEpochMsAfterCapture": 1725085800397,
+        "captureTimestampUtc": "2024-08-31T06:30:00.131000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:08.682764+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:09.002563+00:00",
+        "captureLatencyMs": 319.539,
+        "captureTimestampDeltaMs": 131,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 28.4 MB/s (96568 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 10:08:30 GMT 2024",
+        "expectedEpochMs": 1722506910000,
+        "runtimeEpochMsBeforeCapture": 1722506910132,
+        "runtimeEpochMsAfterCapture": 1722506910412,
+        "captureTimestampUtc": "2024-08-01T10:08:30.132000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:09.245821+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:09.571008+00:00",
+        "captureLatencyMs": 325.814,
+        "captureTimestampDeltaMs": 132,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 30.7 MB/s (103925 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+        "expectedEpochMs": 1723111710000,
+        "runtimeEpochMsBeforeCapture": 1723111710145,
+        "runtimeEpochMsAfterCapture": 1723111710504,
+        "captureTimestampUtc": "2024-08-08T10:08:30.145000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:09.858406+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:10.264434+00:00",
+        "captureLatencyMs": 406.456,
+        "captureTimestampDeltaMs": 145,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 15.4 MB/s (104738 bytes in 0.006s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 10:08:30 GMT 2024",
+        "expectedEpochMs": 1723370910000,
+        "runtimeEpochMsBeforeCapture": 1723370910142,
+        "runtimeEpochMsAfterCapture": 1723370910461,
+        "captureTimestampUtc": "2024-08-11T10:08:30.142000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:10.520094+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:10.887074+00:00",
+        "captureLatencyMs": 367.5,
+        "captureTimestampDeltaMs": 142,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 29.1 MB/s (103813 bytes in 0.003s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 10:08:30 GMT 2024",
+        "expectedEpochMs": 1724148510000,
+        "runtimeEpochMsBeforeCapture": 1724148510123,
+        "runtimeEpochMsAfterCapture": 1724148510415,
+        "captureTimestampUtc": "2024-08-20T10:08:30.123000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:11.107427+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:11.447765+00:00",
+        "captureLatencyMs": 340.098,
+        "captureTimestampDeltaMs": 123,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 46.2 MB/s (103817 bytes in 0.002s)"
+      },
+      {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 10:08:30 GMT 2024",
+        "expectedEpochMs": 1725098910000,
+        "runtimeEpochMsBeforeCapture": 1725098910172,
+        "runtimeEpochMsAfterCapture": 1725098910506,
+        "captureTimestampUtc": "2024-08-31T10:08:30.172000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:11.756293+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:12.140667+00:00",
+        "captureLatencyMs": 384.275,
+        "captureTimestampDeltaMs": 172,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 18.6 MB/s (103757 bytes in 0.005s)"
+      }
+    ]
+  },
+  "runtimeDifferences": [
+    "coordinate/scaling",
+    "device density",
+    "asset resampling",
+    "WFF text rendering",
+    "image filtering"
+  ],
+  "quantitativeSummary": {
+    "globalMae": {
+      "average": 1.8718,
+      "maximum": 2.0463
+    },
+    "staticDialMae": {
+      "average": 1.5525,
+      "maximum": 1.7687
+    },
+    "handsMae": {
+      "average": 8.8725,
+      "maximum": 17.7737
+    },
+    "dateMae": {
+      "average": 16.3727,
+      "maximum": 35.4146
+    },
+    "handAngleErrorDegApprox": {
+      "average": 3.4688,
+      "maximum": 24.0
+    },
+    "handPivotErrorPx": {
+      "average": 0.0,
+      "maximum": 0.0
+    },
+    "handLengthDifferencePxApprox": {
+      "average": 22.254,
+      "maximum": 39.3087
+    },
+    "handWidthDifferencePxApprox": {
+      "average": 13.0783,
+      "maximum": 25.5832
+    },
+    "dateBaselineErrorPxApprox": {
+      "average": 6.0312,
+      "maximum": 10.5
+    },
+    "dateCenteringErrorPxApprox": {
+      "average": 10.3679,
+      "maximum": 23.5478
+    },
+    "runtimeClippedCaseCount": 0,
+    "blurDelta": {
+      "average": -0.9141
+    },
+    "runtimeSize": [
+      [
+        454,
+        454
+      ]
+    ],
+    "activeRuntimeCaptureCount": 40
+  },
+  "humanReviewRequired": [
+    "date window runtime text differs from deterministic output; inspect fallback/BitmapFont behavior",
+    "hand angle/length estimates are image-based approximations and require visual review"
+  ],
+  "reviewArtifacts": {
+    "manual_override_off.sideBySide": "a25c-runtime-calibration\\manual_override_off\\side-by-side-atlas.png",
+    "manual_override_off.differenceHeatmap": "a25c-runtime-calibration\\manual_override_off\\difference-heatmap-atlas.png",
+    "manual_override_off.runtimeOnly9Time": "a25c-runtime-calibration\\manual_override_off\\runtime-only-9-time-atlas.png",
+    "manual_override_on.sideBySide": "a25c-runtime-calibration\\manual_override_on\\side-by-side-atlas.png",
+    "manual_override_on.differenceHeatmap": "a25c-runtime-calibration\\manual_override_on\\difference-heatmap-atlas.png",
+    "manual_override_on.runtimeOnly9Time": "a25c-runtime-calibration\\manual_override_on\\runtime-only-9-time-atlas.png"
+  },
+  "requiredFixes": [],
+  "deferred": []
+}

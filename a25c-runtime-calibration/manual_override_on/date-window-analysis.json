@@ -1,0 +1,3078 @@
+{
+  "renderConfiguration": {
+    "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+    "textBox": {
+      "x": "346",
+      "y": "207",
+      "width": "47",
+      "height": "29"
+    },
+    "alignment": "CENTER",
+    "renderer": "BitmapFont",
+    "family": "Photo2WFFManualGlyphs",
+    "bitmapFontName": "Photo2WFFManualGlyphs",
+    "fallbackFamily": "Pretendard",
+    "fontSize": 24.0,
+    "fontWeight": null,
+    "lineHeightDeclared": null,
+    "manualCharacters": [
+      "8"
+    ],
+    "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+  },
+  "cases": [
+    {
+      "time": "00:00:00",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-01.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-01.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 00:00:00 GMT 2024",
+        "expectedEpochMs": 1722470400000,
+        "runtimeEpochMsBeforeCapture": 1722470400183,
+        "runtimeEpochMsAfterCapture": 1722470400505,
+        "captureTimestampUtc": "2024-08-01T00:00:00.183000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:58.727435+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:59.120394+00:00",
+        "captureLatencyMs": 394.095,
+        "captureTimestampDeltaMs": 183,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 37.1 MB/s (97101 bytes in 0.002s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.3268,
+        "hands": 16.6458,
+        "date": 6.5174,
+        "global": 1.8011
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\00-00-00_day-01.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\00-00-00_day-01.png",
+      "normalizedMae": {
+        "staticDial": 1.2288,
+        "hands": 16.1691,
+        "date": 6.7792,
+        "global": 1.695
+      },
+      "normalizedBlur": {
+        "deterministic": 4.6703,
+        "runtime": 3.9209,
+        "difference": -0.7494
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0015,
+          "expectedAngleAtCaptureDeg": 0.0015,
+          "captureTimestampDeltaMs": 183.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0015,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.1077,
+          "lengthDifferencePxApprox": 23.1077,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 24.3656,
+          "widthDifferencePxApprox": 16.3656,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0183,
+          "expectedAngleAtCaptureDeg": 0.0183,
+          "captureTimestampDeltaMs": 183.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.9817,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 202.5562,
+          "lengthDifferencePxApprox": 27.5562,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 30.5465,
+          "widthDifferencePxApprox": 22.5465,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 1.098,
+          "expectedAngleAtCaptureDeg": 1.098,
+          "captureTimestampDeltaMs": 183.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 0.902,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 11.98,
+          "widthDifferencePxApprox": 8.98,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "00:00:00",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-08.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-08.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+        "expectedEpochMs": 1723075200000,
+        "runtimeEpochMsBeforeCapture": 1723075200130,
+        "runtimeEpochMsAfterCapture": 1723075200501,
+        "captureTimestampUtc": "2024-08-08T00:00:00.130000+00:00",
+        "captureStartedUtc": "2026-08-24T09:09:59.381113+00:00",
+        "captureCompletedUtc": "2026-08-24T09:09:59.799763+00:00",
+        "captureLatencyMs": 419.087,
+        "captureTimestampDeltaMs": 130,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 20.3 MB/s (97965 bytes in 0.005s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.3268,
+        "hands": 15.1515,
+        "date": 35.4146,
+        "global": 1.9755
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\00-00-00_day-08.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\00-00-00_day-08.png",
+      "normalizedMae": {
+        "staticDial": 1.2288,
+        "hands": 14.6933,
+        "date": 35.7736,
+        "global": 1.8707
+      },
+      "normalizedBlur": {
+        "deterministic": 4.6846,
+        "runtime": 3.949,
+        "difference": -0.7356
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0011,
+          "expectedAngleAtCaptureDeg": 0.0011,
+          "captureTimestampDeltaMs": 130.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0011,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.1077,
+          "lengthDifferencePxApprox": 23.1077,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 24.226,
+          "widthDifferencePxApprox": 16.226,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.013,
+          "expectedAngleAtCaptureDeg": 0.013,
+          "captureTimestampDeltaMs": 130.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.987,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 202.5562,
+          "lengthDifferencePxApprox": 27.5562,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 30.4386,
+          "widthDifferencePxApprox": 22.4386,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.78,
+          "expectedAngleAtCaptureDeg": 0.78,
+          "captureTimestampDeltaMs": 130.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.22,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 11.9102,
+          "widthDifferencePxApprox": 8.9102,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          365,
+          218,
+          378,
+          226
+        ],
+        "foregroundSize": {
+          "width": 13,
+          "height": 8
+        },
+        "centerOffsetPx": 2.0616,
+        "baselineBottomOffsetPx": -10,
+        "referenceForegroundBbox": [
+          356,
+          229,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": true
+      }
+    },
+    {
+      "time": "00:00:00",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-11.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-11.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 00:00:00 GMT 2024",
+        "expectedEpochMs": 1723334400000,
+        "runtimeEpochMsBeforeCapture": 1723334400143,
+        "runtimeEpochMsAfterCapture": 1723334400568,
+        "captureTimestampUtc": "2024-08-11T00:00:00.143000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:00.047509+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:00.533339+00:00",
+        "captureLatencyMs": 486.425,
+        "captureTimestampDeltaMs": 143,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 8.6 MB/s (97097 bytes in 0.011s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.3268,
+        "hands": 16.6689,
+        "date": 12.9632,
+        "global": 1.8501
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\00-00-00_day-11.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\00-00-00_day-11.png",
+      "normalizedMae": {
+        "staticDial": 1.2288,
+        "hands": 16.1909,
+        "date": 13.2236,
+        "global": 1.744
+      },
+      "normalizedBlur": {
+        "deterministic": 4.7045,
+        "runtime": 3.9216,
+        "difference": -0.7829
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0012,
+          "expectedAngleAtCaptureDeg": 0.0012,
+          "captureTimestampDeltaMs": 143.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0012,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.1551,
+          "lengthDifferencePxApprox": 23.1551,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 24.4005,
+          "widthDifferencePxApprox": 16.4005,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0143,
+          "expectedAngleAtCaptureDeg": 0.0143,
+          "captureTimestampDeltaMs": 143.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.9857,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 202.5562,
+          "lengthDifferencePxApprox": 27.5562,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 30.5465,
+          "widthDifferencePxApprox": 22.5465,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.858,
+          "expectedAngleAtCaptureDeg": 0.858,
+          "captureTimestampDeltaMs": 143.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.142,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 11.98,
+          "widthDifferencePxApprox": 8.98,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "00:00:00",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-20.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-20.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 00:00:00 GMT 2024",
+        "expectedEpochMs": 1724112000000,
+        "runtimeEpochMsBeforeCapture": 1724112000139,
+        "runtimeEpochMsAfterCapture": 1724112000486,
+        "captureTimestampUtc": "2024-08-20T00:00:00.139000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:00.788050+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:01.189437+00:00",
+        "captureLatencyMs": 401.882,
+        "captureTimestampDeltaMs": 139,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 30.3 MB/s (97007 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.3268,
+        "hands": 15.0418,
+        "date": 22.6153,
+        "global": 1.8763
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\00-00-00_day-20.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\00-00-00_day-20.png",
+      "normalizedMae": {
+        "staticDial": 1.2288,
+        "hands": 14.5825,
+        "date": 22.8861,
+        "global": 1.7708
+      },
+      "normalizedBlur": {
+        "deterministic": 4.7401,
+        "runtime": 3.9276,
+        "difference": -0.8125
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 0.0012,
+          "expectedAngleAtCaptureDeg": 0.0012,
+          "captureTimestampDeltaMs": 139.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.0012,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.1077,
+          "lengthDifferencePxApprox": 23.1077,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.4874,
+          "widthDifferencePxApprox": 15.4874,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0139,
+          "expectedAngleAtCaptureDeg": 0.0139,
+          "captureTimestampDeltaMs": 139.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.9861,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 202.5562,
+          "lengthDifferencePxApprox": 27.5562,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 30.4386,
+          "widthDifferencePxApprox": 22.4386,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.834,
+          "expectedAngleAtCaptureDeg": 0.834,
+          "captureTimestampDeltaMs": 139.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.166,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 11.9102,
+          "widthDifferencePxApprox": 8.9102,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "00:00:00",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\00-00-00_day-31.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-31.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "00:00:00",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\00-00-00_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 00:00:00 GMT 2024",
+        "expectedEpochMs": 1725062400000,
+        "runtimeEpochMsBeforeCapture": 1725062400123,
+        "runtimeEpochMsAfterCapture": 1725062400475,
+        "captureTimestampUtc": "2024-08-31T00:00:00.123000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:01.414191+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:01.814425+00:00",
+        "captureLatencyMs": 400.197,
+        "captureTimestampDeltaMs": 123,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 13.2 MB/s (97007 bytes in 0.007s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.3268,
+        "hands": 15.0418,
+        "date": 17.4396,
+        "global": 1.8375
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\00-00-00_day-31.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\00-00-00_day-31.png",
+      "normalizedMae": {
+        "staticDial": 1.2288,
+        "hands": 14.5825,
+        "date": 17.7146,
+        "global": 1.732
+      },
+      "normalizedBlur": {
+        "deterministic": 4.7206,
+        "runtime": 3.9276,
+        "difference": -0.793
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 0.001,
+          "expectedAngleAtCaptureDeg": 0.001,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 359.0,
+          "angleErrorDegApprox": 1.001,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.1077,
+          "lengthDifferencePxApprox": 23.1077,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.4874,
+          "widthDifferencePxApprox": 15.4874,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 0.0123,
+          "expectedAngleAtCaptureDeg": 0.0123,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.9877,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 202.5562,
+          "lengthDifferencePxApprox": 27.5562,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 30.4386,
+          "widthDifferencePxApprox": 22.4386,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.738,
+          "expectedAngleAtCaptureDeg": 0.738,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.262,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 11.9102,
+          "widthDifferencePxApprox": 8.9102,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "03:15:45",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-01.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-01.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 03:15:45 GMT 2024",
+        "expectedEpochMs": 1722482145000,
+        "runtimeEpochMsBeforeCapture": 1722482145147,
+        "runtimeEpochMsAfterCapture": 1722482145452,
+        "captureTimestampUtc": "2024-08-01T03:15:45.147000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:02.073066+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:02.445429+00:00",
+        "captureLatencyMs": 373.14,
+        "captureTimestampDeltaMs": 147,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 20.7 MB/s (99103 bytes in 0.005s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.6884,
+        "hands": 3.5719,
+        "date": 9.2438,
+        "global": 1.7987
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\03-15-45_day-01.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\03-15-45_day-01.png",
+      "normalizedMae": {
+        "staticDial": 1.5778,
+        "hands": 3.3256,
+        "date": 8.7035,
+        "global": 1.6809
+      },
+      "normalizedBlur": {
+        "deterministic": 4.8368,
+        "runtime": 4.1316,
+        "difference": -0.7052
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 97.8762,
+          "expectedAngleAtCaptureDeg": 97.8762,
+          "captureTimestampDeltaMs": 147.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.8762,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 115.9741,
+          "lengthDifferencePxApprox": 22.9741,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 19.603,
+          "widthDifferencePxApprox": 11.603,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5147,
+          "expectedAngleAtCaptureDeg": 94.5147,
+          "captureTimestampDeltaMs": 147.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5147,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 178.7177,
+          "lengthDifferencePxApprox": 3.7177,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.203,
+          "widthDifferencePxApprox": 15.203,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.882,
+          "expectedAngleAtCaptureDeg": 270.882,
+          "captureTimestampDeltaMs": 147.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 0.118,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 173.0462,
+          "lengthDifferencePxApprox": 2.5462,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 10.6065,
+          "widthDifferencePxApprox": 7.6065,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          346,
+          228,
+          393,
+          236
+        ],
+        "foregroundSize": {
+          "width": 47,
+          "height": 8
+        },
+        "centerOffsetPx": 10.5,
+        "baselineBottomOffsetPx": 0,
+        "referenceForegroundBbox": [
+          346,
+          213,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "03:15:45",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-08.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-08.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 03:15:45 GMT 2024",
+        "expectedEpochMs": 1723086945000,
+        "runtimeEpochMsBeforeCapture": 1723086945135,
+        "runtimeEpochMsAfterCapture": 1723086945425,
+        "captureTimestampUtc": "2024-08-08T03:15:45.135000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:02.693912+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:03.028907+00:00",
+        "captureLatencyMs": 335.258,
+        "captureTimestampDeltaMs": 135,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 35.5 MB/s (99840 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.6801,
+        "hands": 3.5704,
+        "date": 13.1819,
+        "global": 1.8202
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\03-15-45_day-08.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\03-15-45_day-08.png",
+      "normalizedMae": {
+        "staticDial": 1.5694,
+        "hands": 3.323,
+        "date": 12.7146,
+        "global": 1.7029
+      },
+      "normalizedBlur": {
+        "deterministic": 4.812,
+        "runtime": 4.1498,
+        "difference": -0.6622
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 97.8761,
+          "expectedAngleAtCaptureDeg": 97.8761,
+          "captureTimestampDeltaMs": 135.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.8761,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 115.9741,
+          "lengthDifferencePxApprox": 22.9741,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 19.603,
+          "widthDifferencePxApprox": 11.603,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5135,
+          "expectedAngleAtCaptureDeg": 94.5135,
+          "captureTimestampDeltaMs": 135.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5135,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 178.7177,
+          "lengthDifferencePxApprox": 3.7177,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.203,
+          "widthDifferencePxApprox": 15.203,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.81,
+          "expectedAngleAtCaptureDeg": 270.81,
+          "captureTimestampDeltaMs": 135.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 0.19,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 173.0462,
+          "lengthDifferencePxApprox": 2.5462,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 10.6065,
+          "widthDifferencePxApprox": 7.6065,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          346,
+          218,
+          393,
+          236
+        ],
+        "foregroundSize": {
+          "width": 47,
+          "height": 18
+        },
+        "centerOffsetPx": 5.5,
+        "baselineBottomOffsetPx": 0,
+        "referenceForegroundBbox": [
+          346,
+          228,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": true
+      }
+    },
+    {
+      "time": "03:15:45",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-11.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-11.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 03:15:45 GMT 2024",
+        "expectedEpochMs": 1723346145000,
+        "runtimeEpochMsBeforeCapture": 1723346145120,
+        "runtimeEpochMsAfterCapture": 1723346145405,
+        "captureTimestampUtc": "2024-08-11T03:15:45.120000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:03.248072+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:03.577050+00:00",
+        "captureLatencyMs": 329.521,
+        "captureTimestampDeltaMs": 120,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 25.9 MB/s (99115 bytes in 0.004s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.6829,
+        "hands": 3.5708,
+        "date": 14.7528,
+        "global": 1.8347
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\03-15-45_day-11.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\03-15-45_day-11.png",
+      "normalizedMae": {
+        "staticDial": 1.5723,
+        "hands": 3.3239,
+        "date": 14.2194,
+        "global": 1.717
+      },
+      "normalizedBlur": {
+        "deterministic": 4.8652,
+        "runtime": 4.132,
+        "difference": -0.7332
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 97.876,
+          "expectedAngleAtCaptureDeg": 97.876,
+          "captureTimestampDeltaMs": 120.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.876,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 115.9741,
+          "lengthDifferencePxApprox": 22.9741,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 19.603,
+          "widthDifferencePxApprox": 11.603,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.512,
+          "expectedAngleAtCaptureDeg": 94.512,
+          "captureTimestampDeltaMs": 120.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.512,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 178.7177,
+          "lengthDifferencePxApprox": 3.7177,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.203,
+          "widthDifferencePxApprox": 15.203,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.72,
+          "expectedAngleAtCaptureDeg": 270.72,
+          "captureTimestampDeltaMs": 120.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 0.28,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 173.0462,
+          "lengthDifferencePxApprox": 2.5462,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 10.6065,
+          "widthDifferencePxApprox": 7.6065,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          346,
+          228,
+          393,
+          236
+        ],
+        "foregroundSize": {
+          "width": 47,
+          "height": 8
+        },
+        "centerOffsetPx": 10.5,
+        "baselineBottomOffsetPx": 0,
+        "referenceForegroundBbox": [
+          346,
+          213,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "03:15:45",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-20.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-20.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 03:15:45 GMT 2024",
+        "expectedEpochMs": 1724123745000,
+        "runtimeEpochMsBeforeCapture": 1724123745161,
+        "runtimeEpochMsAfterCapture": 1724123745523,
+        "captureTimestampUtc": "2024-08-20T03:15:45.161000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:03.869594+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:04.292144+00:00",
+        "captureLatencyMs": 422.911,
+        "captureTimestampDeltaMs": 161,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 23.3 MB/s (99115 bytes in 0.004s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.7239,
+        "hands": 3.5827,
+        "date": 20.2785,
+        "global": 1.916
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\03-15-45_day-20.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\03-15-45_day-20.png",
+      "normalizedMae": {
+        "staticDial": 1.6123,
+        "hands": 3.3362,
+        "date": 19.759,
+        "global": 1.7975
+      },
+      "normalizedBlur": {
+        "deterministic": 4.8849,
+        "runtime": 4.1285,
+        "difference": -0.7564
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 97.8763,
+          "expectedAngleAtCaptureDeg": 97.8763,
+          "captureTimestampDeltaMs": 161.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.8763,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 115.9741,
+          "lengthDifferencePxApprox": 22.9741,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 19.603,
+          "widthDifferencePxApprox": 11.603,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5161,
+          "expectedAngleAtCaptureDeg": 94.5161,
+          "captureTimestampDeltaMs": 161.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5161,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 178.7177,
+          "lengthDifferencePxApprox": 3.7177,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.203,
+          "widthDifferencePxApprox": 15.203,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.966,
+          "expectedAngleAtCaptureDeg": 270.966,
+          "captureTimestampDeltaMs": 161.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 0.034,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 173.0462,
+          "lengthDifferencePxApprox": 2.5462,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 10.6065,
+          "widthDifferencePxApprox": 7.6065,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          346,
+          228,
+          393,
+          236
+        ],
+        "foregroundSize": {
+          "width": 47,
+          "height": 8
+        },
+        "centerOffsetPx": 10.5,
+        "baselineBottomOffsetPx": 0,
+        "referenceForegroundBbox": [
+          346,
+          213,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "03:15:45",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\03-15-45_day-31.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-31.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "03:15:45",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\03-15-45_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 03:15:45 GMT 2024",
+        "expectedEpochMs": 1725074145000,
+        "runtimeEpochMsBeforeCapture": 1725074145123,
+        "runtimeEpochMsAfterCapture": 1725074145421,
+        "captureTimestampUtc": "2024-08-31T03:15:45.123000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:04.510041+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:04.852643+00:00",
+        "captureLatencyMs": 342.79,
+        "captureTimestampDeltaMs": 123,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 13.4 MB/s (99085 bytes in 0.007s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.6862,
+        "hands": 3.5715,
+        "date": 17.1576,
+        "global": 1.8559
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\03-15-45_day-31.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\03-15-45_day-31.png",
+      "normalizedMae": {
+        "staticDial": 1.5755,
+        "hands": 3.3248,
+        "date": 16.634,
+        "global": 1.7382
+      },
+      "normalizedBlur": {
+        "deterministic": 4.8747,
+        "runtime": 4.1319,
+        "difference": -0.7428
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 97.876,
+          "expectedAngleAtCaptureDeg": 97.876,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 3.876,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 115.9741,
+          "lengthDifferencePxApprox": 22.9741,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 19.603,
+          "widthDifferencePxApprox": 11.603,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 94.5123,
+          "expectedAngleAtCaptureDeg": 94.5123,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 94.0,
+          "angleErrorDegApprox": 0.5123,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 178.7177,
+          "lengthDifferencePxApprox": 3.7177,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 23.203,
+          "widthDifferencePxApprox": 15.203,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 270.738,
+          "expectedAngleAtCaptureDeg": 270.738,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 271.0,
+          "angleErrorDegApprox": 0.262,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 173.0462,
+          "lengthDifferencePxApprox": 2.5462,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 10.6065,
+          "widthDifferencePxApprox": 7.6065,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          346,
+          228,
+          393,
+          236
+        ],
+        "foregroundSize": {
+          "width": 47,
+          "height": 8
+        },
+        "centerOffsetPx": 10.5,
+        "baselineBottomOffsetPx": 0,
+        "referenceForegroundBbox": [
+          346,
+          213,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "06:30:00",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-01.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-01.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 06:30:00 GMT 2024",
+        "expectedEpochMs": 1722493800000,
+        "runtimeEpochMsBeforeCapture": 1722493800148,
+        "runtimeEpochMsAfterCapture": 1722493800445,
+        "captureTimestampUtc": "2024-08-01T06:30:00.148000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:05.105357+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:05.453578+00:00",
+        "captureLatencyMs": 348.475,
+        "captureTimestampDeltaMs": 148,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 35.5 MB/s (96533 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.4586,
+        "hands": 12.015,
+        "date": 6.5174,
+        "global": 1.7966
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\06-30-00_day-01.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\06-30-00_day-01.png",
+      "normalizedMae": {
+        "staticDial": 1.3346,
+        "hands": 11.6581,
+        "date": 6.7792,
+        "global": 1.6689
+      },
+      "normalizedBlur": {
+        "deterministic": 4.9854,
+        "runtime": 4.2691,
+        "difference": -0.7163
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0012,
+          "expectedAngleAtCaptureDeg": 195.0012,
+          "captureTimestampDeltaMs": 148.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0012,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.2497,
+          "lengthDifferencePxApprox": 23.2497,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 27.0358,
+          "widthDifferencePxApprox": 19.0358,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0148,
+          "expectedAngleAtCaptureDeg": 180.0148,
+          "captureTimestampDeltaMs": 148.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0148,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 208.1178,
+          "lengthDifferencePxApprox": 33.1178,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 32.5232,
+          "widthDifferencePxApprox": 24.5232,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.888,
+          "expectedAngleAtCaptureDeg": 0.888,
+          "captureTimestampDeltaMs": 148.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.112,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 9.1246,
+          "widthDifferencePxApprox": 6.1246,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "06:30:00",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-08.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-08.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 06:30:00 GMT 2024",
+        "expectedEpochMs": 1723098600000,
+        "runtimeEpochMsBeforeCapture": 1723098600163,
+        "runtimeEpochMsAfterCapture": 1723098600482,
+        "captureTimestampUtc": "2024-08-08T06:30:00.163000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:05.733430+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:06.118236+00:00",
+        "captureLatencyMs": 384.166,
+        "captureTimestampDeltaMs": 163,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 28.8 MB/s (97477 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.4586,
+        "hands": 11.8147,
+        "date": 35.4146,
+        "global": 2.0078
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\06-30-00_day-08.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\06-30-00_day-08.png",
+      "normalizedMae": {
+        "staticDial": 1.3346,
+        "hands": 11.458,
+        "date": 35.7736,
+        "global": 1.8808
+      },
+      "normalizedBlur": {
+        "deterministic": 4.9997,
+        "runtime": 4.292,
+        "difference": -0.7077
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0014,
+          "expectedAngleAtCaptureDeg": 195.0014,
+          "captureTimestampDeltaMs": 163.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0014,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.2497,
+          "lengthDifferencePxApprox": 23.2497,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 27.0358,
+          "widthDifferencePxApprox": 19.0358,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0163,
+          "expectedAngleAtCaptureDeg": 180.0163,
+          "captureTimestampDeltaMs": 163.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0163,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 208.1178,
+          "lengthDifferencePxApprox": 33.1178,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 32.5232,
+          "widthDifferencePxApprox": 24.5232,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.978,
+          "expectedAngleAtCaptureDeg": 0.978,
+          "captureTimestampDeltaMs": 163.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.022,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 9.1246,
+          "widthDifferencePxApprox": 6.1246,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          365,
+          218,
+          378,
+          226
+        ],
+        "foregroundSize": {
+          "width": 13,
+          "height": 8
+        },
+        "centerOffsetPx": 2.0616,
+        "baselineBottomOffsetPx": -10,
+        "referenceForegroundBbox": [
+          356,
+          229,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": true
+      }
+    },
+    {
+      "time": "06:30:00",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-11.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-11.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 06:30:00 GMT 2024",
+        "expectedEpochMs": 1723357800000,
+        "runtimeEpochMsBeforeCapture": 1723357800133,
+        "runtimeEpochMsAfterCapture": 1723357801016,
+        "captureTimestampUtc": "2024-08-11T06:30:00.133000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:06.389908+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:07.342600+00:00",
+        "captureLatencyMs": 953.064,
+        "captureTimestampDeltaMs": 133,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 6.6 MB/s (96574 bytes in 0.014s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.4586,
+        "hands": 11.719,
+        "date": 12.9632,
+        "global": 1.8366
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\06-30-00_day-11.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\06-30-00_day-11.png",
+      "normalizedMae": {
+        "staticDial": 1.3346,
+        "hands": 11.3615,
+        "date": 13.2236,
+        "global": 1.7088
+      },
+      "normalizedBlur": {
+        "deterministic": 5.0196,
+        "runtime": 4.2693,
+        "difference": -0.7503
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0011,
+          "expectedAngleAtCaptureDeg": 195.0011,
+          "captureTimestampDeltaMs": 133.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0011,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.2497,
+          "lengthDifferencePxApprox": 23.2497,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 27.0358,
+          "widthDifferencePxApprox": 19.0358,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0133,
+          "expectedAngleAtCaptureDeg": 180.0133,
+          "captureTimestampDeltaMs": 133.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0133,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 208.1178,
+          "lengthDifferencePxApprox": 33.1178,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 32.5232,
+          "widthDifferencePxApprox": 24.5232,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.798,
+          "expectedAngleAtCaptureDeg": 0.798,
+          "captureTimestampDeltaMs": 133.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.202,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 9.1246,
+          "widthDifferencePxApprox": 6.1246,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "06:30:00",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-20.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-20.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 06:30:00 GMT 2024",
+        "expectedEpochMs": 1724135400000,
+        "runtimeEpochMsBeforeCapture": 1724135400318,
+        "runtimeEpochMsAfterCapture": 1724135400702,
+        "captureTimestampUtc": "2024-08-20T06:30:00.318000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:07.949252+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:08.423163+00:00",
+        "captureLatencyMs": 474.957,
+        "captureTimestampDeltaMs": 318,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 19.9 MB/s (96773 bytes in 0.005s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.4586,
+        "hands": 14.5805,
+        "date": 22.6153,
+        "global": 1.9903
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\06-30-00_day-20.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\06-30-00_day-20.png",
+      "normalizedMae": {
+        "staticDial": 1.3346,
+        "hands": 14.3065,
+        "date": 22.8861,
+        "global": 1.865
+      },
+      "normalizedBlur": {
+        "deterministic": 5.0552,
+        "runtime": 4.2687,
+        "difference": -0.7865
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0026,
+          "expectedAngleAtCaptureDeg": 195.0026,
+          "captureTimestampDeltaMs": 318.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0026,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.2497,
+          "lengthDifferencePxApprox": 23.2497,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 27.0358,
+          "widthDifferencePxApprox": 19.0358,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0318,
+          "expectedAngleAtCaptureDeg": 180.0318,
+          "captureTimestampDeltaMs": 318.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0318,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 208.1178,
+          "lengthDifferencePxApprox": 33.1178,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 32.5232,
+          "widthDifferencePxApprox": 24.5232,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 1.908,
+          "expectedAngleAtCaptureDeg": 1.908,
+          "captureTimestampDeltaMs": 318.0,
+          "observedAngleDegApprox": 3.0,
+          "angleErrorDegApprox": 1.092,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.5562,
+          "lengthDifferencePxApprox": 32.0562,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 10.0145,
+          "widthDifferencePxApprox": 7.0145,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "06:30:00",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\06-30-00_day-31.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-31.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "06:30:00",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\06-30-00_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 06:30:00 GMT 2024",
+        "expectedEpochMs": 1725085800000,
+        "runtimeEpochMsBeforeCapture": 1725085800131,
+        "runtimeEpochMsAfterCapture": 1725085800397,
+        "captureTimestampUtc": "2024-08-31T06:30:00.131000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:08.682764+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:09.002563+00:00",
+        "captureLatencyMs": 319.539,
+        "captureTimestampDeltaMs": 131,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 28.4 MB/s (96568 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.4586,
+        "hands": 11.6108,
+        "date": 17.4396,
+        "global": 1.8671
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\06-30-00_day-31.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\06-30-00_day-31.png",
+      "normalizedMae": {
+        "staticDial": 1.3346,
+        "hands": 11.2485,
+        "date": 17.7146,
+        "global": 1.7393
+      },
+      "normalizedBlur": {
+        "deterministic": 5.0357,
+        "runtime": 4.2691,
+        "difference": -0.7666
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 195.0011,
+          "expectedAngleAtCaptureDeg": 195.0011,
+          "captureTimestampDeltaMs": 131.0,
+          "observedAngleDegApprox": 171.0,
+          "angleErrorDegApprox": 24.0011,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 116.2497,
+          "lengthDifferencePxApprox": 23.2497,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 27.0358,
+          "widthDifferencePxApprox": 19.0358,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 180.0131,
+          "expectedAngleAtCaptureDeg": 180.0131,
+          "captureTimestampDeltaMs": 131.0,
+          "observedAngleDegApprox": 179.0,
+          "angleErrorDegApprox": 1.0131,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 208.1178,
+          "lengthDifferencePxApprox": 33.1178,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 32.5232,
+          "widthDifferencePxApprox": 24.5232,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 0.786,
+          "expectedAngleAtCaptureDeg": 0.786,
+          "captureTimestampDeltaMs": 131.0,
+          "observedAngleDegApprox": 2.0,
+          "angleErrorDegApprox": 1.214,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 202.4846,
+          "lengthDifferencePxApprox": 31.9846,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 9.1246,
+          "widthDifferencePxApprox": 6.1246,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "10:08:30",
+      "date": 1,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-01.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-01.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 1,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-01.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  1 10:08:30 GMT 2024",
+        "expectedEpochMs": 1722506910000,
+        "runtimeEpochMsBeforeCapture": 1722506910132,
+        "runtimeEpochMsAfterCapture": 1722506910412,
+        "captureTimestampUtc": "2024-08-01T10:08:30.132000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:09.245821+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:09.571008+00:00",
+        "captureLatencyMs": 325.814,
+        "captureTimestampDeltaMs": 132,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 30.7 MB/s (103925 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.677,
+        "hands": 3.7971,
+        "date": 6.5174,
+        "global": 1.7736
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\10-08-30_day-01.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\10-08-30_day-01.png",
+      "normalizedMae": {
+        "staticDial": 1.5544,
+        "hands": 3.4428,
+        "date": 6.7792,
+        "global": 1.6473
+      },
+      "normalizedBlur": {
+        "deterministic": 5.0663,
+        "runtime": 4.3428,
+        "difference": -0.7235
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 304.2511,
+          "expectedAngleAtCaptureDeg": 304.2511,
+          "captureTimestampDeltaMs": 132.0,
+          "observedAngleDegApprox": 306.0,
+          "angleErrorDegApprox": 1.7489,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 91.526,
+          "lengthDifferencePxApprox": -1.474,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 11.1224,
+          "widthDifferencePxApprox": 3.1224,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0132,
+          "expectedAngleAtCaptureDeg": 51.0132,
+          "captureTimestampDeltaMs": 132.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0132,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 193.5975,
+          "lengthDifferencePxApprox": 18.5975,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 12.5528,
+          "widthDifferencePxApprox": 4.5528,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.792,
+          "expectedAngleAtCaptureDeg": 180.792,
+          "captureTimestampDeltaMs": 132.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 0.208,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 208.0385,
+          "lengthDifferencePxApprox": 37.5385,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 12.9113,
+          "widthDifferencePxApprox": 9.9113,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "10:08:30",
+      "date": 8,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-08.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-08.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 8,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-08.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+        "expectedEpochMs": 1723111710000,
+        "runtimeEpochMsBeforeCapture": 1723111710145,
+        "runtimeEpochMsAfterCapture": 1723111710504,
+        "captureTimestampUtc": "2024-08-08T10:08:30.145000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:09.858406+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:10.264434+00:00",
+        "captureLatencyMs": 406.456,
+        "captureTimestampDeltaMs": 145,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 15.4 MB/s (104738 bytes in 0.006s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.7346,
+        "hands": 3.8047,
+        "date": 35.4146,
+        "global": 2.0463
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\10-08-30_day-08.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\10-08-30_day-08.png",
+      "normalizedMae": {
+        "staticDial": 1.6128,
+        "hands": 3.4516,
+        "date": 35.7736,
+        "global": 1.9215
+      },
+      "normalizedBlur": {
+        "deterministic": 5.0806,
+        "runtime": 4.3599,
+        "difference": -0.7207
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 304.2512,
+          "expectedAngleAtCaptureDeg": 304.2512,
+          "captureTimestampDeltaMs": 145.0,
+          "observedAngleDegApprox": 306.0,
+          "angleErrorDegApprox": 1.7488,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 91.526,
+          "lengthDifferencePxApprox": -1.474,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 11.1224,
+          "widthDifferencePxApprox": 3.1224,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0145,
+          "expectedAngleAtCaptureDeg": 51.0145,
+          "captureTimestampDeltaMs": 145.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0145,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 193.5975,
+          "lengthDifferencePxApprox": 18.5975,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 12.5528,
+          "widthDifferencePxApprox": 4.5528,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.87,
+          "expectedAngleAtCaptureDeg": 180.87,
+          "captureTimestampDeltaMs": 145.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 0.13,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 208.0385,
+          "lengthDifferencePxApprox": 37.5385,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 13.0499,
+          "widthDifferencePxApprox": 10.0499,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": true,
+        "foregroundBbox": [
+          365,
+          218,
+          378,
+          226
+        ],
+        "foregroundSize": {
+          "width": 13,
+          "height": 8
+        },
+        "centerOffsetPx": 2.0616,
+        "baselineBottomOffsetPx": -10,
+        "referenceForegroundBbox": [
+          356,
+          229,
+          393,
+          236
+        ],
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": true
+      }
+    },
+    {
+      "time": "10:08:30",
+      "date": 11,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-11.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-11.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 11,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-11.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sun Aug 11 10:08:30 GMT 2024",
+        "expectedEpochMs": 1723370910000,
+        "runtimeEpochMsBeforeCapture": 1723370910142,
+        "runtimeEpochMsAfterCapture": 1723370910461,
+        "captureTimestampUtc": "2024-08-11T10:08:30.142000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:10.520094+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:10.887074+00:00",
+        "captureLatencyMs": 367.5,
+        "captureTimestampDeltaMs": 142,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 29.1 MB/s (103813 bytes in 0.003s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.7346,
+        "hands": 3.8047,
+        "date": 12.9632,
+        "global": 1.8777
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\10-08-30_day-11.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\10-08-30_day-11.png",
+      "normalizedMae": {
+        "staticDial": 1.6128,
+        "hands": 3.4516,
+        "date": 13.2236,
+        "global": 1.7522
+      },
+      "normalizedBlur": {
+        "deterministic": 5.1005,
+        "runtime": 4.3372,
+        "difference": -0.7633
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 304.2512,
+          "expectedAngleAtCaptureDeg": 304.2512,
+          "captureTimestampDeltaMs": 142.0,
+          "observedAngleDegApprox": 306.0,
+          "angleErrorDegApprox": 1.7488,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 91.526,
+          "lengthDifferencePxApprox": -1.474,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 11.1224,
+          "widthDifferencePxApprox": 3.1224,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0142,
+          "expectedAngleAtCaptureDeg": 51.0142,
+          "captureTimestampDeltaMs": 142.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0142,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 193.5975,
+          "lengthDifferencePxApprox": 18.5975,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 12.5528,
+          "widthDifferencePxApprox": 4.5528,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.852,
+          "expectedAngleAtCaptureDeg": 180.852,
+          "captureTimestampDeltaMs": 142.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 0.148,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 208.0385,
+          "lengthDifferencePxApprox": 37.5385,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 13.0499,
+          "widthDifferencePxApprox": 10.0499,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "10:08:30",
+      "date": 20,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-20.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-20.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 20,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-20.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Tue Aug 20 10:08:30 GMT 2024",
+        "expectedEpochMs": 1724148510000,
+        "runtimeEpochMsBeforeCapture": 1724148510123,
+        "runtimeEpochMsAfterCapture": 1724148510415,
+        "captureTimestampUtc": "2024-08-20T10:08:30.123000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:11.107427+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:11.447765+00:00",
+        "captureLatencyMs": 340.098,
+        "captureTimestampDeltaMs": 123,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 46.2 MB/s (103817 bytes in 0.002s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.732,
+        "hands": 3.8036,
+        "date": 22.6153,
+        "global": 1.9476
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\10-08-30_day-20.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\10-08-30_day-20.png",
+      "normalizedMae": {
+        "staticDial": 1.61,
+        "hands": 3.4503,
+        "date": 22.8861,
+        "global": 1.822
+      },
+      "normalizedBlur": {
+        "deterministic": 5.1361,
+        "runtime": 4.3376,
+        "difference": -0.7985
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 304.251,
+          "expectedAngleAtCaptureDeg": 304.251,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 306.0,
+          "angleErrorDegApprox": 1.749,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 91.526,
+          "lengthDifferencePxApprox": -1.474,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 11.1224,
+          "widthDifferencePxApprox": 3.1224,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0123,
+          "expectedAngleAtCaptureDeg": 51.0123,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0123,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 193.5975,
+          "lengthDifferencePxApprox": 18.5975,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 12.5528,
+          "widthDifferencePxApprox": 4.5528,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 180.738,
+          "expectedAngleAtCaptureDeg": 180.738,
+          "captureTimestampDeltaMs": 123.0,
+          "observedAngleDegApprox": 181.0,
+          "angleErrorDegApprox": 0.262,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 208.0385,
+          "lengthDifferencePxApprox": 37.5385,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 13.0499,
+          "widthDifferencePxApprox": 10.0499,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    },
+    {
+      "time": "10:08:30",
+      "date": 31,
+      "mode": "manual_override_on",
+      "deterministic": "a25c-runtime-calibration\\manual_override_on\\deterministic\\10-08-30_day-31.png",
+      "runtimeSource": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-31.png",
+      "captureTimestamp": {
+        "mode": "manual_override_on",
+        "time": "10:08:30",
+        "date": 31,
+        "path": "a25c-runtime-calibration\\manual_override_on\\runtime\\10-08-30_day-31.png",
+        "size": [
+          454,
+          454
+        ],
+        "clockSet": true,
+        "clockOutput": "Sat Aug 31 10:08:30 GMT 2024",
+        "expectedEpochMs": 1725098910000,
+        "runtimeEpochMsBeforeCapture": 1725098910172,
+        "runtimeEpochMsAfterCapture": 1725098910506,
+        "captureTimestampUtc": "2024-08-31T10:08:30.172000+00:00",
+        "captureStartedUtc": "2026-08-24T09:10:11.756293+00:00",
+        "captureCompletedUtc": "2026-08-24T09:10:12.140667+00:00",
+        "captureLatencyMs": 384.275,
+        "captureTimestampDeltaMs": 172,
+        "activeWatchFace": true,
+        "captureOk": true,
+        "captureOutput": "/sdcard/photo2wff-manual_override_on.png: 1 file pulled, 0 skipped. 18.6 MB/s (103757 bytes in 0.005s)"
+      },
+      "rawMetrics": {
+        "staticDial": 1.7687,
+        "hands": 3.8103,
+        "date": 17.4396,
+        "global": 1.9443
+      },
+      "status": "normalized_and_compared",
+      "normalizedRuntime": "a25c-runtime-calibration\\manual_override_on\\runtime-normalized\\10-08-30_day-31.png",
+      "normalizedDifference": "a25c-runtime-calibration\\manual_override_on\\normalized-difference\\10-08-30_day-31.png",
+      "normalizedMae": {
+        "staticDial": 1.6465,
+        "hands": 3.4585,
+        "date": 17.7146,
+        "global": 1.8186
+      },
+      "normalizedBlur": {
+        "deterministic": 5.1167,
+        "runtime": 4.3296,
+        "difference": -0.7871
+      },
+      "handExpectedAngleAtCapture": {
+        "HOUR": {
+          "expectedAngleDeg": 304.2514,
+          "expectedAngleAtCaptureDeg": 304.2514,
+          "captureTimestampDeltaMs": 172.0,
+          "observedAngleDegApprox": 306.0,
+          "angleErrorDegApprox": 1.7486,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 93.0,
+          "observedLengthApprox": 91.526,
+          "lengthDifferencePxApprox": -1.474,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 11.1224,
+          "widthDifferencePxApprox": 3.1224,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "MINUTE": {
+          "expectedAngleDeg": 51.0172,
+          "expectedAngleAtCaptureDeg": 51.0172,
+          "captureTimestampDeltaMs": 172.0,
+          "observedAngleDegApprox": 51.0,
+          "angleErrorDegApprox": 0.0172,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 175.0,
+          "observedLengthApprox": 193.5975,
+          "lengthDifferencePxApprox": 18.5975,
+          "expectedWidth": 8.0,
+          "observedWidthApprox": 12.5528,
+          "widthDifferencePxApprox": 4.5528,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        },
+        "SECOND": {
+          "expectedAngleDeg": 181.032,
+          "expectedAngleAtCaptureDeg": 181.032,
+          "captureTimestampDeltaMs": 172.0,
+          "observedAngleDegApprox": 182.0,
+          "angleErrorDegApprox": 0.968,
+          "expectedPivot": {
+            "x": 219.0,
+            "y": 219.0
+          },
+          "pivotErrorPx": 0.0,
+          "expectedLength": 170.5,
+          "observedLengthApprox": 208.0385,
+          "lengthDifferencePxApprox": 37.5385,
+          "expectedWidth": 3.0,
+          "observedWidthApprox": 12.7731,
+          "widthDifferencePxApprox": 9.7731,
+          "clipped": false,
+          "method": "bright-pixel radial histogram; approximate"
+        }
+      },
+      "dateWindow": {
+        "expectedBox": [
+          346,
+          207,
+          393,
+          236
+        ],
+        "observed": false,
+        "foregroundBbox": null,
+        "foregroundSize": null,
+        "centerOffsetPx": null,
+        "baselineBottomOffsetPx": null,
+        "renderConfiguration": {
+          "xml": "C:\\Users\\bug95\\AppData\\Local\\Temp\\photo2wff-manual-output\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+          "textBox": {
+            "x": "346",
+            "y": "207",
+            "width": "47",
+            "height": "29"
+          },
+          "alignment": "CENTER",
+          "renderer": "BitmapFont",
+          "family": "Photo2WFFManualGlyphs",
+          "bitmapFontName": "Photo2WFFManualGlyphs",
+          "fallbackFamily": "Pretendard",
+          "fontSize": 24.0,
+          "fontWeight": null,
+          "lineHeightDeclared": null,
+          "manualCharacters": [
+            "8"
+          ],
+          "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture"
+        },
+        "manualBitmapGlyphComparison": false
+      }
+    }
+  ],
+  "runtimeFontResourceConclusion": "The screenshot cannot expose the internal runtime font file; declared WFF family and observed glyph geometry are recorded separately."
+}

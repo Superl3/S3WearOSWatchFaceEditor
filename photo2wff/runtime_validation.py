@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import shutil
 import subprocess
+import time
+from datetime import datetime, timezone
+from xml.etree import ElementTree
 from pathlib import Path
 from typing import Any
 
@@ -38,6 +42,24 @@ def _run(command: list[str]) -> tuple[int, str]:
 
 def _adb_run(adb: str, serial: str, arguments: list[str]) -> tuple[int, str]:
     return _run([adb, "-s", serial, *arguments])
+
+
+def _runtime_epoch_ms(adb: str, serial: str) -> int | None:
+    code, output = _adb_run(adb, serial, ["shell", "date", "+%s%3N"])
+    if code != 0:
+        return None
+    match = re.search(r"(\d{10,})", output)
+    return int(match.group(1)) if match else None
+
+
+def _utc_iso(epoch_ms: int | None = None) -> str:
+    instant = datetime.now(timezone.utc) if epoch_ms is None else datetime.fromtimestamp(epoch_ms / 1000.0, timezone.utc)
+    return instant.isoformat()
+
+
+def _expected_epoch_ms(time_value: str, day: int) -> int:
+    hour, minute, second = (int(part) for part in time_value.split(":"))
+    return int(datetime(2024, 8, day, hour, minute, second, tzinfo=timezone.utc).timestamp() * 1000)
 
 
 def _runtime_is_active(adb: str, serial: str) -> bool:
@@ -102,8 +124,13 @@ def capture_runtime_matrix(
                 destination = output_root / mode / "runtime" / filename
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 remote = f"/sdcard/photo2wff-{mode}.png"
+                capture_started = time.perf_counter()
+                capture_started_utc = _utc_iso()
+                runtime_epoch_before_capture = _runtime_epoch_ms(adb, serial)
                 capture_code, capture_output = _adb_run(adb, serial, ["shell", "screencap", "-p", remote])
                 pull_code, pull_output = _run([adb, "-s", serial, "pull", remote, str(destination)])
+                runtime_epoch_after_capture = _runtime_epoch_ms(adb, serial)
+                capture_completed_utc = _utc_iso()
                 with Image.open(destination) as screenshot:
                     size = list(screenshot.size)
                 capture_records.append(
@@ -115,6 +142,14 @@ def capture_runtime_matrix(
                         "size": size,
                         "clockSet": clock_ok,
                         "clockOutput": clock_output,
+                        "expectedEpochMs": _expected_epoch_ms(time_value, day),
+                        "runtimeEpochMsBeforeCapture": runtime_epoch_before_capture,
+                        "runtimeEpochMsAfterCapture": runtime_epoch_after_capture,
+                        "captureTimestampUtc": _utc_iso(runtime_epoch_before_capture),
+                        "captureStartedUtc": capture_started_utc,
+                        "captureCompletedUtc": capture_completed_utc,
+                        "captureLatencyMs": round((time.perf_counter() - capture_started) * 1000.0, 3),
+                        "captureTimestampDeltaMs": round(runtime_epoch_before_capture - _expected_epoch_ms(time_value, day), 3) if runtime_epoch_before_capture is not None else None,
                         "activeWatchFace": _runtime_is_active(adb, serial),
                         "captureOk": capture_code == 0 and pull_code == 0,
                         "captureOutput": capture_output or pull_output,
@@ -204,6 +239,19 @@ def _bright_bbox(image: Image.Image, box: tuple[int, int, int, int], threshold: 
     return (box[0] + bbox[0], box[1] + bbox[1], box[0] + bbox[2], box[1] + bbox[3])
 
 
+def _neutral_text_bbox(image: Image.Image, box: tuple[int, int, int, int], threshold: int = 100, chroma_limit: int = 60) -> tuple[int, int, int, int] | None:
+    pixels = image.convert("RGB").load()
+    points = []
+    for y in range(max(0, box[1]), min(image.height, box[3])):
+        for x in range(max(0, box[0]), min(image.width, box[2])):
+            red, green, blue = pixels[x, y]
+            if max(red, green, blue) >= threshold and max(red, green, blue) - min(red, green, blue) <= chroma_limit:
+                points.append((x, y))
+    if not points:
+        return None
+    return (min(x for x, _ in points), min(y for _, y in points), max(x for x, _ in points) + 1, max(y for _, y in points) + 1)
+
+
 def _foreground_points(image: Image.Image, box: tuple[int, int, int, int]) -> list[tuple[int, int]]:
     pixels = image.convert("RGB").load()
     points: list[tuple[int, int]] = []
@@ -243,22 +291,29 @@ def _circular_error(expected: float | None, observed: float | None) -> float | N
     return round(abs((observed - expected + 180.0) % 360.0 - 180.0), 4)
 
 
-def _runtime_geometry_metrics(runtime: Image.Image, scene: dict[str, Any], time_value: str, date_bbox: dict[str, Any] | None) -> dict[str, Any]:
+def _runtime_geometry_metrics(
+    runtime: Image.Image,
+    scene: dict[str, Any],
+    time_value: str,
+    date_bbox: dict[str, Any] | None,
+    timestamp_delta_ms: float = 0.0,
+) -> dict[str, Any]:
     scale_x = runtime.width / CANVAS_SIZE[0]
     scale_y = runtime.height / CANVAS_SIZE[1]
     center = (219.0 * scale_x, 219.0 * scale_y)
     hour, minute, second = (int(part) for part in time_value.split(":"))
+    delta_seconds = timestamp_delta_ms / 1000.0
     expected: dict[str, float] = {}
     for element in scene.get("elements", []):
         if element.get("type") != "ANALOG_HAND":
             continue
         role = element.get("role")
         if role == "HOUR":
-            expected[role] = ((hour % 12) + minute / 60 + second / 3600) * 30
+            expected[role] = ((hour % 12) + minute / 60 + second / 3600) * 30 + delta_seconds * 0.0083333333
         elif role == "MINUTE":
-            expected[role] = (minute + second / 60) * 6
+            expected[role] = (minute + second / 60) * 6 + delta_seconds * 0.1
         else:
-            expected[role] = second * 6
+            expected[role] = second * 6 + delta_seconds * 6.0
     hands: dict[str, Any] = {}
     for element in scene.get("elements", []):
         if element.get("type") != "ANALOG_HAND":
@@ -299,6 +354,8 @@ def _runtime_geometry_metrics(runtime: Image.Image, scene: dict[str, Any], time_
             observed_width = max(1.0, perpendicular_distances[percentile_index] * 2.0)
         hands[role] = {
             "expectedAngleDeg": round(expected.get(role), 4) if role in expected else None,
+            "expectedAngleAtCaptureDeg": round(expected.get(role), 4) if role in expected else None,
+            "captureTimestampDeltaMs": round(timestamp_delta_ms, 3),
             "observedAngleDegApprox": round(observed_angle, 4) if observed_angle is not None else None,
             "angleErrorDegApprox": _circular_error(expected.get(role), observed_angle),
             "expectedPivot": {"x": round(center[0], 4), "y": round(center[1], 4)},
@@ -411,6 +468,400 @@ def compare_runtime_case(deterministic_path: Path, runtime_path: Path | None, sc
         record["status"] = "blocked_by_runtime_environment"
         record["runtimeDifference"] = None
     return record
+
+
+CALIBRATION_RESAMPLINGS = {
+    "nearest": Image.Resampling.NEAREST,
+    "bilinear": Image.Resampling.BILINEAR,
+    "bicubic": Image.Resampling.BICUBIC,
+}
+
+
+def _inverse_normalize_runtime(runtime: Image.Image, transform: dict[str, Any], resampling: Image.Resampling) -> Image.Image:
+    scale = float(transform["uniformScale"])
+    offset_x = float(transform["centerOffset"]["x"])
+    offset_y = float(transform["centerOffset"]["y"])
+    # Pillow's affine coefficients map each output (logical) pixel to its
+    # source (runtime) coordinate, so the forward runtime transform belongs
+    # in the sampling matrix.
+    matrix = (scale, 0.0, offset_x, 0.0, scale, offset_y)
+    return runtime.transform(CANVAS_SIZE, Image.Transform.AFFINE, matrix, resample=resampling)
+
+
+def _estimate_platform_transform(samples: list[tuple[Image.Image, Image.Image]], scene: dict[str, Any]) -> dict[str, Any]:
+    if not samples:
+        raise ValueError("runtime calibration requires at least one deterministic/runtime pair")
+    runtime_width, runtime_height = samples[0][1].size
+    scale_x = runtime_width / CANVAS_SIZE[0]
+    scale_y = runtime_height / CANVAS_SIZE[1]
+    uniform_scale = (scale_x + scale_y) / 2.0
+    initial_offset = {
+        "x": (runtime_width - CANVAS_SIZE[0] * uniform_scale) / 2.0,
+        "y": (runtime_height - CANVAS_SIZE[1] * uniform_scale) / 2.0,
+    }
+    masks = _region_masks(scene)
+
+    def score(offset_x: float, offset_y: float, resampling: Image.Resampling) -> float:
+        candidate = {"uniformScale": uniform_scale, "centerOffset": {"x": offset_x, "y": offset_y}}
+        values = []
+        for deterministic, runtime in samples:
+            normalized = _inverse_normalize_runtime(runtime, candidate, resampling)
+            values.append(_mae(deterministic, normalized, masks["staticDial"]))
+        return sum(values) / max(1, len(values))
+
+    best_offset = (initial_offset["x"], initial_offset["y"])
+    best_score = score(*best_offset, Image.Resampling.BICUBIC)
+    for dx_index in range(-8, 9):
+        for dy_index in range(-8, 9):
+            candidate_offset = (initial_offset["x"] + dx_index * 0.25, initial_offset["y"] + dy_index * 0.25)
+            candidate_score = score(*candidate_offset, Image.Resampling.BICUBIC)
+            if candidate_score < best_score:
+                best_offset, best_score = candidate_offset, candidate_score
+
+    filter_scores = {}
+    for name, resampling in CALIBRATION_RESAMPLINGS.items():
+        filter_scores[name] = round(score(*best_offset, resampling), 4)
+    selected_resampling = min(filter_scores, key=filter_scores.get)
+    logical_radius = min(CANVAS_SIZE) / 2.0
+    runtime_radius = min(runtime_width, runtime_height) / 2.0
+    return {
+        "logicalSize": list(CANVAS_SIZE),
+        "runtimeSize": [runtime_width, runtime_height],
+        "uniformScale": round(uniform_scale, 8),
+        "axisScale": {"x": round(scale_x, 8), "y": round(scale_y, 8)},
+        "anisotropy": round(abs(scale_x - scale_y), 8),
+        "centerOffset": {"x": round(best_offset[0], 4), "y": round(best_offset[1], 4)},
+        "logicalCenter": {"x": CANVAS_SIZE[0] / 2.0, "y": CANVAS_SIZE[1] / 2.0},
+        "runtimeCenter": {"x": round(CANVAS_SIZE[0] / 2.0 * uniform_scale + best_offset[0], 4), "y": round(CANVAS_SIZE[1] / 2.0 * uniform_scale + best_offset[1], 4)},
+        "circularViewport": {
+            "shape": "circle",
+            "logicalRadius": round(logical_radius, 4),
+            "runtimeRadius": round(runtime_radius, 4),
+            "estimatedFromCanvasBounds": True,
+            "edgeContourIndependentFit": False,
+        },
+        "offsetSearch": {"initial": initial_offset, "stepPx": 0.25, "rangePx": 2.0, "staticDialMae": round(best_score, 4)},
+        "resamplingCandidatesStaticDialMae": filter_scores,
+        "selectedResampling": selected_resampling,
+        "inverseTransform": "runtime(x,y) = logical(x,y) * uniformScale + centerOffset",
+    }
+
+
+def _parse_date_render_config(xml_path: Path) -> dict[str, Any]:
+    root = ElementTree.parse(xml_path).getroot()
+    part_text = next((element for element in root.iter() if element.tag.rsplit("}", 1)[-1] == "PartText"), None)
+    text_element = next((element for element in root.iter() if element.tag.rsplit("}", 1)[-1] == "Text"), None)
+    font = next((element for element in root.iter() if element.tag.rsplit("}", 1)[-1] in {"Font", "BitmapFont"} and ("size" in element.attrib or "family" in element.attrib)), None)
+    bitmap_font = next((element for element in root.iter() if element.tag.rsplit("}", 1)[-1] == "BitmapFont"), None)
+    characters = [element.attrib.get("name") for element in root.iter() if element.tag.rsplit("}", 1)[-1] == "Character"]
+    return {
+        "xml": str(xml_path),
+        "textBox": dict(part_text.attrib) if part_text is not None else None,
+        "alignment": text_element.attrib.get("align") if text_element is not None else None,
+        "renderer": font.tag.rsplit("}", 1)[-1] if font is not None else None,
+        "family": font.attrib.get("family") if font is not None else None,
+        "bitmapFontName": bitmap_font.attrib.get("name") if bitmap_font is not None else None,
+        "fallbackFamily": font.attrib.get("fallbackFamily") if font is not None else None,
+        "fontSize": float(font.attrib["size"]) if font is not None and "size" in font.attrib else None,
+        "fontWeight": font.attrib.get("weight") if font is not None else None,
+        "lineHeightDeclared": font.attrib.get("lineHeight") if font is not None else None,
+        "manualCharacters": [character for character in characters if character],
+        "runtimeFontResourceIntrospection": "not_exposed_by_screenshot_or_WFF_capture",
+    }
+
+
+def _date_window_measurement(image: Image.Image, expected_bbox: dict[str, Any] | None, reference_bbox: tuple[int, int, int, int] | None = None) -> dict[str, Any]:
+    if not expected_bbox:
+        return {"observed": False}
+    box = (
+        int(expected_bbox["x"]),
+        int(expected_bbox["y"]),
+        int(expected_bbox["x"] + expected_bbox["width"]),
+        int(expected_bbox["y"] + expected_bbox["height"]),
+    )
+    observed = _neutral_text_bbox(image, box)
+    result: dict[str, Any] = {
+        "expectedBox": list(box),
+        "observed": observed is not None,
+        "foregroundBbox": list(observed) if observed else None,
+        "foregroundSize": {"width": observed[2] - observed[0], "height": observed[3] - observed[1]} if observed else None,
+        "centerOffsetPx": None,
+        "baselineBottomOffsetPx": None,
+    }
+    if observed:
+        expected_center = ((box[0] + box[2]) / 2.0, (box[1] + box[3]) / 2.0)
+        observed_center = ((observed[0] + observed[2]) / 2.0, (observed[1] + observed[3]) / 2.0)
+        result["centerOffsetPx"] = round(math.hypot(observed_center[0] - expected_center[0], observed_center[1] - expected_center[1]), 4)
+        if reference_bbox:
+            result["baselineBottomOffsetPx"] = round(observed[3] - reference_bbox[3], 4)
+            result["referenceForegroundBbox"] = list(reference_bbox)
+    return result
+
+
+def _write_date_calibration_sheet(records: list[dict[str, Any]], destination: Path) -> None:
+    selected = [record for record in records if record["time"] == "00:00:00" and record["date"] in VALIDATION_DATES]
+    tile = (120, 84)
+    sheet = Image.new("RGB", (tile[0] * 3, (tile[1] + 18) * max(1, len(selected))), "#101010")
+    draw = ImageDraw.Draw(sheet)
+    for index, record in enumerate(selected):
+        y = index * (tile[1] + 18)
+        deterministic = Image.open(record["deterministic"]).convert("RGB").crop((346, 207, 393, 236))
+        normalized = Image.open(record["normalizedRuntime"]).convert("RGB").crop((346, 207, 393, 236))
+        difference = ImageChops.difference(deterministic, normalized)
+        sheet.paste(ImageOps.contain(deterministic, tile), (0, y))
+        sheet.paste(ImageOps.contain(normalized, tile), (tile[0], y))
+        sheet.paste(ImageOps.contain(ImageOps.colorize(difference.convert("L"), "#050505", "#ff3b30"), tile), (tile[0] * 2, y))
+        draw.text((4, y + tile[1] + 2), f'day {record["date"]}', fill="white")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(destination)
+
+
+def _calibration_case_key(mode: str, time_value: str, day: int) -> tuple[str, str, int]:
+    return mode, time_value, day
+
+
+def run_runtime_calibration(
+    scene_path: Path,
+    deterministic_xml: Path,
+    runtime_source_dir: Path,
+    output_root: Path,
+    manual_xml: Path | None = None,
+) -> dict[str, Any]:
+    scene = json.loads(scene_path.read_text(encoding="utf-8"))
+    output_root.mkdir(parents=True, exist_ok=True)
+    source_report_path = runtime_source_dir / "runtime-validation-report.json"
+    source_report = json.loads(source_report_path.read_text(encoding="utf-8")) if source_report_path.exists() else {}
+    modes = {"manual_override_off": deterministic_xml}
+    if manual_xml:
+        modes["manual_override_on"] = manual_xml
+    capture_index = {}
+    for capture in source_report.get("runtimeScreenshots", {}).get("captures", []):
+        capture_index[_calibration_case_key(capture["mode"], capture["time"], int(capture["date"]))] = capture
+    source_case_index = {
+        _calibration_case_key(case["mode"], case["time"], int(case["date"])): case
+        for case in source_report.get("cases", [])
+    }
+    deterministic_records_by_mode: dict[str, list[dict[str, Any]]] = {}
+    samples: list[tuple[Image.Image, Image.Image]] = []
+    for mode, xml_path in modes.items():
+        deterministic_records = render_deterministic_matrix(xml_path, output_root, mode)
+        deterministic_records_by_mode[mode] = deterministic_records
+        for item in deterministic_records:
+            runtime_path = runtime_source_dir / mode / "runtime" / Path(item["path"]).name
+            if runtime_path.exists() and len(samples) < 12:
+                samples.append((Image.open(item["path"]).convert("RGB"), Image.open(runtime_path).convert("RGB")))
+    if not samples:
+        report = {
+            "milestone": "A2.5c Runtime Calibration",
+            "baseline": "7421f98",
+            "status": "blocked_by_runtime_environment",
+            "platformTransform": None,
+            "normalizedMetrics": None,
+            "trueWffRenderingDifferences": None,
+            "measurementArtifacts": {},
+            "requiredProductionFixes": [],
+            "deferred": ["runtime screenshots from A2.5b are unavailable"],
+        }
+        report_path = output_root / "runtime-calibration-report.json"
+        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        report["report"] = str(report_path)
+        return report
+    transform = _estimate_platform_transform(samples, scene)
+    selected_resampling = CALIBRATION_RESAMPLINGS[transform["selectedResampling"]]
+    date_element = next((element for element in scene.get("elements", []) if element.get("type") == "DYNAMIC_SLOT"), None)
+    date_bbox = date_element.get("bbox") if date_element else None
+    case_records: list[dict[str, Any]] = []
+    for mode, deterministic_records in deterministic_records_by_mode.items():
+        xml_config = _parse_date_render_config(modes[mode])
+        for item in deterministic_records:
+            runtime_path = runtime_source_dir / mode / "runtime" / Path(item["path"]).name
+            key = _calibration_case_key(mode, item["time"], int(item["date"]))
+            capture = capture_index.get(key, {})
+            raw_case = source_case_index.get(key, {})
+            record: dict[str, Any] = {
+                "time": item["time"],
+                "date": item["date"],
+                "mode": mode,
+                "deterministic": item["path"],
+                "runtimeSource": str(runtime_path) if runtime_path.exists() else None,
+                "captureTimestamp": capture,
+                "rawMetrics": raw_case.get("mae"),
+                "status": "blocked_by_runtime_environment",
+            }
+            if not runtime_path.exists():
+                case_records.append(record)
+                continue
+            runtime = Image.open(runtime_path).convert("RGB")
+            normalized = _inverse_normalize_runtime(runtime, transform, selected_resampling)
+            normalized_path = output_root / mode / "runtime-normalized" / Path(item["path"]).name
+            normalized_path.parent.mkdir(parents=True, exist_ok=True)
+            normalized.save(normalized_path)
+            deterministic = Image.open(item["path"]).convert("RGB")
+            difference = ImageChops.difference(deterministic, normalized)
+            difference_path = output_root / mode / "normalized-difference" / Path(item["path"]).name
+            difference_path.parent.mkdir(parents=True, exist_ok=True)
+            difference.save(difference_path)
+            masks = _region_masks(scene)
+            for region, mask in masks.items():
+                _save_region_difference(difference, mask, output_root / mode / "normalized-roi-difference" / region / Path(item["path"]).name)
+            timestamp_delta_ms = float(capture.get("captureTimestampDeltaMs") or 0.0)
+            geometry = _runtime_geometry_metrics(normalized, scene, item["time"], date_bbox, timestamp_delta_ms=timestamp_delta_ms)
+            date_box = _date_window_measurement(normalized, date_bbox, _date_window_measurement(deterministic, date_bbox).get("foregroundBbox"))
+            date_box["renderConfiguration"] = xml_config
+            date_box["manualBitmapGlyphComparison"] = mode == "manual_override_on" and int(item["date"]) == 8
+            record.update(
+                {
+                    "normalizedRuntime": str(normalized_path),
+                    "normalizedDifference": str(difference_path),
+                    "normalizedMae": {region: _mae(deterministic, normalized, mask) for region, mask in masks.items()} | {"global": _mae(deterministic, normalized)},
+                    "normalizedBlur": {
+                        "deterministic": _blur_metric(deterministic),
+                        "runtime": _blur_metric(normalized),
+                        "difference": round(_blur_metric(normalized) - _blur_metric(deterministic), 4),
+                    },
+                    "handExpectedAngleAtCapture": geometry["hands"],
+                    "dateWindow": date_box,
+                    "status": "normalized_and_compared",
+                }
+            )
+            case_records.append(record)
+    compared = [record for record in case_records if record["status"] == "normalized_and_compared"]
+
+    def average(metric: str, region: str | None = None) -> float | None:
+        values = []
+        for record in compared:
+            source = record.get(metric, {})
+            value = source.get(region) if region else source
+            if isinstance(value, (int, float)):
+                values.append(float(value))
+        return round(sum(values) / len(values), 4) if values else None
+
+    def maximum(metric: str, region: str | None = None) -> float | None:
+        values = []
+        for record in compared:
+            source = record.get(metric, {})
+            value = source.get(region) if region else source
+            if isinstance(value, (int, float)):
+                values.append(float(value))
+        return round(max(values), 4) if values else None
+
+    def hand_average(metric: str, role: str | None = None) -> float | None:
+        values = []
+        for record in compared:
+            for hand_role, hand in record.get("handExpectedAngleAtCapture", {}).items():
+                if role is None or role == hand_role:
+                    value = hand.get(metric)
+                    if isinstance(value, (int, float)):
+                        values.append(abs(float(value)))
+        return round(sum(values) / len(values), 4) if values else None
+
+    def hand_maximum(metric: str, role: str | None = None) -> float | None:
+        values = []
+        for record in compared:
+            for hand_role, hand in record.get("handExpectedAngleAtCapture", {}).items():
+                if role is None or role == hand_role:
+                    value = hand.get(metric)
+                    if isinstance(value, (int, float)):
+                        values.append(abs(float(value)))
+        return round(max(values), 4) if values else None
+
+    def date_measurement_average(key: str) -> float | None:
+        values = [float(record["dateWindow"][key]) for record in compared if isinstance(record.get("dateWindow", {}).get(key), (int, float))]
+        return round(sum(values) / len(values), 4) if values else None
+
+    def date_measurement_maximum(key: str) -> float | None:
+        values = [float(record["dateWindow"][key]) for record in compared if isinstance(record.get("dateWindow", {}).get(key), (int, float))]
+        return round(max(values), 4) if values else None
+
+    date_configs = {mode: _parse_date_render_config(xml_path) for mode, xml_path in modes.items()}
+    date_artifacts = {}
+    for mode in modes:
+        date_artifact = output_root / mode / "date-window-calibration-sheet.png"
+        _write_date_calibration_sheet([record for record in compared if record["mode"] == mode], date_artifact)
+        date_artifacts[mode] = str(date_artifact)
+        (output_root / mode / "date-window-analysis.json").write_text(
+            json.dumps(
+                {
+                    "renderConfiguration": date_configs[mode],
+                    "cases": [record for record in compared if record["mode"] == mode],
+                    "runtimeFontResourceConclusion": "The screenshot cannot expose the internal runtime font file; declared WFF family and observed glyph geometry are recorded separately.",
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+
+    raw_summary = source_report.get("quantitativeSummary", {})
+    normalized_summary = {
+        "globalMae": {"average": average("normalizedMae", "global"), "maximum": maximum("normalizedMae", "global")},
+        "staticDialMae": {"average": average("normalizedMae", "staticDial"), "maximum": maximum("normalizedMae", "staticDial")},
+        "handsMae": {"average": average("normalizedMae", "hands"), "maximum": maximum("normalizedMae", "hands")},
+        "dateMae": {"average": average("normalizedMae", "date"), "maximum": maximum("normalizedMae", "date")},
+        "handAngleErrorDegAtCapture": {"average": hand_average("angleErrorDegApprox"), "maximum": hand_maximum("angleErrorDegApprox")},
+        "secondHandAngleErrorDegAtCapture": {"average": hand_average("angleErrorDegApprox", "SECOND"), "maximum": hand_maximum("angleErrorDegApprox", "SECOND")},
+        "handPivotErrorPx": {"average": hand_average("pivotErrorPx"), "maximum": hand_maximum("pivotErrorPx")},
+        "handLengthDifferencePxApprox": {"average": hand_average("lengthDifferencePxApprox"), "maximum": hand_maximum("lengthDifferencePxApprox")},
+        "handWidthDifferencePxApprox": {"average": hand_average("widthDifferencePxApprox"), "maximum": hand_maximum("widthDifferencePxApprox")},
+        "dateBaselineBottomOffsetPx": {"average": date_measurement_average("baselineBottomOffsetPx"), "maximum": date_measurement_maximum("baselineBottomOffsetPx")},
+        "dateCenterOffsetPx": {"average": date_measurement_average("centerOffsetPx"), "maximum": date_measurement_maximum("centerOffsetPx")},
+        "blurDelta": {"average": average("normalizedBlur", "difference")},
+        "timestampAwareCaptureCount": sum(1 for record in compared if record.get("captureTimestamp", {}).get("captureTimestampDeltaMs") is not None),
+    }
+    date_wff_difference = normalized_summary["dateMae"]["average"] is not None and normalized_summary["staticDialMae"]["average"] is not None and normalized_summary["dateMae"]["average"] > normalized_summary["staticDialMae"]["average"] * 2
+    report = {
+        "milestone": "A2.5c Runtime Calibration",
+        "baseline": "7421f98",
+        "registrationBaseline": "95207c2",
+        "status": "runtime_compared" if compared else "blocked_by_runtime_environment",
+        "sourceReport": str(source_report_path),
+        "platformTransform": transform,
+        "normalizedMetrics": normalized_summary,
+        "rawMetricsReference": raw_summary,
+        "trueWffRenderingDifferences": {
+            "platformTransformExplained": {
+                "rawGlobalMaeAverage": raw_summary.get("globalMae", {}).get("average"),
+                "normalizedGlobalMaeAverage": normalized_summary["globalMae"]["average"],
+                "globalMaeReduction": round((raw_summary.get("globalMae", {}).get("average") or 0.0) - (normalized_summary["globalMae"]["average"] or 0.0), 4),
+                "rawStaticDialMaeAverage": raw_summary.get("staticDialMae", {}).get("average"),
+                "normalizedStaticDialMaeAverage": normalized_summary["staticDialMae"]["average"],
+            },
+            "resampling": {
+                "candidateStaticDialMae": transform["resamplingCandidatesStaticDialMae"],
+                "selectedForInverseNormalization": transform["selectedResampling"],
+                "interpretation": "filter candidate scores are calibration measurements, not production renderer changes",
+            },
+            "handRendering": {
+                "normalizedHandsMae": normalized_summary["handsMae"],
+                "timestampDeltaCorrectionApplied": normalized_summary["timestampAwareCaptureCount"] > 0,
+                "secondHandCorrection": "expected angle uses emulator wall-clock delta at capture; screenshot contour remains an approximate observation",
+            },
+            "dateWindow": {
+                "normalizedDateMae": normalized_summary["dateMae"],
+                "likelyWffTextRenderingDifference": date_wff_difference,
+                "configurations": date_configs,
+                "manualBitmapGlyphComparedSeparately": True,
+            },
+            "classification": ["WFF text rendering" if date_wff_difference else "no confirmed residual text difference", "residual image filtering" if normalized_summary["blurDelta"]["average"] else "no measured blur residual"],
+        },
+        "measurementArtifacts": {
+            "normalizedRuntimeRoot": str(output_root),
+            "dateCalibrationSheets": date_artifacts,
+            "dateAnalysis": {mode: str(output_root / mode / "date-window-analysis.json") for mode in modes},
+            "caseCount": len(case_records),
+            "normalizedCaseCount": len(compared),
+            "timestampCaptureMetadata": "embedded per case in cases[].captureTimestamp",
+        },
+        "cases": case_records,
+        "requiredProductionFixes": [],
+        "deferred": ["runtime font file identity cannot be introspected from screenshot alone; inspect platform/font diagnostics if a production text fix is proposed"],
+    }
+    report_path = output_root / "runtime-calibration-report.json"
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    report["report"] = str(report_path)
+    return report
 
 
 def _make_review_atlases(cases: list[dict[str, Any]], output_root: Path) -> dict[str, str]:

@@ -132,6 +132,17 @@ artifacts.
 The gate never labels a phone emulator as Wear OS and reports
 `blocked_by_runtime_environment` when no Wear OS runtime is available.
 
+A2.5c calibrates an existing A2.5b capture set into logical 438×438 space
+without changing the production scene or WFF renderer:
+
+```powershell
+python -m photo2wff runtime-calibration path\to\scene.json path\to\manual-off\watchface.xml runtime-validation --manual-xml path\to\manual-on\watchface.xml --out runtime-calibration
+```
+
+It records the 454×454-to-438×438 transform, inverse-normalized screenshots,
+timestamp-aware hand expectations, resampling candidates, and separate date
+window/font measurements.
+
 `quick` creates:
 
 ```text
