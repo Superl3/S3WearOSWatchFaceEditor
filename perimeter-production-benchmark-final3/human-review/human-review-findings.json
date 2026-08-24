@@ -1,0 +1,31 @@
+{
+  "status": "benchmark_failed_human_review",
+  "accepted": false,
+  "findings": [
+    {
+      "area": "static dial hand removal",
+      "severity": "blocking",
+      "finding": "The reused analog hand cleanup leaves visible source-hand silhouettes and red second-hand fragments in the static dial."
+    },
+    {
+      "area": "perimeter artwork grouping",
+      "severity": "blocking",
+      "finding": "Connected-component decomposition splits some multi-part or neighboring numeral artwork, producing incorrect spacing after element-preserving mapping."
+    },
+    {
+      "area": "element-preserving mapping",
+      "severity": "review",
+      "finding": "Local glyph shape is preserved better than raster warp, but the current grouping errors prevent production acceptance."
+    },
+    {
+      "area": "dynamic text",
+      "severity": "pass",
+      "finding": "Weekday and day-of-month are detected, removed from the static layer, and rendered dynamically at runtime."
+    },
+    {
+      "area": "runtime",
+      "severity": "pass",
+      "finding": "The element-preserving APK was activated as the real watch face and captured for nine test times on the Wear OS emulator."
+    }
+  ]
+}

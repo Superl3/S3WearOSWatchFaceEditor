@@ -47,6 +47,13 @@ def _day_value(fixed_date: str, padded: bool = False) -> str:
 
 
 def _parameter_value(expression: str, fixed_date: str) -> str:
+    if expression == "[DAY_OF_WEEK_S]":
+        normalized = str(fixed_date).replace("/", "-").replace(".", "-")
+        try:
+            value = datetime.fromisoformat(normalized if normalized.count("-") == 2 else f"2024-01-{_day_value(fixed_date, padded=True)}")
+        except ValueError:
+            value = datetime(2024, 1, 1)
+        return value.strftime("%a").upper()
     if expression == "[DAY]":
         return _day_value(fixed_date)
     if expression == "[DAY_Z]":

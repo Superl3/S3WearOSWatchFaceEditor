@@ -199,6 +199,22 @@ If the validator is absent or cannot execute, WFF validation fails closed.
 `lint_wff_xml` is only a Photo2WFF structural lint and is never reported as
 official WFF validation.
 
+## Generic rounded-rectangle perimeter analog support
+
+Run the target-independent fixture gate before benchmarking a product image:
+
+```powershell
+photo2wff perimeter-fixtures --out perimeter-generic-fixtures
+photo2wff perimeter-benchmark reference.webp --out perimeter-benchmark --serial emulator-5556
+```
+
+The benchmark command refuses to analyze the reference until the synthetic
+gate passes. It emits both `RASTER_WARP` and `ELEMENT_PRESERVING` projects,
+keeps unknown perimeter content as `STATIC_ARTWORK`, extracts central weekday
+and day-of-month candidates, and reuses the existing analog-hand pipeline.
+Structural/runtime success and visual benchmark acceptance are reported
+separately; visual acceptance remains human-reviewed.
+
 The legacy A2.5c command can still reproduce the invalidated research artifact:
 
 ```powershell

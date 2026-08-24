@@ -110,10 +110,10 @@
       "properties": {
         "source": { "$ref": "#/$defs/displayShape" },
         "target": { "$ref": "#/$defs/displayShape" },
-        "mappingPolicy": { "const": "CENTER_PRESERVING_BOUNDARY_NORMALIZED" },
+        "mappingPolicy": { "enum": ["CENTER_PRESERVING_BOUNDARY_NORMALIZED", "RASTER_WARP", "ELEMENT_PRESERVING"] },
         "availableMappings": {
           "type": "array",
-          "items": { "enum": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING"] },
+          "items": { "enum": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING", "RASTER_WARP", "ELEMENT_PRESERVING"] },
           "minItems": 1
         }
       }
@@ -198,10 +198,24 @@
       "required": ["id", "type", "dynamic", "bbox", "confidence"],
       "properties": {
         "id": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
-        "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "DYNAMIC_SLOT", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "ANALOG_HAND", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
+        "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "DYNAMIC_SLOT", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "STATIC_ARTWORK", "ANALOG_HAND", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
         "dynamic": { "type": "boolean" },
         "bbox": { "$ref": "#/$defs/bbox" },
         "rotation": { "type": "number", "minimum": -360, "maximum": 360 },
+        "anchor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y"],
+          "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+        },
+        "sourceAngleDeg": { "type": "number", "minimum": 0, "maximum": 360 },
+        "perimeterPosition": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "mappingMode": { "enum": ["RASTER_WARP", "ELEMENT_PRESERVING"] },
+        "opticalOffsetX": { "type": "number" },
+        "opticalOffsetY": { "type": "number" },
+        "opticalScale": { "type": "number", "exclusiveMinimum": 0 },
+        "opticalRotation": { "type": "number", "minimum": -360, "maximum": 360 },
         "format": { "type": "string" },
         "style": { "$ref": "#/$defs/style" },
         "text": { "type": "string" },

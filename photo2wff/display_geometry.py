@@ -233,6 +233,55 @@ def map_structured_element(element: dict[str, Any], source: RoundedRect, target:
     }
 
 
+def map_element_preserving(element: dict[str, Any], source: RoundedRect, target: RoundedRect) -> dict[str, Any]:
+    """Map an artwork anchor while applying only a uniform local transform."""
+
+    bbox = element["bbox"]
+    anchor_value = element.get("anchor") or {
+        "x": float(bbox["x"]) + float(bbox["width"]) / 2,
+        "y": float(bbox["y"]) + float(bbox["height"]) / 2,
+    }
+    source_anchor = (float(anchor_value["x"]), float(anchor_value["y"]))
+    mapped_anchor = boundary_normalized_map(source_anchor, source, target)
+    vector = (source_anchor[0] - source.center_x, source_anchor[1] - source.center_y)
+    vector_length = math.hypot(*vector)
+    direction = (0.0, -1.0) if vector_length == 0 else (vector[0] / vector_length, vector[1] / vector_length)
+    boundary_scale = target.boundary_distance(direction) / source.boundary_distance(direction)
+    uniform_scale = boundary_scale * float(element.get("scale", 1.0)) * float(element.get("opticalScale", 1.0))
+    target_anchor = (
+        mapped_anchor[0] + float(element.get("opticalOffsetX", 0.0)),
+        mapped_anchor[1] + float(element.get("opticalOffsetY", 0.0)),
+    )
+    width = float(bbox["width"]) * uniform_scale
+    height = float(bbox["height"]) * uniform_scale
+    source_rotation = float(element.get("rotation", 0.0))
+    rotation = float(element.get("opticalRotation", 0.0))
+    return {
+        "id": element.get("id"),
+        "type": element.get("type"),
+        "mappingMode": "ELEMENT_PRESERVING",
+        "sourceAnchor": {"x": source_anchor[0], "y": source_anchor[1]},
+        "targetAnchor": {"x": target_anchor[0], "y": target_anchor[1]},
+        "sourceAngleDeg": angle_from_direction(direction),
+        "uniformScale": uniform_scale,
+        "rotation": rotation,
+        "sourceRotation": source_rotation,
+        "targetBbox": {
+            "x": target_anchor[0] - width / 2,
+            "y": target_anchor[1] - height / 2,
+            "width": width,
+            "height": height,
+        },
+        "opticalCorrection": {
+            "x": float(element.get("opticalOffsetX", 0.0)),
+            "y": float(element.get("opticalOffsetY", 0.0)),
+            "scale": float(element.get("opticalScale", 1.0)),
+            "rotation": float(element.get("opticalRotation", 0.0)),
+        },
+        "localAppearance": "uniform_scale_and_rotation_only",
+    }
+
+
 def _bilinear_sample(image: Image.Image, point: Point) -> tuple[int, int, int, int]:
     x, y = point
     if x < 0 or y < 0 or x >= image.width or y >= image.height:

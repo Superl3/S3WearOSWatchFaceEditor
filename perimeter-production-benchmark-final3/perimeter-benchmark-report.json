@@ -1,0 +1,316 @@
+{
+  "milestone": "General Rounded-Rectangle Perimeter Analog Support",
+  "system": {
+    "pass": true,
+    "fixtures": {
+      "milestone": "Generic Rounded-Rectangle Analog Fixtures",
+      "systemPass": true,
+      "checks": {
+        "twelveRectanglesDetected": true,
+        "rectangleAnchorMaxErrorPx": 1.1506,
+        "rotatedGlyphElementsDetected": true,
+        "elementMappingMaxErrorPx": 0.0,
+        "localAspectRatioPreserved": true,
+        "weekdayAndDateDetected": true,
+        "dynamicTextRemoved": true,
+        "analogHandFixtureCreated": true
+      },
+      "fixtures": {
+        "rectangles": "perimeter-production-benchmark-final3\\generic-fixtures\\twelve-rectangles.png",
+        "rotatedGlyphs": "perimeter-production-benchmark-final3\\generic-fixtures\\rotated-glyph-like.png",
+        "dynamicText": "perimeter-production-benchmark-final3\\generic-fixtures\\center-weekday-date.png",
+        "analogHands": "perimeter-production-benchmark-final3\\generic-fixtures\\three-analog-hands.png"
+      },
+      "targetReferenceUsed": false
+    },
+    "officialValidatorPass": true,
+    "buildPass": true
+  },
+  "benchmark": {
+    "pass": false,
+    "automatedPipelinePass": true,
+    "humanReviewStatus": "required",
+    "reference": "C:\\Users\\bug95\\OneDrive\\Documents\\apple_watch_7_sport_02.webp",
+    "perimeterElements": 13,
+    "dynamicText": {
+      "elements": [
+        {
+          "id": "weekday",
+          "type": "WEEKDAY",
+          "dynamic": true,
+          "bbox": {
+            "x": 163,
+            "y": 119,
+            "width": 70,
+            "height": 32
+          },
+          "style": {
+            "fontFamily": "Pretendard",
+            "fontWeight": 400,
+            "fontSize": 28,
+            "alignment": "center",
+            "color": "#FFFFFF"
+          },
+          "confidence": 0.7,
+          "zIndex": 6,
+          "relationships": {
+            "detection": "central aligned component row",
+            "semanticHeuristic": "WEEKDAY"
+          }
+        },
+        {
+          "id": "day_of_month",
+          "type": "DYNAMIC_SLOT",
+          "slotType": "DATE_DAY_OF_MONTH",
+          "dynamic": true,
+          "bbox": {
+            "x": 233,
+            "y": 119,
+            "width": 44,
+            "height": 32
+          },
+          "style": {
+            "fontFamily": "Pretendard",
+            "fontWeight": 400,
+            "fontSize": 28,
+            "alignment": "center",
+            "color": "#FFFFFF"
+          },
+          "confidence": 0.66,
+          "zIndex": 6,
+          "relationships": {
+            "detection": "central aligned component row",
+            "semanticHeuristic": "DATE_DAY_OF_MONTH"
+          }
+        }
+      ],
+      "candidateComponentCount": 1,
+      "detected": true,
+      "removalMask": "perimeter-production-benchmark-final3\\dynamic-text\\dynamic-text-mask.png",
+      "cleanBackground": "perimeter-production-benchmark-final3\\dynamic-text\\dynamic-text-removed.png",
+      "reconstruction": "existing deterministic simple-background reconstruction",
+      "requiresHumanReview": false
+    },
+    "hands": [
+      "HOUR",
+      "MINUTE",
+      "SECOND"
+    ],
+    "runtime": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\perimeter-production-benchmark-final3\\project-element-preserving\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\perimeter-production-benchmark-final3\\project-element-preserving\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 25.1 MB/s (1304808 bytes in 0.050s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[150] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "captures": [
+        {
+          "time": "00:00:00",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-00-00-00.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 00:00:00 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723593600190\n1723593600528",
+          "expectedEpochMs": 1723593600000,
+          "runtimeEpochMsBeforeCapture": 1723593600190,
+          "runtimeEpochMsAfterCapture": 1723593600528,
+          "captureTimestampDeltaRangeMs": [
+            190,
+            528
+          ],
+          "captureTimeUncertaintyMs": 338,
+          "activeWatchFace": true
+        },
+        {
+          "time": "03:15:45",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-03-15-45.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 03:15:45 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723605345204\n1723605345534",
+          "expectedEpochMs": 1723605345000,
+          "runtimeEpochMsBeforeCapture": 1723605345204,
+          "runtimeEpochMsAfterCapture": 1723605345534,
+          "captureTimestampDeltaRangeMs": [
+            204,
+            534
+          ],
+          "captureTimeUncertaintyMs": 330,
+          "activeWatchFace": true
+        },
+        {
+          "time": "06:30:00",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-06-30-00.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 06:30:00 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723617000163\n1723617000503",
+          "expectedEpochMs": 1723617000000,
+          "runtimeEpochMsBeforeCapture": 1723617000163,
+          "runtimeEpochMsAfterCapture": 1723617000503,
+          "captureTimestampDeltaRangeMs": [
+            163,
+            503
+          ],
+          "captureTimeUncertaintyMs": 340,
+          "activeWatchFace": true
+        },
+        {
+          "time": "09:45:15",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-09-45-15.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 09:45:15 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723628715175\n1723628715479",
+          "expectedEpochMs": 1723628715000,
+          "runtimeEpochMsBeforeCapture": 1723628715175,
+          "runtimeEpochMsAfterCapture": 1723628715479,
+          "captureTimestampDeltaRangeMs": [
+            175,
+            479
+          ],
+          "captureTimeUncertaintyMs": 304,
+          "activeWatchFace": true
+        },
+        {
+          "time": "10:08:30",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-10-08-30.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 10:08:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723630110175\n1723630110505",
+          "expectedEpochMs": 1723630110000,
+          "runtimeEpochMsBeforeCapture": 1723630110175,
+          "runtimeEpochMsAfterCapture": 1723630110505,
+          "captureTimestampDeltaRangeMs": [
+            175,
+            505
+          ],
+          "captureTimeUncertaintyMs": 330,
+          "activeWatchFace": true
+        },
+        {
+          "time": "12:00:00",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-12-00-00.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 12:00:00 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723636800165\n1723636800475",
+          "expectedEpochMs": 1723636800000,
+          "runtimeEpochMsBeforeCapture": 1723636800165,
+          "runtimeEpochMsAfterCapture": 1723636800475,
+          "captureTimestampDeltaRangeMs": [
+            165,
+            475
+          ],
+          "captureTimeUncertaintyMs": 310,
+          "activeWatchFace": true
+        },
+        {
+          "time": "15:22:10",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-15-22-10.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 15:22:10 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723648930184\n1723648930524",
+          "expectedEpochMs": 1723648930000,
+          "runtimeEpochMsBeforeCapture": 1723648930184,
+          "runtimeEpochMsAfterCapture": 1723648930524,
+          "captureTimestampDeltaRangeMs": [
+            184,
+            524
+          ],
+          "captureTimeUncertaintyMs": 340,
+          "activeWatchFace": true
+        },
+        {
+          "time": "18:40:30",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-18-40-30.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 18:40:30 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723660830222\n1723660830537",
+          "expectedEpochMs": 1723660830000,
+          "runtimeEpochMsBeforeCapture": 1723660830222,
+          "runtimeEpochMsAfterCapture": 1723660830537,
+          "captureTimestampDeltaRangeMs": [
+            222,
+            537
+          ],
+          "captureTimeUncertaintyMs": 315,
+          "activeWatchFace": true
+        },
+        {
+          "time": "21:55:50",
+          "date": 14,
+          "path": "perimeter-production-benchmark-final3\\human-review\\runtime-21-55-50.png",
+          "clockSet": true,
+          "clockOutput": "Wed Aug 14 21:55:50 GMT 2024",
+          "captureOk": true,
+          "captureOutput": "1723672550212\n1723672550551",
+          "expectedEpochMs": 1723672550000,
+          "runtimeEpochMsBeforeCapture": 1723672550212,
+          "runtimeEpochMsAfterCapture": 1723672550551,
+          "captureTimestampDeltaRangeMs": [
+            212,
+            551
+          ],
+          "captureTimeUncertaintyMs": 339,
+          "activeWatchFace": true
+        }
+      ],
+      "status": "runtime_verified",
+      "nineTimeAtlas": "perimeter-production-benchmark-final3\\human-review\\runtime-nine-time-atlas.png"
+    }
+  },
+  "projects": {
+    "raster-warp": {
+      "xml": "perimeter-production-benchmark-final3\\project-raster-warp\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : perimeter-production-benchmark-final3\\project-raster-warp\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1",
+      "build": {
+        "success": true,
+        "returnCode": 0,
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\perimeter-production-benchmark-final3\\project-raster-warp\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources\n> Task :watchface:packageDebugResources\n> Task :watchface:processDebugNavigationResources\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:javaPreCompileDebug\n> Task :watchface:mergeDebugAssets\n> Task :watchface:parseDebugLocalResources\n> Task :watchface:compressDebugAssets\n> Task :watchface:checkDebugDuplicateClasses\n> Task :watchface:generateDebugRFile\n> Task :watchface:extractProguardFiles\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:checkDebugAarMetadata\n> Task :watchface:compileDebugNavigationResources\n> Task :watchface:mapDebugSourceSetPaths\n> Task :watchface:createDebugCompatibleScreenManifests\n> Task :watchface:extractDeepLinksDebug\n> Task :watchface:mergeDebugResources\n> Task :watchface:processDebugMainManifest\n> Task :watchface:processDebugManifest\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJniLibFolders\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug\n> Task :watchface:processDebugManifestForPackage\n> Task :watchface:writeDebugAppMetadata\n> Task :watchface:mergeDebugJavaResource\n> Task :watchface:writeDebugSigningConfigVersions\n> Task :watchface:processDebugResources\n> Task :watchface:mergeDebugGeneratedProguardFiles\n> Task :watchface:minifyDebugWithR8\n> Task :watchface:packageDebug\n> Task :watchface:createDebugApkListingFileRedirect\n> Task :watchface:assembleDebug\n\nBUILD SUCCESSFUL in 3s\n29 actionable tasks: 29 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+      }
+    },
+    "element-preserving": {
+      "xml": "perimeter-production-benchmark-final3\\project-element-preserving\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : perimeter-production-benchmark-final3\\project-element-preserving\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1",
+      "build": {
+        "success": true,
+        "returnCode": 0,
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\perimeter-production-benchmark-final3\\project-element-preserving\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources\n> Task :watchface:packageDebugResources\n> Task :watchface:processDebugNavigationResources\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:javaPreCompileDebug\n> Task :watchface:mergeDebugAssets\n> Task :watchface:compressDebugAssets\n> Task :watchface:parseDebugLocalResources\n> Task :watchface:checkDebugDuplicateClasses\n> Task :watchface:extractProguardFiles\n> Task :watchface:generateDebugRFile\n> Task :watchface:checkDebugAarMetadata\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:compileDebugNavigationResources\n> Task :watchface:mapDebugSourceSetPaths\n> Task :watchface:createDebugCompatibleScreenManifests\n> Task :watchface:extractDeepLinksDebug\n> Task :watchface:mergeDebugResources\n> Task :watchface:processDebugMainManifest\n> Task :watchface:processDebugManifest\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJniLibFolders\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug\n> Task :watchface:writeDebugAppMetadata\n> Task :watchface:writeDebugSigningConfigVersions\n> Task :watchface:processDebugManifestForPackage\n> Task :watchface:mergeDebugJavaResource\n> Task :watchface:processDebugResources\n> Task :watchface:mergeDebugGeneratedProguardFiles\n> Task :watchface:minifyDebugWithR8\n> Task :watchface:packageDebug\n> Task :watchface:createDebugApkListingFileRedirect\n> Task :watchface:assembleDebug\n\nBUILD SUCCESSFUL in 3s\n29 actionable tasks: 29 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+      }
+    }
+  },
+  "humanReview": {
+    "sourceNormalized": "perimeter-production-benchmark-final3\\human-review\\source-normalized.png",
+    "perimeterOverlay": "perimeter-production-benchmark-final3\\human-review\\detected-perimeter-elements-overlay.png",
+    "extractedArtworkSheet": "perimeter-production-benchmark-final3\\human-review\\extracted-artwork-sheet.png",
+    "rasterWarp": "perimeter-production-benchmark-final3\\human-review\\raster-warp-result.png",
+    "elementPreserving": "perimeter-production-benchmark-final3\\human-review\\element-preserving-result.png",
+    "mappingSideBySide": "perimeter-production-benchmark-final3\\human-review\\mapping-mode-side-by-side.png",
+    "handsOff": "perimeter-production-benchmark-final3\\human-review\\hands-off-static-dial.png",
+    "dynamicTextRemoval": "perimeter-production-benchmark-final3\\human-review\\dynamic-text-removal-result.png",
+    "nineTimeAtlas": "perimeter-production-benchmark-final3\\human-review\\element-preserving-nine-time-atlas.png",
+    "weekdayDateAtlas": "perimeter-production-benchmark-final3\\human-review\\weekday-date-review-atlas.png",
+    "runtimeNineTimeAtlas": "perimeter-production-benchmark-final3\\human-review\\runtime-nine-time-atlas.png",
+    "finalPreview": "perimeter-production-benchmark-final3\\human-review\\final-full-watch-preview.png"
+  },
+  "overfittingGuard": {
+    "targetReferenceUsedForFixtureCalibration": false,
+    "referenceSpecificCoordinatesInImplementation": false
+  }
+}

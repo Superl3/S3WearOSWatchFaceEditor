@@ -25,6 +25,7 @@ SUPPORTED_TYPES = {
     "ICON",
     "IMAGE",
     "STATIC_IMAGE",
+    "STATIC_ARTWORK",
     "ANALOG_HAND",
     "BATTERY",
     "STEPS",
@@ -109,8 +110,8 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
     if display_geometry is not None:
         if not isinstance(display_geometry, dict):
             _fail("displayGeometry", "must be an object")
-        if display_geometry.get("mappingPolicy") != "CENTER_PRESERVING_BOUNDARY_NORMALIZED":
-            _fail("displayGeometry.mappingPolicy", "must use center-preserving boundary-normalized mapping")
+        if display_geometry.get("mappingPolicy") not in {"CENTER_PRESERVING_BOUNDARY_NORMALIZED", "RASTER_WARP", "ELEMENT_PRESERVING"}:
+            _fail("displayGeometry.mappingPolicy", "must use a supported rounded-rectangle mapping mode")
         for key in ("source", "target"):
             value = display_geometry.get(key)
             if not isinstance(value, dict):
@@ -233,7 +234,7 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
                 _fail(f"{path}.pivot", "pivotX and pivotY must be between 0 and 1")
             if not isinstance(element.get("asset"), str) or not element["asset"]:
                 _fail(f"{path}.asset", "ANALOG_HAND requires a canonical transparent asset")
-        if element_type in {"IMAGE", "ICON", "STATIC_IMAGE"} and not isinstance(element.get("asset"), str) and not isinstance(element.get("assetInstruction"), dict):
+        if element_type in {"IMAGE", "ICON", "STATIC_IMAGE", "STATIC_ARTWORK"} and not isinstance(element.get("asset"), str) and not isinstance(element.get("assetInstruction"), dict):
             _fail(f"{path}", f"{element_type} requires asset or assetInstruction")
         if element_type == "TEXT" and not isinstance(element.get("text", ""), str):
             _fail(f"{path}.text", "must be a string")
@@ -241,6 +242,9 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
             _fail(f"{path}.dataSource", "must be a WFF data source name")
         if "rotation" in element:
             _number(element["rotation"], f"{path}.rotation")
+        for number_key in ("sourceAngleDeg", "perimeterPosition", "scale", "opticalOffsetX", "opticalOffsetY", "opticalScale", "opticalRotation"):
+            if number_key in element:
+                _number(element[number_key], f"{path}.{number_key}")
         if "uncertainty" in element and not isinstance(element["uncertainty"], list):
             _fail(f"{path}.uncertainty", "must be an array of strings")
 

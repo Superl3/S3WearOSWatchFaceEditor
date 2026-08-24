@@ -168,7 +168,7 @@ def render_scene(scene: dict[str, Any], output_path: Path, scene_root: Path, mod
                 base.alpha_composite(overlay, (bbox["x"], bbox["y"]))
             else:
                 _centered_text(draw, bbox, element.get("text", ""), _font(scene_root, style), fill)
-        elif element_type in {"IMAGE", "ICON", "STATIC_IMAGE"}:
+        elif element_type in {"IMAGE", "ICON", "STATIC_IMAGE", "STATIC_ARTWORK"}:
             asset = element.get("asset")
             if asset and (scene_root / asset).exists():
                 overlay = Image.open(scene_root / asset).convert("RGBA")

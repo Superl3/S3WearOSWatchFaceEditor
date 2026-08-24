@@ -18,6 +18,8 @@ from .human_review import generate_human_review_artifacts
 from .measurement_correctness import run_measurement_correctness
 from .runtime_rendering_calibration import run_runtime_rendering_calibration
 from .production_port import create_production_port
+from .generic_fixtures import run_generic_fixtures
+from .perimeter_benchmark import run_perimeter_benchmark
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -213,6 +215,15 @@ def main() -> None:
     production_parser.add_argument("--adb", type=Path)
     production_parser.add_argument("--serial", type=str)
     production_parser.add_argument("--manual-glyph-dir", type=Path)
+    fixture_parser = subparsers.add_parser("perimeter-fixtures")
+    fixture_parser.add_argument("--out", type=Path, default=Path("perimeter-generic-fixtures"))
+    benchmark_parser = subparsers.add_parser("perimeter-benchmark")
+    benchmark_parser.add_argument("reference", type=Path)
+    benchmark_parser.add_argument("--out", type=Path, default=Path("perimeter-benchmark"))
+    benchmark_parser.add_argument("--no-build", action="store_true")
+    benchmark_parser.add_argument("--no-capture", action="store_true")
+    benchmark_parser.add_argument("--adb", type=Path)
+    benchmark_parser.add_argument("--serial", type=str)
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -257,3 +268,7 @@ def main() -> None:
                 indent=2,
             )
         )
+    elif args.command == "perimeter-fixtures":
+        print(json.dumps(run_generic_fixtures(args.out), ensure_ascii=False, indent=2))
+    elif args.command == "perimeter-benchmark":
+        print(json.dumps(run_perimeter_benchmark(args.reference, args.out, build=not args.no_build, capture=not args.no_capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))

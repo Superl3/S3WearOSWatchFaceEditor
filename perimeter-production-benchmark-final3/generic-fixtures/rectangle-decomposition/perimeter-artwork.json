@@ -1,0 +1,437 @@
+{
+  "sourceShape": {
+    "shape": "ROUNDED_RECT",
+    "width": 360,
+    "height": 400,
+    "radius": 54,
+    "centerX": 219,
+    "centerY": 219,
+    "isCircleSpecialCase": false
+  },
+  "backgroundColor": "#000000",
+  "minimumNormalizedRadius": 0.62,
+  "elementCount": 12,
+  "elements": [
+    {
+      "id": "perimeter_artwork_00",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 113,
+        "y": 48,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 123.5,
+        "y": 54.5
+      },
+      "sourceAngleDeg": 329.8628,
+      "perimeterPosition": 0.916286,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.742,
+      "asset": "assets/perimeter/perimeter_00.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.82251,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_01",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 208,
+        "y": 48,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 218.5,
+        "y": 54.5
+      },
+      "sourceAngleDeg": 359.8258,
+      "perimeterPosition": 0.999516,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.742,
+      "asset": "assets/perimeter/perimeter_01.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.8225,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_02",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 303,
+        "y": 48,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 313.5,
+        "y": 54.5
+      },
+      "sourceAngleDeg": 29.876,
+      "perimeterPosition": 0.082989,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.742,
+      "asset": "assets/perimeter/perimeter_02.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.822503,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_03",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 60,
+        "y": 127,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 70.5,
+        "y": 133.5
+      },
+      "sourceAngleDeg": 299.9315,
+      "perimeterPosition": 0.833143,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.744,
+      "asset": "assets/perimeter/perimeter_03.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.825,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_04",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 356,
+        "y": 127,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 366.5,
+        "y": 133.5
+      },
+      "sourceAngleDeg": 59.9008,
+      "perimeterPosition": 0.166391,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.7396,
+      "asset": "assets/perimeter/perimeter_04.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.819444,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_05",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 60,
+        "y": 212,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 70.5,
+        "y": 218.5
+      },
+      "sourceAngleDeg": 270.1929,
+      "perimeterPosition": 0.750536,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.744,
+      "asset": "assets/perimeter/perimeter_05.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.825,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_06",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 356,
+        "y": 212,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 366.5,
+        "y": 218.5
+      },
+      "sourceAngleDeg": 89.8058,
+      "perimeterPosition": 0.24946,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.7396,
+      "asset": "assets/perimeter/perimeter_06.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.819444,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_07",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 60,
+        "y": 297,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 70.5,
+        "y": 303.5
+      },
+      "sourceAngleDeg": 240.3591,
+      "perimeterPosition": 0.667664,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.744,
+      "asset": "assets/perimeter/perimeter_07.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.825,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_08",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 356,
+        "y": 297,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 366.5,
+        "y": 303.5
+      },
+      "sourceAngleDeg": 119.8076,
+      "perimeterPosition": 0.332799,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.7396,
+      "asset": "assets/perimeter/perimeter_08.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.819444,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_09",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 113,
+        "y": 376,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 123.5,
+        "y": 382.5
+      },
+      "sourceAngleDeg": 210.2891,
+      "perimeterPosition": 0.584136,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.738,
+      "asset": "assets/perimeter/perimeter_09.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.817518,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_10",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 208,
+        "y": 376,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 218.5,
+        "y": 382.5
+      },
+      "sourceAngleDeg": 180.1752,
+      "perimeterPosition": 0.500487,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.738,
+      "asset": "assets/perimeter/perimeter_10.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.8175,
+        "semanticIdentificationRequired": false
+      }
+    },
+    {
+      "id": "perimeter_artwork_11",
+      "type": "STATIC_ARTWORK",
+      "dynamic": false,
+      "bbox": {
+        "x": 303,
+        "y": 376,
+        "width": 22,
+        "height": 14
+      },
+      "anchor": {
+        "x": 313.5,
+        "y": 382.5
+      },
+      "sourceAngleDeg": 149.9729,
+      "perimeterPosition": 0.416591,
+      "rotation": 0.0,
+      "scale": 1.0,
+      "mappingMode": "ELEMENT_PRESERVING",
+      "opticalOffsetX": 0.0,
+      "opticalOffsetY": 0.0,
+      "opticalScale": 1.0,
+      "opticalRotation": 0.0,
+      "confidence": 0.738,
+      "asset": "assets/perimeter/perimeter_11.png",
+      "assetInstruction": {
+        "operation": "extract_from_reference"
+      },
+      "zIndex": 2,
+      "relationships": {
+        "detector": "foreground connected component in normalized rounded-rectangle perimeter band",
+        "normalizedRadius": 0.817507,
+        "semanticIdentificationRequired": false
+      }
+    }
+  ],
+  "mask": "perimeter-production-benchmark-final3\\generic-fixtures\\rectangle-decomposition\\perimeter-artwork-mask.png"
+}

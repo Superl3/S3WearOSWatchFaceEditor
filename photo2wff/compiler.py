@@ -201,7 +201,7 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
                 scene_node.append(_asset_part(element, resource_names[asset]))
             else:
                 scene_node.append(_part_text(element))
-        elif element_type in {"IMAGE", "ICON", "STATIC_IMAGE"}:
+        elif element_type in {"IMAGE", "ICON", "STATIC_IMAGE", "STATIC_ARTWORK"}:
             asset = element.get("asset")
             if asset not in resource_names:
                 raise ValueError(f"element '{element['id']}' references missing asset '{asset}'")

@@ -1,0 +1,21 @@
+{
+  "milestone": "Generic Rounded-Rectangle Analog Fixtures",
+  "systemPass": true,
+  "checks": {
+    "twelveRectanglesDetected": true,
+    "rectangleAnchorMaxErrorPx": 1.1506,
+    "rotatedGlyphElementsDetected": true,
+    "elementMappingMaxErrorPx": 0.0,
+    "localAspectRatioPreserved": true,
+    "weekdayAndDateDetected": true,
+    "dynamicTextRemoved": true,
+    "analogHandFixtureCreated": true
+  },
+  "fixtures": {
+    "rectangles": "perimeter-production-benchmark-final3\\generic-fixtures\\twelve-rectangles.png",
+    "rotatedGlyphs": "perimeter-production-benchmark-final3\\generic-fixtures\\rotated-glyph-like.png",
+    "dynamicText": "perimeter-production-benchmark-final3\\generic-fixtures\\center-weekday-date.png",
+    "analogHands": "perimeter-production-benchmark-final3\\generic-fixtures\\three-analog-hands.png"
+  },
+  "targetReferenceUsed": false
+}

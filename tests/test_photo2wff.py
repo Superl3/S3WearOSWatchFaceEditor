@@ -13,11 +13,14 @@ from photo2wff.analog_validate import validate_dynamic_renders
 from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
-from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
+from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand, map_element_preserving
+from photo2wff.dynamic_text import extract_center_dynamic_text
+from photo2wff.generic_fixtures import run_generic_fixtures
 from photo2wff.model import SceneValidationError, apply_patches, load_scene, validate_scene
 from photo2wff.measurement_correctness import FIDUCIALS, _fit_geometry
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.production_port import _make_production_dial, _production_scene
+from photo2wff.perimeter_artwork import decompose_perimeter_artwork
 from photo2wff.render import render_scene
 from photo2wff.runtime_validation import _region_masks, run_runtime_gate
 from photo2wff.wff_validate import WffValidationError, lint_wff_xml, validate_wff_xml
@@ -408,6 +411,56 @@ class Photo2WFFTests(unittest.TestCase):
         self.assertEqual(mapped.size, (438, 438))
         self.assertEqual(mapped.getpixel((0, 0))[3], 0)
         self.assertGreater(mapped.getpixel((219, 219))[3], 0)
+
+    def test_generic_perimeter_fixtures_pass_without_target_reference(self):
+        with tempfile.TemporaryDirectory() as temp:
+            report = run_generic_fixtures(Path(temp))
+            self.assertTrue(report["systemPass"])
+            self.assertFalse(report["targetReferenceUsed"])
+            self.assertEqual(report["checks"]["elementMappingMaxErrorPx"], 0)
+
+    def test_element_preserving_mapping_does_not_reapply_source_rotation(self):
+        source = RoundedRect(360, 400, 54, 219, 219)
+        target = RoundedRect(438, 438, 219, 219, 219)
+        mapped = map_element_preserving(
+            {
+                "id": "artwork",
+                "type": "STATIC_ARTWORK",
+                "bbox": {"x": 30, "y": 180, "width": 20, "height": 50},
+                "anchor": {"x": 40, "y": 205},
+                "rotation": 90,
+                "opticalRotation": 3,
+            },
+            source,
+            target,
+        )
+        self.assertEqual(mapped["sourceRotation"], 90)
+        self.assertEqual(mapped["rotation"], 3)
+
+    def test_perimeter_decomposer_preserves_unknown_artwork_metadata(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            image = Image.new("RGB", (120, 120), "black")
+            ImageDraw.Draw(image).rectangle((54, 10, 65, 19), fill="white")
+            report = decompose_perimeter_artwork(image, RoundedRect(100, 110, 18, 60, 60), root, minimum_area=20)
+            self.assertEqual(report["elementCount"], 1)
+            element = report["elements"][0]
+            self.assertEqual(element["type"], "STATIC_ARTWORK")
+            self.assertEqual(element["mappingMode"], "ELEMENT_PRESERVING")
+            for key in ("bbox", "anchor", "sourceAngleDeg", "perimeterPosition", "rotation", "scale", "confidence", "asset"):
+                self.assertIn(key, element)
+
+    def test_center_dynamic_text_extracts_weekday_and_day(self):
+        with tempfile.TemporaryDirectory() as temp:
+            image = Image.new("RGB", (240, 240), "black")
+            draw = ImageDraw.Draw(image)
+            font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 22)
+            draw.text((64, 120), "TUE", font=font, fill="white", anchor="lm")
+            draw.text((145, 120), "14", font=font, fill="white", anchor="lm")
+            report = extract_center_dynamic_text(image, Path(temp))
+            self.assertTrue(report["detected"])
+            self.assertEqual([element["type"] for element in report["elements"]], ["WEEKDAY", "DYNAMIC_SLOT"])
+            self.assertEqual(report["elements"][1]["slotType"], "DATE_DAY_OF_MONTH")
 
     def test_production_port_uses_static_dial_native_hands_date_and_cap(self):
         source_root = Path(__file__).resolve().parents[1] / "hermes-a2-output"
