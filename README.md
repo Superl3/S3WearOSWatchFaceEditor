@@ -116,6 +116,19 @@ and global regions. Run it with:
 python -m photo2wff runtime-gate path\to\scene.json path\to\manual-off\watchface.xml --manual-xml path\to\manual-on\watchface.xml --out runtime-validation
 ```
 
+To capture the active Wear OS runtime (not the picker preview), provide both
+debug APKs and the Wear OS device serial:
+
+```powershell
+python -m photo2wff runtime-gate path\to\scene.json path\to\manual-off\watchface.xml --manual-xml path\to\manual-on\watchface.xml --out runtime-validation --capture --apk-off path\to\manual-off.apk --apk-on path\to\manual-on.apk --serial emulator-5556
+```
+
+The capture path clean-installs each APK, activates it through
+`DEBUG_SURFACE`, sets each fixed time/date, and records a screenshot only when
+the active runtime is confirmed. The report also saves aligned, hand-ROI,
+date-window, static-dial, side-by-side, heatmap, and runtime-only atlas
+artifacts.
+
 The gate never labels a phone emulator as Wear OS and reports
 `blocked_by_runtime_environment` when no Wear OS runtime is available.
 

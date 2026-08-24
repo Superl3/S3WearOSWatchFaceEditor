@@ -175,6 +175,11 @@ def main() -> None:
     runtime_parser.add_argument("--out", type=Path, default=Path("runtime-validation"))
     runtime_parser.add_argument("--manual-xml", type=Path, help="optional manual-override-on WFF XML")
     runtime_parser.add_argument("--adb", type=Path, help="optional adb executable")
+    runtime_parser.add_argument("--runtime-dir", type=Path, help="existing active-runtime screenshots root")
+    runtime_parser.add_argument("--capture", action="store_true", help="clean-install, activate, set time/date, and capture the active WFF runtime")
+    runtime_parser.add_argument("--apk-off", type=Path, help="manual-override-off APK for --capture")
+    runtime_parser.add_argument("--apk-on", type=Path, help="manual-override-on APK for --capture")
+    runtime_parser.add_argument("--serial", type=str, help="Wear OS adb serial for --capture")
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -196,4 +201,4 @@ def main() -> None:
     elif args.command == "human-review":
         human_review(args.output)
     elif args.command == "runtime-gate":
-        print(json.dumps(run_runtime_gate(args.scene, args.xml, args.out, manual_xml=args.manual_xml, adb=args.adb), ensure_ascii=False, indent=2))
+        print(json.dumps(run_runtime_gate(args.scene, args.xml, args.out, manual_xml=args.manual_xml, adb=args.adb, runtime_dir=args.runtime_dir, capture=args.capture, apk_off=args.apk_off, apk_on=args.apk_on, serial=args.serial), ensure_ascii=False, indent=2))
