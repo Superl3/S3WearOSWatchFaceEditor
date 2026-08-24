@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "milestone": "A2.5c.2 Runtime Rendering Calibration",
+  "baseline": "1ee56a8",
+  "baselineTag": "baseline/a25c1-measurement-correctness",
+  "runtime": {
+    "serial": "emulator-5556",
+    "status": "runtime_available"
+  },
+  "verifiedCalibrationValues": {
+    "logicalToRuntime": {
+      "scaleX": 1.03540214,
+      "scaleY": 1.03535224,
+      "centerOffset": {
+        "x": 0.0583,
+        "y": 0.0577
+      },
+      "rotationDeg": -0.002232,
+      "fitResidualRmsPx": 0.0464,
+      "matrix": {
+        "a": 1.035402134377134,
+        "b": -3.2714109502598814e-05,
+        "c": -4.032599888947495e-05,
+        "d": 1.0353522428341808,
+        "tx": 0.3123802479315093,
+        "ty": 0.32436651997474825
+      }
+    },
+    "bitmapFont": {
+      "runtimeVerticalAnchor": "CENTER",
+      "runtimeTopOffsetVsContainerHeightSlope": 0.517093,
+      "sameAspectMetricScaleInvariant": true,
+      "squareMetricsIncreaseApparentWidth": true,
+      "horizontalAlignmentHonored": true,
+      "postCalibrationVerticalResidualPx": -0.2074,
+      "bitmapMinusPartImageVerticalResidualPx": 0.0083,
+      "productionYOffsetApplied": false
+    },
+    "imageResampling": {
+      "medianAbsoluteEnergyWidthErrorPx": 0.006,
+      "medianFwhmErrorPx": -0.0854,
+      "energyWidthScaleByOrientation": {
+        "vertical": 1.001191,
+        "horizontal": 1.001427
+      },
+      "runtimeWidthCorrectionRequired": false,
+      "hourMinuteWidthLossExplainedBySolidLineResampling": false
+    },
+    "analogPivot": {
+      "x": -0.052,
+      "y": -0.052,
+      "distance": 0.0736
+    }
+  },
+  "unverifiedValuesOmitted": true,
+  "productionSceneGeometryModified": false
+}

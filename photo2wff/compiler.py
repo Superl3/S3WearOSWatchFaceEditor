@@ -42,11 +42,15 @@ def _font_attributes(style: dict[str, Any], include_text: bool = False) -> dict[
     return attrs
 
 
+def _text_alignment(value: Any) -> str:
+    return {"LEFT": "START", "CENTER": "CENTER", "RIGHT": "END"}.get(str(value).upper(), "CENTER")
+
+
 def _part_text(element: dict[str, Any], expression: str | None = None, template: str | None = None, manual_glyphs: dict[str, Any] | None = None) -> ET.Element:
     bbox = element["bbox"]
     style = element.get("style", {})
     part = ET.Element("PartText", {"x": str(bbox["x"]), "y": str(bbox["y"]), "width": str(bbox["width"]), "height": str(bbox["height"])})
-    text = ET.SubElement(part, "Text", {"align": str(style.get("alignment", "center")).upper()})
+    text = ET.SubElement(part, "Text", {"align": _text_alignment(style.get("alignment", "center"))})
     if manual_glyphs:
         font = ET.SubElement(text, "BitmapFont", {"family": str(manual_glyphs["family"]), "size": str(int(style.get("fontSize", 24))), "color": _xml_color(style.get("color", "#FFFFFF"))})
     else:

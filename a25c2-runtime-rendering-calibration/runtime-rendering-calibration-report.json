@@ -1,0 +1,1382 @@
+{
+  "milestone": "A2.5c.2 Runtime Rendering Calibration",
+  "baseline": "1ee56a8",
+  "baselineTag": "baseline/a25c1-measurement-correctness",
+  "status": "runtime_measured",
+  "officialValidation": {
+    "geometry": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\geometry\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "bitmap_font": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\bitmap-font\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "resampling": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\resampling\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "pivot": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\pivot\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_off": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\production-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_manual": {
+      "passed": true,
+      "output": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\production-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    }
+  },
+  "bitmapFontFindings": {
+    "status": "measured",
+    "variants": {
+      "part_image": {
+        "kind": "PART_IMAGE",
+        "container": {
+          "x": 10,
+          "y": 100,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center",
+        "deterministicForegroundBboxLogical": [
+          52,
+          114,
+          67,
+          135
+        ],
+        "runtimeForegroundBbox": [
+          55,
+          118,
+          70,
+          140
+        ],
+        "runtimeForegroundBboxLogical": [
+          52.8213,
+          113.6596,
+          67.3091,
+          134.909
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": 0.5652,
+          "y": -0.2157
+        },
+        "runtimeVsDeterministicTopDifferencePx": -0.3404,
+        "runtimeVsDeterministicBottomDifferencePx": -0.091
+      },
+      "native_h29": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 116,
+          "y": 100,
+          "width": 96,
+          "height": 29
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center",
+        "deterministicForegroundBboxLogical": [
+          158,
+          104,
+          173,
+          125
+        ],
+        "runtimeForegroundBbox": [
+          164,
+          108,
+          179,
+          131
+        ],
+        "runtimeForegroundBboxLogical": [
+          158.0942,
+          104.0052,
+          172.582,
+          126.2204
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.1619,
+          "y": 0.6128
+        },
+        "runtimeVsDeterministicTopDifferencePx": 0.0052,
+        "runtimeVsDeterministicBottomDifferencePx": 1.2204
+      },
+      "native_h48": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 222,
+          "y": 100,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center",
+        "deterministicForegroundBboxLogical": [
+          264,
+          114,
+          279,
+          135
+        ],
+        "runtimeForegroundBbox": [
+          274,
+          118,
+          289,
+          140
+        ],
+        "runtimeForegroundBboxLogical": [
+          264.3334,
+          113.6679,
+          278.8212,
+          134.9172
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": 0.0773,
+          "y": -0.2074
+        },
+        "runtimeVsDeterministicTopDifferencePx": -0.3321,
+        "runtimeVsDeterministicBottomDifferencePx": -0.0828
+      },
+      "native_h72": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 328,
+          "y": 100,
+          "width": 96,
+          "height": 72
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center",
+        "deterministicForegroundBboxLogical": [
+          370,
+          126,
+          385,
+          147
+        ],
+        "runtimeForegroundBbox": [
+          383,
+          131,
+          398,
+          153
+        ],
+        "runtimeForegroundBboxLogical": [
+          369.6069,
+          126.2281,
+          384.0947,
+          147.4775
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.6492,
+          "y": 0.3528
+        },
+        "runtimeVsDeterministicTopDifferencePx": 0.2281,
+        "runtimeVsDeterministicBottomDifferencePx": 0.4775
+      },
+      "half_metrics": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 10,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 83,
+          "height": 101
+        },
+        "alignment": "center",
+        "deterministicForegroundBboxLogical": [
+          52,
+          274,
+          67,
+          295
+        ],
+        "runtimeForegroundBbox": [
+          54,
+          284,
+          69,
+          306
+        ],
+        "runtimeForegroundBboxLogical": [
+          51.8606,
+          273.9915,
+          66.3484,
+          295.2409
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.3955,
+          "y": 0.1162
+        },
+        "runtimeVsDeterministicTopDifferencePx": -0.0085,
+        "runtimeVsDeterministicBottomDifferencePx": 0.2409
+      },
+      "square_metrics": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 116,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 166
+        },
+        "alignment": "center",
+        "deterministicForegroundBboxLogical": [
+          157,
+          274,
+          174,
+          295
+        ],
+        "runtimeForegroundBbox": [
+          162,
+          284,
+          182,
+          307
+        ],
+        "runtimeForegroundBboxLogical": [
+          156.1679,
+          273.9956,
+          175.4848,
+          296.211
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": 0.3263,
+          "y": 0.6033
+        },
+        "runtimeVsDeterministicTopDifferencePx": -0.0044,
+        "runtimeVsDeterministicBottomDifferencePx": 1.211
+      },
+      "native_start": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 222,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "left",
+        "deterministicForegroundBboxLogical": [
+          226,
+          274,
+          241,
+          295
+        ],
+        "runtimeForegroundBbox": [
+          234,
+          284,
+          249,
+          306
+        ],
+        "runtimeForegroundBboxLogical": [
+          225.7061,
+          273.9983,
+          240.1939,
+          295.2477
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": -0.55,
+          "y": 0.123
+        },
+        "runtimeVsDeterministicTopDifferencePx": -0.0017,
+        "runtimeVsDeterministicBottomDifferencePx": 0.2477
+      },
+      "native_end": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 328,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "right",
+        "deterministicForegroundBboxLogical": [
+          408,
+          274,
+          423,
+          295
+        ],
+        "runtimeForegroundBbox": [
+          424,
+          284,
+          439,
+          306
+        ],
+        "runtimeForegroundBboxLogical": [
+          409.2097,
+          274.0054,
+          423.6975,
+          295.2548
+        ],
+        "runtimeVsDeterministicCenterDifferencePx": {
+          "x": 0.9536,
+          "y": 0.1301
+        },
+        "runtimeVsDeterministicTopDifferencePx": 0.0054,
+        "runtimeVsDeterministicBottomDifferencePx": 0.2548
+      }
+    },
+    "findings": {
+      "partImageVerticalDifferencePx": -0.2157,
+      "bitmapFontVerticalDifferencePx": -0.2074,
+      "bitmapMinusPartImageVerticalDifferencePx": 0.0083,
+      "containerHeightVerticalDifferenceRangePx": 0.8202,
+      "runtimeGlyphTopOffsetMedianPx": 13.6679,
+      "runtimeGlyphTopOffsetRangePx": 22.2229,
+      "runtimeTopOffsetVsContainerHeightSlope": 0.517093,
+      "runtimeVerticalAnchor": "CENTER",
+      "containerHeightAffectsVerticalPosition": true,
+      "sameAspectMetricScaleInvariant": true,
+      "squareMetricsIncreaseApparentWidth": true,
+      "horizontalAlignmentHonored": true,
+      "rootCause": "deterministic renderer centered the native bitmap before applying BitmapFont size and Character metrics",
+      "deterministicRendererCalibrationApplied": true,
+      "productionYOffsetApplied": false
+    }
+  },
+  "resamplingFindings": {
+    "status": "measured",
+    "records": [
+      {
+        "id": "vertical_1",
+        "orientation": "VERTICAL",
+        "knownWidthPx": 1,
+        "bbox": {
+          "x": 50,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 1.0,
+          "fwhmPx": 1.0,
+          "supportWidthByThresholdPx": {
+            "16": 1.0,
+            "32": 1.0,
+            "64": 1.0,
+            "128": 1.0,
+            "192": 1.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 198.0,
+          "energyEquivalentWidthPx": 1.2886,
+          "fwhmPx": 0.9658,
+          "supportWidthByThresholdPx": {
+            "16": 1.9316,
+            "32": 1.9316,
+            "64": 1.9316,
+            "128": 0.9658,
+            "192": 0.9658
+          }
+        },
+        "runtimeEnergyWidthErrorPx": 0.2886,
+        "runtimeFwhmErrorPx": -0.0342
+      },
+      {
+        "id": "horizontal_1",
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 1,
+        "bbox": {
+          "x": 149,
+          "y": 210,
+          "width": 140,
+          "height": 24
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 1.0,
+          "fwhmPx": 1.0,
+          "supportWidthByThresholdPx": {
+            "16": 1.0,
+            "32": 1.0,
+            "64": 1.0,
+            "128": 1.0,
+            "192": 1.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 229.0,
+          "energyEquivalentWidthPx": 1.1135,
+          "fwhmPx": 0.9659,
+          "supportWidthByThresholdPx": {
+            "16": 1.9317,
+            "32": 1.9317,
+            "64": 0.9659,
+            "128": 0.9659,
+            "192": 0.9659
+          }
+        },
+        "runtimeEnergyWidthErrorPx": 0.1135,
+        "runtimeFwhmErrorPx": -0.0341
+      },
+      {
+        "id": "vertical_2",
+        "orientation": "VERTICAL",
+        "knownWidthPx": 2,
+        "bbox": {
+          "x": 112,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 2.0,
+          "fwhmPx": 2.0,
+          "supportWidthByThresholdPx": {
+            "16": 2.0,
+            "32": 2.0,
+            "64": 2.0,
+            "128": 2.0,
+            "192": 2.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 1.996,
+          "fwhmPx": 2.8974,
+          "supportWidthByThresholdPx": {
+            "16": 2.8974,
+            "32": 2.8974,
+            "64": 2.8974,
+            "128": 2.8974,
+            "192": 0.9658
+          }
+        },
+        "runtimeEnergyWidthErrorPx": -0.004,
+        "runtimeFwhmErrorPx": 0.8974
+      },
+      {
+        "id": "horizontal_2",
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 2,
+        "bbox": {
+          "x": 149,
+          "y": 244,
+          "width": 140,
+          "height": 24
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 2.0,
+          "fwhmPx": 2.0,
+          "supportWidthByThresholdPx": {
+            "16": 2.0,
+            "32": 2.0,
+            "64": 2.0,
+            "128": 2.0,
+            "192": 2.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 1.9999,
+          "fwhmPx": 1.9317,
+          "supportWidthByThresholdPx": {
+            "16": 2.8976,
+            "32": 2.8976,
+            "64": 2.8976,
+            "128": 1.9317,
+            "192": 0.9659
+          }
+        },
+        "runtimeEnergyWidthErrorPx": -0.0001,
+        "runtimeFwhmErrorPx": -0.0683
+      },
+      {
+        "id": "vertical_3",
+        "orientation": "VERTICAL",
+        "knownWidthPx": 3,
+        "bbox": {
+          "x": 174,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 3.0,
+          "fwhmPx": 3.0,
+          "supportWidthByThresholdPx": {
+            "16": 3.0,
+            "32": 3.0,
+            "64": 3.0,
+            "128": 3.0,
+            "192": 3.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 3.0035,
+          "fwhmPx": 2.8974,
+          "supportWidthByThresholdPx": {
+            "16": 3.8632,
+            "32": 3.8632,
+            "64": 3.8632,
+            "128": 2.8974,
+            "192": 2.8974
+          }
+        },
+        "runtimeEnergyWidthErrorPx": 0.0035,
+        "runtimeFwhmErrorPx": -0.1026
+      },
+      {
+        "id": "horizontal_3",
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 3,
+        "bbox": {
+          "x": 149,
+          "y": 278,
+          "width": 140,
+          "height": 24
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 3.0,
+          "fwhmPx": 3.0,
+          "supportWidthByThresholdPx": {
+            "16": 3.0,
+            "32": 3.0,
+            "64": 3.0,
+            "128": 3.0,
+            "192": 3.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 3.0074,
+          "fwhmPx": 2.8976,
+          "supportWidthByThresholdPx": {
+            "16": 3.8634,
+            "32": 3.8634,
+            "64": 3.8634,
+            "128": 2.8976,
+            "192": 1.9317
+          }
+        },
+        "runtimeEnergyWidthErrorPx": 0.0074,
+        "runtimeFwhmErrorPx": -0.1024
+      },
+      {
+        "id": "vertical_4",
+        "orientation": "VERTICAL",
+        "knownWidthPx": 4,
+        "bbox": {
+          "x": 236,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 4.0,
+          "fwhmPx": 4.0,
+          "supportWidthByThresholdPx": {
+            "16": 4.0,
+            "32": 4.0,
+            "64": 4.0,
+            "128": 4.0,
+            "192": 4.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 4.0261,
+          "fwhmPx": 3.8632,
+          "supportWidthByThresholdPx": {
+            "16": 4.829,
+            "32": 4.829,
+            "64": 3.8632,
+            "128": 3.8632,
+            "192": 3.8632
+          }
+        },
+        "runtimeEnergyWidthErrorPx": 0.0261,
+        "runtimeFwhmErrorPx": -0.1368
+      },
+      {
+        "id": "horizontal_4",
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 4,
+        "bbox": {
+          "x": 149,
+          "y": 312,
+          "width": 140,
+          "height": 24
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 4.0,
+          "fwhmPx": 4.0,
+          "supportWidthByThresholdPx": {
+            "16": 4.0,
+            "32": 4.0,
+            "64": 4.0,
+            "128": 4.0,
+            "192": 4.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 3.9998,
+          "fwhmPx": 3.8634,
+          "supportWidthByThresholdPx": {
+            "16": 4.8293,
+            "32": 4.8293,
+            "64": 4.8293,
+            "128": 3.8634,
+            "192": 3.8634
+          }
+        },
+        "runtimeEnergyWidthErrorPx": -0.0002,
+        "runtimeFwhmErrorPx": -0.1366
+      },
+      {
+        "id": "vertical_8",
+        "orientation": "VERTICAL",
+        "knownWidthPx": 8,
+        "bbox": {
+          "x": 298,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 8.0,
+          "fwhmPx": 8.0,
+          "supportWidthByThresholdPx": {
+            "16": 8.0,
+            "32": 8.0,
+            "64": 8.0,
+            "128": 8.0,
+            "192": 8.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 7.992,
+          "fwhmPx": 7.7265,
+          "supportWidthByThresholdPx": {
+            "16": 8.6923,
+            "32": 8.6923,
+            "64": 8.6923,
+            "128": 7.7265,
+            "192": 7.7265
+          }
+        },
+        "runtimeEnergyWidthErrorPx": -0.008,
+        "runtimeFwhmErrorPx": -0.2735
+      },
+      {
+        "id": "horizontal_8",
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 8,
+        "bbox": {
+          "x": 149,
+          "y": 346,
+          "width": 140,
+          "height": 24
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 8.0,
+          "fwhmPx": 8.0,
+          "supportWidthByThresholdPx": {
+            "16": 8.0,
+            "32": 8.0,
+            "64": 8.0,
+            "128": 8.0,
+            "192": 8.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 8.0374,
+          "fwhmPx": 7.7268,
+          "supportWidthByThresholdPx": {
+            "16": 9.6585,
+            "32": 8.6927,
+            "64": 7.7268,
+            "128": 7.7268,
+            "192": 7.7268
+          }
+        },
+        "runtimeEnergyWidthErrorPx": 0.0374,
+        "runtimeFwhmErrorPx": -0.2732
+      },
+      {
+        "id": "vertical_13",
+        "orientation": "VERTICAL",
+        "knownWidthPx": 13,
+        "bbox": {
+          "x": 360,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 13.0,
+          "fwhmPx": 13.0,
+          "supportWidthByThresholdPx": {
+            "16": 13.0,
+            "32": 13.0,
+            "64": 13.0,
+            "128": 13.0,
+            "192": 13.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 12.9986,
+          "fwhmPx": 13.5213,
+          "supportWidthByThresholdPx": {
+            "16": 13.5213,
+            "32": 13.5213,
+            "64": 13.5213,
+            "128": 13.5213,
+            "192": 12.5555
+          }
+        },
+        "runtimeEnergyWidthErrorPx": -0.0014,
+        "runtimeFwhmErrorPx": 0.5213
+      },
+      {
+        "id": "horizontal_13",
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 13,
+        "bbox": {
+          "x": 149,
+          "y": 380,
+          "width": 140,
+          "height": 24
+        },
+        "deterministic": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 13.0,
+          "fwhmPx": 13.0,
+          "supportWidthByThresholdPx": {
+            "16": 13.0,
+            "32": 13.0,
+            "64": 13.0,
+            "128": 13.0,
+            "192": 13.0
+          }
+        },
+        "runtimeNormalizedLogical": {
+          "peak": 255.0,
+          "energyEquivalentWidthPx": 12.9955,
+          "fwhmPx": 13.522,
+          "supportWidthByThresholdPx": {
+            "16": 13.522,
+            "32": 13.522,
+            "64": 13.522,
+            "128": 13.522,
+            "192": 12.5561
+          }
+        },
+        "runtimeEnergyWidthErrorPx": -0.0045,
+        "runtimeFwhmErrorPx": 0.522
+      }
+    ],
+    "findings": {
+      "medianAbsoluteEnergyWidthErrorPx": 0.006,
+      "medianFwhmErrorPx": -0.0854,
+      "energyPreservedWithin0_75Px": true,
+      "classification": "threshold_or_edge_filtering_artifact",
+      "hourMinuteWidthLossExplainedBySolidLineResampling": false,
+      "energyWidthScaleByOrientation": {
+        "vertical": 1.001191,
+        "horizontal": 1.001427
+      },
+      "runtimeWidthCorrectionRequired": false,
+      "filterKernel": "unmeasured"
+    }
+  },
+  "pivotStatus": {
+    "status": "measured",
+    "method": "red hand-asset pivot marker versus centroid of four cyan static center fiducials",
+    "runtimePivot": [
+      227.0,
+      227.0
+    ],
+    "runtimeTargetCenter": [
+      227.0539,
+      227.0539
+    ],
+    "pivotErrorRuntimePx": {
+      "x": -0.0539,
+      "y": -0.0539,
+      "distance": 0.0762
+    },
+    "pivotErrorLogicalPx": {
+      "x": -0.052,
+      "y": -0.052,
+      "distance": 0.0736
+    },
+    "pivotMarkerPixelCount": 61,
+    "fiducialCount": 4,
+    "verified": true
+  },
+  "verifiedCalibrationValues": {
+    "logicalToRuntime": {
+      "scaleX": 1.03540214,
+      "scaleY": 1.03535224,
+      "centerOffset": {
+        "x": 0.0583,
+        "y": 0.0577
+      },
+      "rotationDeg": -0.002232,
+      "fitResidualRmsPx": 0.0464,
+      "matrix": {
+        "a": 1.035402134377134,
+        "b": -3.2714109502598814e-05,
+        "c": -4.032599888947495e-05,
+        "d": 1.0353522428341808,
+        "tx": 0.3123802479315093,
+        "ty": 0.32436651997474825
+      }
+    },
+    "bitmapFont": {
+      "runtimeVerticalAnchor": "CENTER",
+      "runtimeTopOffsetVsContainerHeightSlope": 0.517093,
+      "sameAspectMetricScaleInvariant": true,
+      "squareMetricsIncreaseApparentWidth": true,
+      "horizontalAlignmentHonored": true,
+      "postCalibrationVerticalResidualPx": -0.2074,
+      "bitmapMinusPartImageVerticalResidualPx": 0.0083,
+      "productionYOffsetApplied": false
+    },
+    "imageResampling": {
+      "medianAbsoluteEnergyWidthErrorPx": 0.006,
+      "medianFwhmErrorPx": -0.0854,
+      "energyWidthScaleByOrientation": {
+        "vertical": 1.001191,
+        "horizontal": 1.001427
+      },
+      "runtimeWidthCorrectionRequired": false,
+      "hourMinuteWidthLossExplainedBySolidLineResampling": false
+    },
+    "analogPivot": {
+      "x": -0.052,
+      "y": -0.052,
+      "distance": 0.0736
+    }
+  },
+  "deviceRuntimeCalibration": "a25c2-runtime-rendering-calibration\\device-runtime-calibration.json",
+  "predictedRuntimePreview": "a25c2-runtime-rendering-calibration\\predicted-runtime-preview-geometry-only.png",
+  "predictedRuntimePreviewLimitations": [
+    "global affine transform only",
+    "runtime filter kernel remains unmeasured"
+  ],
+  "reviewAtlas": "a25c2-runtime-rendering-calibration\\runtime-rendering-calibration-atlas.png",
+  "productionFixesRequired": [],
+  "previewRendererFixesApplied": [
+    "BitmapFont glyphs scale from BitmapFont size and Character metrics before vertical centering",
+    "START/END alignment is honored by compiler and deterministic renderer"
+  ],
+  "productionSceneGeometryModified": false,
+  "regressions": [],
+  "projects": {
+    "geometry": {
+      "name": "geometry",
+      "root": "a25c2-runtime-rendering-calibration\\geometry",
+      "scene": "a25c2-runtime-rendering-calibration\\geometry\\scene.json",
+      "project": "a25c2-runtime-rendering-calibration\\geometry\\project",
+      "xml": "a25c2-runtime-rendering-calibration\\geometry\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\geometry\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "bitmap_font": {
+      "name": "bitmap-font",
+      "root": "a25c2-runtime-rendering-calibration\\bitmap-font",
+      "scene": "a25c2-runtime-rendering-calibration\\bitmap-font\\scene.json",
+      "project": "a25c2-runtime-rendering-calibration\\bitmap-font\\project",
+      "xml": "a25c2-runtime-rendering-calibration\\bitmap-font\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\bitmap-font\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "resampling": {
+      "name": "resampling",
+      "root": "a25c2-runtime-rendering-calibration\\resampling",
+      "scene": "a25c2-runtime-rendering-calibration\\resampling\\scene.json",
+      "project": "a25c2-runtime-rendering-calibration\\resampling\\project",
+      "xml": "a25c2-runtime-rendering-calibration\\resampling\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\resampling\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "pivot": {
+      "name": "pivot",
+      "root": "a25c2-runtime-rendering-calibration\\pivot",
+      "scene": "a25c2-runtime-rendering-calibration\\pivot\\scene.json",
+      "project": "a25c2-runtime-rendering-calibration\\pivot\\project",
+      "xml": "a25c2-runtime-rendering-calibration\\pivot\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\pivot\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_off": {
+      "name": "production-off",
+      "root": "a25c2-runtime-rendering-calibration\\production-off",
+      "scene": "a25c2-runtime-rendering-calibration\\production-off\\scene.json",
+      "project": "a25c2-runtime-rendering-calibration\\production-off\\project",
+      "xml": "a25c2-runtime-rendering-calibration\\production-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\production-off\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    },
+    "production_manual": {
+      "name": "production-manual",
+      "root": "a25c2-runtime-rendering-calibration\\production-manual",
+      "scene": "a25c2-runtime-rendering-calibration\\production-manual\\scene.json",
+      "project": "a25c2-runtime-rendering-calibration\\production-manual\\project",
+      "xml": "a25c2-runtime-rendering-calibration\\production-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml",
+      "officialValidation": "INFO: WFF Validation Application Version unspecified. Maximum Supported Format Version #5\nINFO: ?  PASSED : a25c2-runtime-rendering-calibration\\production-manual\\project\\watchface\\src\\main\\res\\raw\\watchface.xml is valid against watch face format version #1"
+    }
+  },
+  "builds": {
+    "geometry": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\geometry\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "bitmap_font": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\bitmap-font\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "resampling": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\resampling\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "pivot": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\pivot\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "production_off": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\production-off\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    },
+    "production_manual": {
+      "success": true,
+      "returnCode": 0,
+      "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\production-manual\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+      "output": "\n> Configure project :watchface\nWARNING: BuildType 'debug' is both debuggable and has 'isMinifyEnabled' set to true.\nAll code optimizations and obfuscation are disabled for debuggable builds.\n\n> Task :watchface:preBuild UP-TO-DATE\n> Task :watchface:preDebugBuild UP-TO-DATE\n> Task :watchface:mergeDebugNativeDebugMetadata NO-SOURCE\n> Task :watchface:generateDebugResources UP-TO-DATE\n> Task :watchface:packageDebugResources UP-TO-DATE\n> Task :watchface:processDebugNavigationResources UP-TO-DATE\n> Task :watchface:parseDebugLocalResources UP-TO-DATE\n> Task :watchface:generateDebugRFile UP-TO-DATE\n> Task :watchface:compileDebugKotlin NO-SOURCE\n> Task :watchface:javaPreCompileDebug UP-TO-DATE\n> Task :watchface:compileDebugJavaWithJavac NO-SOURCE\n> Task :watchface:generateDebugAssets UP-TO-DATE\n> Task :watchface:mergeDebugAssets UP-TO-DATE\n> Task :watchface:compressDebugAssets UP-TO-DATE\n> Task :watchface:checkDebugDuplicateClasses UP-TO-DATE\n> Task :watchface:extractProguardFiles UP-TO-DATE\n> Task :watchface:checkDebugAarMetadata UP-TO-DATE\n> Task :watchface:compileDebugNavigationResources UP-TO-DATE\n> Task :watchface:mapDebugSourceSetPaths UP-TO-DATE\n> Task :watchface:mergeDebugResources UP-TO-DATE\n> Task :watchface:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :watchface:extractDeepLinksDebug UP-TO-DATE\n> Task :watchface:processDebugMainManifest UP-TO-DATE\n> Task :watchface:processDebugManifest UP-TO-DATE\n> Task :watchface:processDebugManifestForPackage UP-TO-DATE\n> Task :watchface:processDebugResources UP-TO-DATE\n> Task :watchface:mergeDebugGeneratedProguardFiles UP-TO-DATE\n> Task :watchface:processDebugJavaRes NO-SOURCE\n> Task :watchface:mergeDebugJavaResource UP-TO-DATE\n> Task :watchface:minifyDebugWithR8 UP-TO-DATE\n> Task :watchface:mergeDebugJniLibFolders UP-TO-DATE\n> Task :watchface:mergeDebugNativeLibs NO-SOURCE\n> Task :watchface:stripDebugDebugSymbols NO-SOURCE\n> Task :watchface:validateSigningDebug UP-TO-DATE\n> Task :watchface:writeDebugAppMetadata UP-TO-DATE\n> Task :watchface:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :watchface:packageDebug UP-TO-DATE\n> Task :watchface:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :watchface:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n29 actionable tasks: 29 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n"
+    }
+  },
+  "captures": {
+    "geometry": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\geometry\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\geometry\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 117.3 MB/s (25958 bytes in 0.000s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[141] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "clockSet": true,
+      "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+      "captureOk": true,
+      "captureOutput": "1723111710159\n1723111710500",
+      "runtimeEpochMsBeforeCapture": 1723111710159,
+      "runtimeEpochMsAfterCapture": 1723111710500,
+      "captureTimestampDeltaRangeMs": [
+        159,
+        500
+      ],
+      "captureTimeUncertaintyMs": 341,
+      "path": "a25c2-runtime-rendering-calibration\\runtime\\geometry.png",
+      "activeWatchFace": true
+    },
+    "bitmap_font": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\bitmap-font\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\bitmap-font\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 158.6 MB/s (37084 bytes in 0.000s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[142] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "clockSet": true,
+      "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+      "captureOk": true,
+      "captureOutput": "1723111710179\n1723111710446",
+      "runtimeEpochMsBeforeCapture": 1723111710179,
+      "runtimeEpochMsAfterCapture": 1723111710446,
+      "captureTimestampDeltaRangeMs": [
+        179,
+        446
+      ],
+      "captureTimeUncertaintyMs": 267,
+      "path": "a25c2-runtime-rendering-calibration\\runtime\\bitmap-font.png",
+      "activeWatchFace": true
+    },
+    "resampling": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\resampling\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\resampling\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 115.3 MB/s (26515 bytes in 0.000s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[143] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "clockSet": true,
+      "clockOutput": "Thu Aug  8 10:08:30 GMT 2024",
+      "captureOk": true,
+      "captureOutput": "1723111710176\n1723111710468",
+      "runtimeEpochMsBeforeCapture": 1723111710176,
+      "runtimeEpochMsAfterCapture": 1723111710468,
+      "captureTimestampDeltaRangeMs": [
+        176,
+        468
+      ],
+      "captureTimeUncertaintyMs": 292,
+      "path": "a25c2-runtime-rendering-calibration\\runtime\\resampling.png",
+      "activeWatchFace": true
+    },
+    "pivot": {
+      "activation": {
+        "apk": "C:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\pivot\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk",
+        "installOk": true,
+        "installOutput": "Performing Push Install\nSuccess\nC:\\Users\\bug95\\Documents\\Codex\\2026-08-20\\new-chat\\outputs\\Photo2WFF\\a25c2-runtime-rendering-calibration\\pivot\\project\\watchface\\build\\outputs\\apk\\debug\\watchface-debug.apk: 1 file pushed, 0 skipped. 109.1 MB/s (23148 bytes in 0.000s)",
+        "broadcastOk": true,
+        "broadcastOutput": "Broadcasting: Intent { act=com.google.android.wearable.app.DEBUG_SURFACE flg=0x400000 (has extras) }\nBroadcast completed: result=1, data=\"Favorite Id=[144] Runtime=[2]\"",
+        "runtimeActive": true
+      },
+      "clockSet": true,
+      "clockOutput": "Thu Aug  8 00:00:00 GMT 2024",
+      "captureOk": true,
+      "captureOutput": "1723075200170\n1723075200470",
+      "runtimeEpochMsBeforeCapture": 1723075200170,
+      "runtimeEpochMsAfterCapture": 1723075200470,
+      "captureTimestampDeltaRangeMs": [
+        170,
+        470
+      ],
+      "captureTimeUncertaintyMs": 300,
+      "path": "a25c2-runtime-rendering-calibration\\runtime\\pivot.png",
+      "activeWatchFace": true
+    }
+  },
+  "runtimeEnvironment": {
+    "status": "runtime_available",
+    "reason": null,
+    "devices": [
+      {
+        "serial": "emulator-5554",
+        "wearOs": false,
+        "properties": {
+          "ro.product.model": "sdk_gphone64_x86_64",
+          "ro.product.name": "sdk_gphone64_x86_64",
+          "ro.build.characteristics": "emulator",
+          "ro.build.version.release": "15"
+        },
+        "watchFeature": false
+      },
+      {
+        "serial": "emulator-5556",
+        "wearOs": true,
+        "properties": {
+          "ro.product.model": "sdk_gwear_x86_64",
+          "ro.product.name": "sdk_gwear_x86_64",
+          "ro.build.characteristics": "emulator,nosdcard,watch",
+          "ro.build.version.release": "14"
+        },
+        "watchFeature": true
+      }
+    ],
+    "selectedDevice": "emulator-5556",
+    "adb": "C:\\Users\\bug95\\Android\\Sdk\\platform-tools\\adb.EXE"
+  },
+  "diagnosticMetadata": {
+    "bitmapFont": {
+      "part_image": {
+        "kind": "PART_IMAGE",
+        "container": {
+          "x": 10,
+          "y": 100,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center"
+      },
+      "native_h29": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 116,
+          "y": 100,
+          "width": 96,
+          "height": 29
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center"
+      },
+      "native_h48": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 222,
+          "y": 100,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center"
+      },
+      "native_h72": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 328,
+          "y": 100,
+          "width": 96,
+          "height": 72
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "center"
+      },
+      "half_metrics": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 10,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 83,
+          "height": 101
+        },
+        "alignment": "center"
+      },
+      "square_metrics": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 116,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 166
+        },
+        "alignment": "center"
+      },
+      "native_start": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 222,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "left"
+      },
+      "native_end": {
+        "kind": "BITMAP_FONT",
+        "container": {
+          "x": 328,
+          "y": 260,
+          "width": 96,
+          "height": 48
+        },
+        "glyphMetrics": {
+          "width": 166,
+          "height": 202
+        },
+        "alignment": "right"
+      }
+    },
+    "resampling": {
+      "vertical_1": {
+        "orientation": "VERTICAL",
+        "knownWidthPx": 1,
+        "bbox": {
+          "x": 50,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        }
+      },
+      "horizontal_1": {
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 1,
+        "bbox": {
+          "x": 149,
+          "y": 210,
+          "width": 140,
+          "height": 24
+        }
+      },
+      "vertical_2": {
+        "orientation": "VERTICAL",
+        "knownWidthPx": 2,
+        "bbox": {
+          "x": 112,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        }
+      },
+      "horizontal_2": {
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 2,
+        "bbox": {
+          "x": 149,
+          "y": 244,
+          "width": 140,
+          "height": 24
+        }
+      },
+      "vertical_3": {
+        "orientation": "VERTICAL",
+        "knownWidthPx": 3,
+        "bbox": {
+          "x": 174,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        }
+      },
+      "horizontal_3": {
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 3,
+        "bbox": {
+          "x": 149,
+          "y": 278,
+          "width": 140,
+          "height": 24
+        }
+      },
+      "vertical_4": {
+        "orientation": "VERTICAL",
+        "knownWidthPx": 4,
+        "bbox": {
+          "x": 236,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        }
+      },
+      "horizontal_4": {
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 4,
+        "bbox": {
+          "x": 149,
+          "y": 312,
+          "width": 140,
+          "height": 24
+        }
+      },
+      "vertical_8": {
+        "orientation": "VERTICAL",
+        "knownWidthPx": 8,
+        "bbox": {
+          "x": 298,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        }
+      },
+      "horizontal_8": {
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 8,
+        "bbox": {
+          "x": 149,
+          "y": 346,
+          "width": 140,
+          "height": 24
+        }
+      },
+      "vertical_13": {
+        "orientation": "VERTICAL",
+        "knownWidthPx": 13,
+        "bbox": {
+          "x": 360,
+          "y": 80,
+          "width": 24,
+          "height": 100
+        }
+      },
+      "horizontal_13": {
+        "orientation": "HORIZONTAL",
+        "knownWidthPx": 13,
+        "bbox": {
+          "x": 149,
+          "y": 380,
+          "width": 140,
+          "height": 24
+        }
+      }
+    },
+    "pivot": {
+      "targetLogicalCenter": [
+        219,
+        219
+      ],
+      "fiducials": [
+        [
+          207,
+          207
+        ],
+        [
+          231,
+          207
+        ],
+        [
+          207,
+          231
+        ],
+        [
+          231,
+          231
+        ]
+      ],
+      "assetPivot": [
+        10,
+        135
+      ]
+    }
+  }
+}

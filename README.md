@@ -149,6 +149,22 @@ python -m photo2wff measurement-correctness hermes-a2-output\scene.json `
   --out a25c1-measurement-correctness --capture --serial emulator-5556
 ```
 
+`1ee56a8` is preserved as `baseline/a25c1-measurement-correctness`. A2.5c.2
+isolates BitmapFont layout, solid-raster resampling, and analog pivot behavior
+without changing production scene geometry:
+
+```powershell
+python -m photo2wff runtime-rendering-calibration hermes-a2-output\scene.json `
+  --manual-scene C:\path\to\manual-output\scene.json `
+  --out a25c2-runtime-rendering-calibration --capture --serial emulator-5556
+```
+
+The generated `device-runtime-calibration.json` contains only values measured
+by dedicated runtime diagnostics. The geometry-only predicted preview applies
+the verified logical-to-runtime affine transform; it does not claim an image
+filter kernel while that kernel remains unmeasured. BitmapFont preview glyphs
+are scaled from `BitmapFont size` and `Character` metrics before centering.
+
 The runtime capture records `t_before -> screencap -> t_after` in one remote
 device command and evaluates moving hands against the resulting angle interval.
 Pivot error remains `unmeasured` unless it can be independently detected.

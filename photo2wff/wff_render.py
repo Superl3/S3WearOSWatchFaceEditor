@@ -118,22 +118,27 @@ def _part_text(base: Image.Image, node: ET.Element, xml_path: Path, fixed_date: 
         family = bitmap_font_node.attrib.get("family", "")
         catalog = bitmap_fonts.get(family, {})
         glyphs: list[Image.Image] = []
+        font_size = max(1, round(float(bitmap_font_node.attrib.get("size", "20"))))
         for character in text:
             definition = catalog.get(character)
             if definition is None:
                 raise ValueError(f"BitmapFont '{family}' has no glyph for '{character}'")
-            glyphs.append(_resource(xml_path.parent.parent / "drawable", definition["resource"]))
+            glyph = _resource(xml_path.parent.parent / "drawable", definition["resource"])
+            metric_width = max(1, int(definition.get("width", glyph.width)))
+            metric_height = max(1, int(definition.get("height", glyph.height)))
+            target_width = max(1, round(metric_width * font_size / metric_height))
+            glyphs.append(glyph.resize((target_width, font_size), Image.Resampling.LANCZOS))
         total_width = sum(glyph.width for glyph in glyphs)
-        x = 0 if align == "LEFT" else width - total_width if align == "RIGHT" else (width - total_width) / 2
-        y = max(0, (height - max((glyph.height for glyph in glyphs), default=0)) // 2)
+        x = 0 if align in {"LEFT", "START"} else width - total_width if align in {"RIGHT", "END"} else (width - total_width) / 2
+        y = max(0, (height - font_size) // 2)
         for glyph in glyphs:
             layer.alpha_composite(glyph, (round(x), y))
             x += glyph.width
     else:
         draw = ImageDraw.Draw(layer)
         font = _font_for(xml_path, font_node.attrib)
-        x = 0 if align == "LEFT" else width if align == "RIGHT" else width / 2
-        anchor = "lm" if align == "LEFT" else "rm" if align == "RIGHT" else "mm"
+        x = 0 if align in {"LEFT", "START"} else width if align in {"RIGHT", "END"} else width / 2
+        anchor = "lm" if align in {"LEFT", "START"} else "rm" if align in {"RIGHT", "END"} else "mm"
         draw.text((x, height / 2), text, font=font, fill=_color(font_node.attrib.get("color", "#FFFFFF")), anchor=anchor)
     base.alpha_composite(layer, (int(float(node.attrib.get("x", "0"))), int(float(node.attrib.get("y", "0")))))
 

@@ -10,6 +10,9 @@ tools/wff-validator/*.jar
 a25c1-measurement-correctness/*/project/
 a25c1-measurement-correctness/*/scene.json
 a25c1-measurement-correctness/sources/
+a25c2-runtime-rendering-calibration/*/project/
+a25c2-runtime-rendering-calibration/*/scene.json
+a25c2-runtime-rendering-calibration/sources/
 
 # Generated APKs and intermediate reports
 **/*.apk

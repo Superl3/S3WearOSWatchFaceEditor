@@ -16,6 +16,7 @@ from .wff_validate import validate_wff_xml
 from .wff_render import render_wff_xml
 from .human_review import generate_human_review_artifacts
 from .measurement_correctness import run_measurement_correctness
+from .runtime_rendering_calibration import run_runtime_rendering_calibration
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -195,6 +196,14 @@ def main() -> None:
     correctness_parser.add_argument("--capture", action="store_true")
     correctness_parser.add_argument("--adb", type=Path)
     correctness_parser.add_argument("--serial", type=str)
+    rendering_calibration_parser = subparsers.add_parser("runtime-rendering-calibration")
+    rendering_calibration_parser.add_argument("scene", type=Path)
+    rendering_calibration_parser.add_argument("--manual-scene", type=Path, required=True)
+    rendering_calibration_parser.add_argument("--out", type=Path, default=Path("a25c2-runtime-rendering-calibration"))
+    rendering_calibration_parser.add_argument("--build", action="store_true")
+    rendering_calibration_parser.add_argument("--capture", action="store_true")
+    rendering_calibration_parser.add_argument("--adb", type=Path)
+    rendering_calibration_parser.add_argument("--serial", type=str)
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -221,3 +230,5 @@ def main() -> None:
         print(json.dumps(run_runtime_calibration(args.scene, args.xml, args.runtime_dir, args.out, manual_xml=args.manual_xml), ensure_ascii=False, indent=2))
     elif args.command == "measurement-correctness":
         print(json.dumps(run_measurement_correctness(args.scene, args.out, manual_scene_path=args.manual_scene, build=args.build, capture=args.capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))
+    elif args.command == "runtime-rendering-calibration":
+        print(json.dumps(run_runtime_rendering_calibration(args.scene, args.manual_scene, args.out, build=args.build, capture=args.capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))

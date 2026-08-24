@@ -134,8 +134,20 @@ class Photo2WFFTests(unittest.TestCase):
             render_wff_xml(xml_path, provided, fixed_date="2024-08-08")
             render_wff_xml(xml_path, fallback, fixed_date="2024-08-09")
             self.assertNotEqual(provided.read_bytes(), fallback.read_bytes())
+            with Image.open(provided) as rendered:
+                foreground = rendered.convert("RGB").crop((170, 200, 268, 236)).getbbox()
+                self.assertIsNotNone(foreground)
+                self.assertLessEqual(foreground[2] - foreground[0], 15)
+                self.assertGreaterEqual(foreground[1], 5)
+                self.assertLess(foreground[1], 10)
             with Image.open(shutil_target) as copied:
                 self.assertEqual(copied.size, (13, 21))
+
+    def test_compiler_maps_scene_alignment_to_official_wff_values(self):
+        scene = basic_scene()
+        scene["elements"][1]["style"]["alignment"] = "left"
+        root = ET.fromstring(compile_watchface_xml(scene, {}))
+        self.assertEqual(root.find(".//PartText/Text").attrib["align"], "START")
 
     def test_runtime_gate_reports_blocked_environment_without_faking_capture(self):
         with tempfile.TemporaryDirectory() as temp:
