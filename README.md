@@ -109,17 +109,17 @@ boundary contact or component loss. The review bundle additionally contains
 mask/reconstruction overlay, raw extraction, canonical asset, and source-space
 reprojection for every observed digit. Missing `3` remains deferred to A2b.2.
 
-A2b.3 replaces fixed raster crops with a topology-first glyph grammar.
-Observed full masks produce outer/inner contours, skeletons, curvature
-extrema, endpoints, junctions, tangent, length, stroke-width, and cap metadata.
-A single global hour-ring orientation rule is recorded and applied; glyph
-specific orientation exceptions are not used. Leave-one-out validation hides
-each observed digit in turn, reconstructs it from other topology donors, and
-explicitly tests the 9 rotated 180 degrees as a 6 donor candidate. The current
-sample emits three ranked `3` recipes: opened 8 topology, 2 upper plus another
-lower curve, and a 9/6-family hybrid. Candidates remain review-only and no
-synthesized `3` is added to the static dial. Pretendard fallback remains the
-production path until a human selects a candidate.
+A2b.2 adds reusable compositional glyph assembly without an external
+generator. Observed canonical glyphs are decomposed into native-resolution
+loop, curve, stem, terminal, and transition primitives. The current sample
+emits three ranked `3` recipes with provenance under
+`assets/glyphs/primitives/` and `assets/glyphs/synthesized/candidates/`.
+Candidates are exposed only through review-only themed WFF projects; ranking
+never implies approval, and no synthesized `3` is added to the static dial.
+The review bundle includes the primitive atlas, candidate provenance sheet,
+fallback-versus-candidate renders for days 1/8/11/20/31, and the observed
+fidelity review. Pretendard fallback remains the production path until a
+human selects a candidate.
 
 The external and local model adapters are optional. When unavailable, the deterministic fallback adapter emits explicit review-only candidates and reports `external synthesis unavailable`; it does not claim model output. A2b writes `glyph-report.json`, `assets/glyphs/observed/raw/`, `assets/glyphs/observed/canonical/`, `assets/glyphs/synthesized/candidates/`, `assets/glyphs/themed/`, `project/`, `project-fallback/`, and glyph review sheets for canonical coverage, provenance, candidate 3, fallback-vs-themed dates, and full-watch themed renders. An unapproved synthesized glyph keeps the milestone at `completed_with_review`.
 

@@ -14,7 +14,7 @@ from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
-from photo2wff.glyphs import ExternalModelAdapter, _extract_shape_primitives, _leave_one_out_validation, _synthesize_compositional_missing_glyphs
+from photo2wff.glyphs import ExternalModelAdapter, _extract_shape_primitives, _synthesize_compositional_missing_glyphs
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
@@ -154,11 +154,11 @@ class Photo2WFFTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             output_root = Path(temp)
             glyphs = {}
-            for character in ("2", "8", "9"):
+            for character in ("5", "8", "9"):
                 image = Image.new("RGBA", (42, 64), (0, 0, 0, 0))
                 draw = ImageDraw.Draw(image)
                 draw.rounded_rectangle((5, 4, 36, 59), radius=12, outline=(240, 230, 220, 255), width=3)
-                if character == "2":
+                if character == "5":
                     draw.line((8, 31, 32, 31), fill=(240, 230, 220, 255), width=3)
                 elif character == "8":
                     draw.line((8, 31, 33, 31), fill=(240, 230, 220, 255), width=3)
@@ -172,26 +172,8 @@ class Photo2WFFTests(unittest.TestCase):
             self.assertEqual(len(candidates["3"]), 3)
             self.assertEqual([item["rank"] for item in candidates["3"]], [1, 2, 3])
             self.assertTrue(all(item["requiresHumanReview"] for item in candidates["3"]))
-            self.assertEqual(themed["3"]["source"], "SYNTHESIZED_TOPOLOGY")
+            self.assertEqual(themed["3"]["source"], "SYNTHESIZED_COMPOSITIONAL")
             self.assertFalse(candidates["3"][0]["ranking"]["autoApproved"])
-
-    def test_leave_one_out_includes_rotated_nine_donor_for_six(self):
-        with tempfile.TemporaryDirectory() as temp:
-            output_root = Path(temp)
-            image = Image.new("RGBA", (42, 64), (0, 0, 0, 0))
-            ImageDraw.Draw(image).rounded_rectangle((5, 4, 36, 59), radius=12, outline=(240, 230, 220, 255), width=3)
-            themed = {}
-            topology = {"glyphs": {}}
-            for character in ("6", "9"):
-                asset = output_root / f"glyph_{character}.png"
-                image.save(asset)
-                themed[character] = {"resource": str(asset.relative_to(output_root)), "provenance": "OBSERVED_PARTIAL" if character == "6" else "OBSERVED_CLEAN"}
-                topology["glyphs"][character] = _extract_shape_primitives(character, image, output_root)
-            result = _leave_one_out_validation(output_root, themed, topology)
-            six_candidates = result["targets"]["6"]["candidates"]
-            self.assertTrue(six_candidates)
-            self.assertEqual(six_candidates[0]["donor"], "9")
-            self.assertEqual(six_candidates[0]["rotationDeg"], 180.0)
 
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:
