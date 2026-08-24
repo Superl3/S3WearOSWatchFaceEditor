@@ -14,6 +14,7 @@ from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
 from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand
+from photo2wff.glyphs import ExternalModelAdapter
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
@@ -83,6 +84,61 @@ class Photo2WFFTests(unittest.TestCase):
             render_wff_xml(xml_path, first, fixed_date="2024-08-01")
             render_wff_xml(xml_path, second, fixed_date="2024-08-31")
             self.assertNotEqual(first.read_bytes(), second.read_bytes())
+
+    def test_themed_bitmap_glyphs_compile_and_render_dynamic_date(self):
+        scene = basic_scene()
+        resources = {digit: f"assets/glyph_{digit}.png" for digit in "0123456789"}
+        metrics = {digit: {"width": 20, "height": 24} for digit in "0123456789"}
+        scene["elements"] = [
+            {
+                "id": "date_day_of_month",
+                "type": "DYNAMIC_SLOT",
+                "slotType": "DATE_DAY_OF_MONTH",
+                "dynamic": True,
+                "bbox": {"x": 346, "y": 207, "width": 47, "height": 29},
+                "format": "d",
+                "style": {"fontFamily": "Pretendard", "fontSize": 24, "alignment": "center", "color": "#DFD8D2"},
+                "themedGlyph": {
+                    "type": "THEMED_GLYPH",
+                    "family": "PHOTO2WFF_THEMED",
+                    "enabled": True,
+                    "approved": False,
+                    "fallbackFamily": "Pretendard",
+                    "coverageReport": "glyph-report.json",
+                    "resourceDirectory": "assets/glyphs/themed",
+                    "resources": resources,
+                    "metrics": metrics,
+                    "requiresHumanReview": True,
+                },
+                "confidence": 0.9,
+            }
+        ]
+        xml = compile_watchface_xml(scene, resources | {value: f"glyph_{digit}" for digit, value in resources.items()})
+        root = ET.fromstring(xml)
+        self.assertEqual(root.find("./BitmapFonts/BitmapFont").attrib["name"], "PHOTO2WFF_THEMED")
+        self.assertIsNotNone(root.find(".//Text/BitmapFont/Template/Parameter"))
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            xml_path = directory / "res/raw/watchface.xml"
+            drawable = directory / "res/drawable"
+            drawable.mkdir(parents=True)
+            xml_path.parent.mkdir(parents=True)
+            for digit in "0123456789":
+                image = Image.new("RGBA", (20, 24), (0, 0, 0, 0))
+                ImageDraw.Draw(image).text((10, 12), digit, font=ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 18), fill="#DFD8D2", anchor="mm")
+                image.save(drawable / f"glyph_{digit}.png")
+            xml_path.write_text(xml, encoding="utf-8")
+            self.assertEqual(validate_wff_xml(xml_path), "structural validation passed")
+            first = directory / "day-01.png"
+            last = directory / "day-31.png"
+            render_wff_xml(xml_path, first, fixed_date="2024-08-01")
+            render_wff_xml(xml_path, last, fixed_date="2024-08-31")
+            self.assertNotEqual(first.read_bytes(), last.read_bytes())
+
+    def test_external_glyph_model_is_explicitly_unavailable(self):
+        status = ExternalModelAdapter().status()
+        self.assertFalse(status["available"])
+        self.assertEqual(status["reason"], "external synthesis unavailable")
 
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:

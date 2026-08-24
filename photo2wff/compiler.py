@@ -41,12 +41,28 @@ def _font_attributes(style: dict[str, Any], include_text: bool = False) -> dict[
     return attrs
 
 
-def _part_text(element: dict[str, Any], expression: str | None = None, template: str | None = None) -> ET.Element:
+def _part_text(
+    element: dict[str, Any],
+    expression: str | None = None,
+    template: str | None = None,
+    bitmap_font: dict[str, Any] | None = None,
+) -> ET.Element:
     bbox = element["bbox"]
     style = element.get("style", {})
     part = ET.Element("PartText", {"x": str(bbox["x"]), "y": str(bbox["y"]), "width": str(bbox["width"]), "height": str(bbox["height"])})
     text = ET.SubElement(part, "Text", {"align": str(style.get("alignment", "center")).upper()})
-    font = ET.SubElement(text, "Font", _font_attributes(style))
+    if bitmap_font:
+        font = ET.SubElement(
+            text,
+            "BitmapFont",
+            {
+                "family": str(bitmap_font["family"]),
+                "size": str(int(style.get("fontSize", 24))),
+                "color": _xml_color(style.get("color", "#FFFFFF")),
+            },
+        )
+    else:
+        font = ET.SubElement(text, "Font", _font_attributes(style))
     if template is not None:
         template_node = ET.SubElement(font, "Template")
         template_node.text = template
@@ -90,6 +106,37 @@ def _pretty_xml(root: ET.Element) -> str:
     return minidom.parseString(raw).toprettyxml(indent="  ", encoding="utf-8").decode("utf-8")
 
 
+def _append_bitmap_fonts(root: ET.Element, scene: dict[str, Any], resource_names: dict[str, str]) -> None:
+    definitions: dict[str, dict[str, Any]] = {}
+    for element in scene["elements"]:
+        themed = element.get("themedGlyph")
+        if not themed or not themed.get("enabled"):
+            continue
+        family = str(themed["family"])
+        definitions.setdefault(family, {"themed": themed, "element": element})
+    if not definitions:
+        return
+    fonts_node = ET.SubElement(root, "BitmapFonts")
+    for family, definition in sorted(definitions.items()):
+        themed = definition["themed"]
+        font_node = ET.SubElement(fonts_node, "BitmapFont", {"name": family})
+        metrics = themed.get("metrics", {})
+        for character, asset in sorted(themed.get("resources", {}).items()):
+            if asset not in resource_names:
+                raise ValueError(f"themed glyph '{character}' references missing asset '{asset}'")
+            glyph_metrics = metrics.get(character, {})
+            ET.SubElement(
+                font_node,
+                "Character",
+                {
+                    "name": str(character),
+                    "resource": resource_names[asset],
+                    "width": str(int(glyph_metrics.get("width", 20))),
+                    "height": str(int(glyph_metrics.get("height", 24))),
+                },
+            )
+
+
 def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str]) -> str:
     scene = validate_scene(scene)
     root = ET.Element("WatchFace", {"width": "438", "height": "438"})
@@ -97,6 +144,7 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
     ET.SubElement(root, "Metadata", {"key": "CLOCK_TYPE", "value": "ANALOG" if is_analog else "DIGITAL"})
     ET.SubElement(root, "Metadata", {"key": "PREVIEW_TIME", "value": str(scene.get("preview", {}).get("time", "10:08:32"))})
     ET.SubElement(root, "Metadata", {"key": "PREVIEW_DATE", "value": str(scene.get("preview", {}).get("date", "08.20"))})
+    _append_bitmap_fonts(root, scene, resource_names)
     background = scene["background"]
     if str(background.get("type", "")).upper() not in {"SOLID", "UNKNOWN", "IMAGE"}:
         raise ValueError(f"background type '{background.get('type')}' needs a rasterized background asset before WFF compilation")
@@ -120,7 +168,8 @@ def compile_watchface_xml(scene: dict[str, Any], resource_names: dict[str, str])
             if element.get("slotType") != "DATE_DAY_OF_MONTH":
                 raise ValueError(f"element '{element['id']}' has unsupported DYNAMIC_SLOT type")
             expression = "[DAY_Z]" if element.get("format", "d") == "dd" else "[DAY]"
-            scene_node.append(_part_text(element, expression))
+            themed = element.get("themedGlyph")
+            scene_node.append(_part_text(element, expression, bitmap_font=themed if themed and themed.get("enabled") else None))
         elif element_type == "WEEKDAY":
             scene_node.append(_part_text(element, "[DAY_OF_WEEK_S]"))
         elif element_type == "BATTERY":
@@ -217,16 +266,24 @@ def compile_project(scene: dict[str, Any], project_dir: Path, source_root: Path)
         directory.mkdir(parents=True, exist_ok=True)
     resource_names: dict[str, str] = {}
     assets_root = source_root / "assets"
+
+    def register_asset(asset: str) -> None:
+        source_asset = source_root / asset
+        if not source_asset.exists():
+            raise ValueError(f"scene references missing asset '{asset}'")
+        resource_name = Path(asset).stem.lower().replace("-", "_")
+        resource_names[asset] = resource_name
+        shutil.copy2(source_asset, drawable / f"{resource_name}.png")
+
     for element in scene["elements"]:
         asset = element.get("asset")
         if not asset:
             continue
-        source_asset = source_root / asset
-        if not source_asset.exists():
-            raise ValueError(f"element '{element['id']}' references missing asset '{asset}'")
-        resource_name = Path(asset).stem.lower().replace("-", "_")
-        resource_names[asset] = resource_name
-        shutil.copy2(source_asset, drawable / f"{resource_name}.png")
+        register_asset(asset)
+    for element in scene["elements"]:
+        themed = element.get("themedGlyph") or {}
+        for asset in themed.get("resources", {}).values():
+            register_asset(asset)
     for element in scene["elements"]:
         if element["type"] in {"RECTANGLE", "CIRCLE", "LINE", "RING"}:
             resource_name = element["id"].lower().replace("-", "_")

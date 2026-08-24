@@ -1,0 +1,115 @@
+{
+  "semanticType": "DATE_DAY_OF_MONTH",
+  "days": [
+    1,
+    8,
+    11,
+    20,
+    31
+  ],
+  "fixedTime": "10:08:30",
+  "renders": {
+    "1": "hermes-a2b-output\\human-review\\date-window\\renders\\day-01.png",
+    "8": "hermes-a2b-output\\human-review\\date-window\\renders\\day-08.png",
+    "11": "hermes-a2b-output\\human-review\\date-window\\renders\\day-11.png",
+    "20": "hermes-a2b-output\\human-review\\date-window\\renders\\day-20.png",
+    "31": "hermes-a2b-output\\human-review\\date-window\\renders\\day-31.png"
+  },
+  "metrics": [
+    {
+      "day": 1,
+      "inkBbox": {
+        "x": 366,
+        "y": 210,
+        "width": 8,
+        "height": 21
+      },
+      "horizontalOffset": 0.5,
+      "verticalOffset": -1.0,
+      "leftPadding": 20,
+      "rightPadding": 19,
+      "topPadding": 3,
+      "bottomPadding": 5,
+      "clipped": false,
+      "baselineY": 229.5
+    },
+    {
+      "day": 8,
+      "inkBbox": {
+        "x": 363,
+        "y": 210,
+        "width": 13,
+        "height": 21
+      },
+      "horizontalOffset": 0.0,
+      "verticalOffset": -1.0,
+      "leftPadding": 17,
+      "rightPadding": 17,
+      "topPadding": 3,
+      "bottomPadding": 5,
+      "clipped": false,
+      "baselineY": 229.5
+    },
+    {
+      "day": 11,
+      "inkBbox": {
+        "x": 356,
+        "y": 210,
+        "width": 28,
+        "height": 21
+      },
+      "horizontalOffset": 0.5,
+      "verticalOffset": -1.0,
+      "leftPadding": 10,
+      "rightPadding": 9,
+      "topPadding": 3,
+      "bottomPadding": 5,
+      "clipped": false,
+      "baselineY": 229.5
+    },
+    {
+      "day": 20,
+      "inkBbox": {
+        "x": 353,
+        "y": 210,
+        "width": 35,
+        "height": 21
+      },
+      "horizontalOffset": 1.0,
+      "verticalOffset": -1.0,
+      "leftPadding": 7,
+      "rightPadding": 5,
+      "topPadding": 3,
+      "bottomPadding": 5,
+      "clipped": false,
+      "baselineY": 229.5
+    },
+    {
+      "day": 31,
+      "inkBbox": {
+        "x": 352,
+        "y": 210,
+        "width": 32,
+        "height": 21
+      },
+      "horizontalOffset": -1.5,
+      "verticalOffset": -1.0,
+      "leftPadding": 6,
+      "rightPadding": 9,
+      "topPadding": 3,
+      "bottomPadding": 5,
+      "clipped": false,
+      "baselineY": 229.5
+    }
+  ],
+  "artifacts": {
+    "atlas": "hermes-a2b-output\\human-review\\date-window\\date-window-review-atlas.png",
+    "geometryReview": "hermes-a2b-output\\human-review\\date-window\\date-window-geometry-review.png"
+  },
+  "checks": {
+    "horizontalVerticalCentering": true,
+    "clipping": true,
+    "baselineAndPaddingVisible": true
+  },
+  "deviceOrEmulatorVerification": "deferred"
+}

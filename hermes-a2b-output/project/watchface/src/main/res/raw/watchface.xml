@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="438" height="438">
+  <Metadata key="CLOCK_TYPE" value="ANALOG"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:30"/>
+  <Metadata key="PREVIEW_DATE" value="08.20"/>
+  <BitmapFonts>
+    <BitmapFont name="PHOTO2WFF_THEMED">
+      <Character name="0" resource="glyph_0" width="20" height="24"/>
+      <Character name="1" resource="glyph_1" width="20" height="24"/>
+      <Character name="2" resource="glyph_2" width="20" height="24"/>
+      <Character name="3" resource="glyph_3" width="20" height="24"/>
+      <Character name="4" resource="glyph_4" width="20" height="24"/>
+      <Character name="5" resource="glyph_5" width="20" height="24"/>
+      <Character name="6" resource="glyph_6" width="20" height="24"/>
+      <Character name="7" resource="glyph_7" width="20" height="24"/>
+      <Character name="8" resource="glyph_8" width="20" height="24"/>
+      <Character name="9" resource="glyph_9" width="20" height="24"/>
+    </BitmapFont>
+  </BitmapFonts>
+  <Scene backgroundColor="#000000">
+    <PartImage x="0" y="0" width="438" height="438">
+      <Image resource="dial_empty_date"/>
+    </PartImage>
+    <PartText x="346" y="207" width="47" height="29">
+      <Text align="CENTER">
+        <BitmapFont family="PHOTO2WFF_THEMED" size="24" color="#DFD8D2">
+          <Template>
+            %s
+            <Parameter expression="[DAY]"/>
+          </Template>
+        </BitmapFont>
+      </Text>
+    </PartText>
+    <AnalogClock x="0" y="0" width="438" height="438" pivotX="0.5" pivotY="0.5">
+      <HourHand resource="hour_hand" x="206" y="128" width="28" height="105" pivotX="0.5" pivotY="0.885714"/>
+      <MinuteHand resource="minute_hand" x="206" y="46" width="28" height="185" pivotX="0.5" pivotY="0.945946"/>
+      <SecondHand resource="second_hand" x="215" y="51" width="10" height="180" pivotX="0.5" pivotY="0.947222">
+        <Sweep frequency="15"/>
+      </SecondHand>
+    </AnalogClock>
+    <PartImage x="207" y="207" width="24" height="24">
+      <Image resource="center_cap"/>
+    </PartImage>
+  </Scene>
+</WatchFace>
