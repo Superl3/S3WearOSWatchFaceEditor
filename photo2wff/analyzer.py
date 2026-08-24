@@ -551,7 +551,7 @@ def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> tuple[dict[str, d
     return metadata, (center_x, center_y, center_confidence)
 
 
-def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fallback_path: Path | None = None) -> dict[str, Any]:
+def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fallback_path: Path | None = None, human_seed_path: Path | None = None) -> dict[str, Any]:
     """Extract a frontal dark display from a product photo and preserve it as static artwork."""
     source = Image.open(reference_path).convert("RGB")
     source_size = list(source.size)
@@ -632,6 +632,7 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         date_window_metadata_path=output_dir / "date-window-metadata.json",
         dial_completed_path=assets_dir / "dial-completed.png",
         reconstructed_mask_path=assets_dir / "reconstructed-mask.png",
+        human_seed_path=human_seed_path,
     )
     dial_asset = date_window_metadata["emptyDialAsset"] if date_window_metadata else "assets/dial_clean.png"
     elements: list[dict[str, Any]] = [

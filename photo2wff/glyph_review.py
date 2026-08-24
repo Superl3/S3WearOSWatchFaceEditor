@@ -306,9 +306,9 @@ def _leave_one_out_review(report: dict[str, Any], output_root: Path, path: Path)
 
 
 def _scaffold_review(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
-    """Compare source, generic scaffold, styled scaffold, donor candidate, overlay."""
+    """Compare source/seed, grammar scaffolds, a grammar variant, and overlay."""
     style = report.get("primitives", {}).get("styleParameters", {})
-    labels = ("SOURCE", "GENERIC SCAFFOLD", "STYLED SCAFFOLD", "DONOR-ASSISTED", "SOURCE OVERLAY")
+    labels = ("SOURCE / SEED", "GENERIC SCAFFOLD", "STYLED SCAFFOLD", "AUTO GRAMMAR VARIANT", "SOURCE OVERLAY")
     targets = ("6", "3")
     tile = (180, 170)
     sheet = Image.new("RGB", (tile[0] * len(labels), tile[1] * len(targets) + 42), "#151515")
@@ -318,7 +318,8 @@ def _scaffold_review(report: dict[str, Any], output_root: Path, path: Path) -> d
         draw.text((column * tile[0] + 5, 28), label, fill="#A8A8A8", font=_font(8))
     for row, target in enumerate(targets):
         source_meta = report.get("glyphs", {}).get(target)
-        source = Image.open(output_root / source_meta["resource"]).convert("RGBA") if source_meta else Image.new("RGBA", (64, 96), (0, 0, 0, 0))
+        seed_meta = report.get("primitives", {}).get("humanSeed") if target == "3" else None
+        source = Image.open(output_root / source_meta["resource"]).convert("RGBA") if source_meta else Image.open(output_root / seed_meta["asset"]).convert("RGBA") if seed_meta and seed_meta.get("asset") else Image.new("RGBA", (64, 96), (0, 0, 0, 0))
         generic_style = dict(style)
         generic_style["outerStrokeWidth"] = 1.0
         generic_style["outlineGap"] = 0.2
@@ -329,11 +330,11 @@ def _scaffold_review(report: dict[str, Any], output_root: Path, path: Path) -> d
         else:
             candidates = report.get("candidates", {}).get("3", [])
             best = candidates[1] if len(candidates) > 1 else (candidates[0] if candidates else None)
-        donor = Image.open(_candidate_resource_path(output_root, best["resource"])).convert("RGBA") if best else Image.new("RGBA", styled.size, (0, 0, 0, 0))
+        variant = Image.open(_candidate_resource_path(output_root, best["resource"])).convert("RGBA") if best else Image.new("RGBA", styled.size, (0, 0, 0, 0))
         overlay = source.copy()
-        if source_meta:
-            overlay.alpha_composite(donor.resize(source.size, Image.Resampling.NEAREST), (0, 0))
-        panels = (source, generic, styled, donor, overlay)
+        if source_meta or seed_meta:
+            overlay.alpha_composite(variant.resize(source.size, Image.Resampling.NEAREST), (0, 0))
+        panels = (source, generic, styled, variant, overlay)
         for column, image in enumerate(panels):
             left = column * tile[0]
             top = 42 + row * tile[1]
@@ -343,6 +344,36 @@ def _scaffold_review(report: dict[str, Any], output_root: Path, path: Path) -> d
     path.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(path)
     return {"artifact": str(path), "targets": list(targets), "columns": list(labels), "styleParameters": style.get("report")}
+
+
+def _human_seed_and_candidates(report: dict[str, Any], output_root: Path, path: Path) -> dict[str, Any]:
+    """Show the user-provided seed beside every non-approved grammar candidate."""
+    seed = report.get("primitives", {}).get("humanSeed")
+    candidates = report.get("candidates", {}).get("3", [])
+    entries: list[tuple[str, Image.Image, str]] = []
+    if seed and seed.get("asset"):
+        entries.append(("HUMAN SEED", Image.open(output_root / seed["asset"]).convert("RGBA"), "fitted grammar"))
+    for candidate in candidates:
+        image_path = _candidate_resource_path(output_root, candidate["resource"])
+        if image_path.exists():
+            recipe = next((item.get("recipe", "") for item in candidate.get("provenance", []) if item.get("role") == "assembly"), "")
+            entries.append((f"AUTO #{candidate.get('rank', candidate.get('candidate', '?'))}", Image.open(image_path).convert("RGBA"), recipe))
+    tile = (190, 175)
+    columns = 3
+    rows = max(1, (len(entries) + columns - 1) // columns)
+    sheet = Image.new("RGB", (tile[0] * columns, tile[1] * rows + 44), "#151515")
+    draw = ImageDraw.Draw(sheet)
+    draw.text((12, 10), "HUMAN SEED + PARAMETRIC DIGIT GRAMMAR CANDIDATES", fill="#FFFFFF", font=_font(15, True))
+    for index, (label, image, recipe) in enumerate(entries):
+        left = (index % columns) * tile[0]
+        top = 44 + (index // columns) * tile[1]
+        sheet.paste(_fit(image, tile), (left, top))
+        color = "#69F0AE" if label == "HUMAN SEED" else "#FFB45C"
+        draw.text((left + 8, top + 132), label, fill=color, font=_font(12, True))
+        draw.text((left + 8, top + 148), recipe[:26], fill="#D0D0D0", font=_font(9))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(path)
+    return {"artifact": str(path), "humanSeedIncluded": bool(seed), "candidateCount": len(candidates), "autoApproval": False}
 
 
 def _candidate_comparison_atlas(
@@ -393,6 +424,7 @@ def generate_glyph_review_artifacts(
     primitive_atlas = review_dir / "primitive-atlas.png"
     leave_one_out = review_dir / "topology-leave-one-out-review.png"
     scaffold_review = review_dir / "scaffold-guided-reconstruction-review.png"
+    human_seed_review = review_dir / "human-seed-and-auto-candidates.png"
     candidate_comparison = review_dir / "fallback-vs-compositional-candidates.png"
     _glyph_atlas(report, output_root, canonical)
     _glyph_atlas(report, output_root, provenance, provenance=True)
@@ -405,6 +437,7 @@ def generate_glyph_review_artifacts(
     primitive_report = _primitive_atlas(report, output_root, primitive_atlas)
     leave_one_out_report = _leave_one_out_review(report, output_root, leave_one_out)
     scaffold_review_report = _scaffold_review(report, output_root, scaffold_review)
+    human_seed_report = _human_seed_and_candidates(report, output_root, human_seed_review)
     candidate_comparison_report = _candidate_comparison_atlas(scene, candidate_xmls or {}, fallback_xml, candidate_comparison) if candidate_xmls else None
     manifest = {
         "milestone": "A2b.4 Scaffold-Guided Glyph Reconstruction",
@@ -424,6 +457,7 @@ def generate_glyph_review_artifacts(
             "primitiveAtlas": primitive_report,
             "topologyLeaveOneOutReview": leave_one_out_report,
             "scaffoldGuidedReconstruction": scaffold_review_report,
+            "humanSeedAndAutoCandidates": human_seed_report,
             "fallbackVsCompositionalCandidates": candidate_comparison_report,
         },
         "requiresHumanReview": report.get("requiresHumanReview", True),

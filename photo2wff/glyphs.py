@@ -645,10 +645,55 @@ def _rasterize_geometry(geometry: dict[str, Any], size: tuple[int, int], rotatio
     return result
 
 
-GENERIC_SCAFFOLDS: dict[str, list[list[tuple[float, float]]]] = {
-    "6": [[(0.72, 0.08), (0.42, 0.04), (0.18, 0.18), (0.12, 0.52), (0.20, 0.82), (0.45, 0.96), (0.72, 0.84), (0.76, 0.62), (0.58, 0.50), (0.30, 0.53)]],
-    "3": [[(0.18, 0.12), (0.48, 0.05), (0.76, 0.18), (0.58, 0.48), (0.76, 0.56), (0.78, 0.82), (0.50, 0.96), (0.18, 0.86)]],
+DIGIT_GRAMMAR_SCHEMA = {
+    "version": "1.0",
+    "supportedDigits": list(DIGITS),
+    "implementedDigits": ["3"],
+    "components": ("backbone", "upper_lobe", "lower_lobe", "terminal", "bridge", "counter"),
 }
+
+
+def _digit_grammar_paths(character: str, params: dict[str, float] | None = None) -> list[list[tuple[float, float]]]:
+    """Return content geometry independent of reference glyph pixels."""
+    params = params or {}
+    if character == "3":
+        bridge = max(0.22, min(0.52, float(params.get("centerBridgeLength", 0.36))))
+        opening = max(0.10, min(0.34, float(params.get("openingWidth", 0.18))))
+        upper = max(0.38, min(0.58, float(params.get("upperLobeProportion", 0.50))))
+        lower = max(0.38, min(0.60, float(params.get("lowerLobeProportion", 0.50))))
+        spine = max(0.08, min(0.28, float(params.get("spineCurvature", 0.16))))
+        left = opening
+        right = 0.78
+        mid = 0.50
+        upper_peak = max(0.035, min(0.14, 0.09 - (upper - 0.50) * 0.18))
+        lower_peak = min(0.965, max(0.86, 0.91 + (0.50 - lower) * 0.18))
+        spine_x = max(0.68, min(right + 0.03, right - spine * 0.16))
+        bridge_left = max(left + 0.02, right - bridge)
+
+        def quadratic(start: tuple[float, float], control: tuple[float, float], end: tuple[float, float], steps: int = 10) -> list[tuple[float, float]]:
+            return [
+                (
+                    (1 - t) ** 2 * start[0] + 2 * (1 - t) * t * control[0] + t**2 * end[0],
+                    (1 - t) ** 2 * start[1] + 2 * (1 - t) * t * control[1] + t**2 * end[1],
+                )
+                for t in [index / steps for index in range(steps + 1)]
+            ]
+
+        upper_lobe = quadratic((left, 0.27), (left - 0.01, upper_peak + 0.08), (0.52, upper_peak), 12)
+        upper_lobe += quadratic((0.52, upper_peak), (right + 0.02, upper_peak + 0.03), (right, 0.25), 12)[1:]
+        upper_lobe += quadratic((right, 0.25), (right + 0.01, 0.39), (bridge_left, mid), 8)[1:]
+        lower_lobe = quadratic((bridge_left, mid), (right + 0.01, 0.61), (right, 0.75), 8)
+        lower_lobe += quadratic((right, 0.75), (right + 0.02, lower_peak - 0.03), (0.52, lower_peak), 12)[1:]
+        lower_lobe += quadratic((0.52, lower_peak), (left - 0.01, lower_peak - 0.08), (left, 0.73), 12)[1:]
+        return [
+            upper_lobe,
+            lower_lobe,
+            [(right, 0.25), (spine_x, mid), (right, 0.75)],
+            [(bridge_left, mid), (spine_x, mid)],
+        ]
+    if character == "6":
+        return [[(0.72, 0.08), (0.42, 0.04), (0.18, 0.18), (0.12, 0.52), (0.20, 0.82), (0.45, 0.96), (0.72, 0.84), (0.76, 0.62), (0.58, 0.50), (0.30, 0.53)]]
+    return []
 
 
 def _estimate_style_parameters(output_root: Path, themed_assets: dict[str, dict[str, Any]]) -> dict[str, Any]:
@@ -678,10 +723,52 @@ def _estimate_style_parameters(output_root: Path, themed_assets: dict[str, dict[
     return {**style, "report": str(style_path.relative_to(output_root)).replace("\\", "/")}
 
 
+def _fit_human_seed(output_root: Path, seed_path: Path | None, style: dict[str, Any]) -> dict[str, Any] | None:
+    if seed_path is None or not seed_path.exists():
+        return None
+    seed = Image.open(seed_path).convert("RGBA")
+    seed.putalpha(_ink_mask(seed))
+    seed_asset = output_root / "assets/glyphs/human-seed-3.png"
+    seed_asset.parent.mkdir(parents=True, exist_ok=True)
+    seed.save(seed_asset)
+    seed_topology = _extract_topology("human_seed_3", seed, output_root)
+    geometry = seed_topology.get("geometry", {})
+    box = geometry.get("bbox", [0, 0, seed.width, seed.height])
+    width = max(1.0, box[2] - box[0])
+    height = max(1.0, box[3] - box[1])
+    midpoint = (box[1] + box[3]) / 2
+    bridge_points = [point for point in geometry.get("skeleton", []) if abs(point[1] - midpoint) <= height * 0.10]
+    bridge_span = (max((point[0] for point in bridge_points), default=box[0]) - min((point[0] for point in bridge_points), default=box[0])) / width
+    right_points = [point for point in geometry.get("outerContour", []) if point[0] >= box[0] + width * 0.65]
+    spine_variation = (statistics.pstdev(point[0] for point in right_points) / width) if len(right_points) > 1 else 0.16
+    alpha = seed.getchannel("A")
+    upper_ink = sum(alpha.crop((0, 0, seed.width, max(1, round(seed.height * 0.5)))).getdata())
+    lower_ink = sum(alpha.crop((0, round(seed.height * 0.5), seed.width, seed.height)).getdata())
+    total_ink = max(1, upper_ink + lower_ink)
+    fitted = {
+        "centerBridgeLength": round(max(0.22, min(0.52, bridge_span)), 4),
+        "upperLobeProportion": round(max(0.38, min(0.58, upper_ink / total_ink + 0.25)), 4),
+        "lowerLobeProportion": round(max(0.38, min(0.60, lower_ink / total_ink + 0.25)), 4),
+        "openingWidth": round(max(0.10, min(0.34, 0.16 + (min((point[0] for point in geometry.get("outerContour", [])), default=box[0]) - box[0]) / width)), 4),
+        "spineCurvature": round(max(0.08, min(0.28, spine_variation)), 4),
+    }
+    seed_report = {
+        "source": str(seed_path),
+        "asset": str(seed_asset.relative_to(output_root)).replace("\\", "/"),
+        "topologyAsset": geometry.get("topologyAsset"),
+        "fittedParameters": fitted,
+        "requiresHumanReview": True,
+    }
+    seed_report_path = output_root / "human-seed-report.json"
+    seed_report_path.write_text(json.dumps(seed_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    seed_report["report"] = str(seed_report_path.relative_to(output_root)).replace("\\", "/")
+    return seed_report
+
+
 def _render_styled_scaffold(character: str, style: dict[str, Any], size: tuple[int, int] = (64, 96)) -> Image.Image:
     """Render a generic vector-like scaffold once at high resolution."""
     outer = Image.new("L", size, 0)
-    paths = GENERIC_SCAFFOLDS.get(character, [])
+    paths = _digit_grammar_paths(character, style.get("grammarParameters"))
     draw_outer = ImageDraw.Draw(outer)
     outer_width = max(3, round(float(style.get("outerStrokeWidth", 2.0)) * 2.0))
     inner_width = max(1, round(outer_width - float(style.get("outlineGap", 1.0)) * 2.0))
@@ -828,32 +915,32 @@ def _synthesize_compositional_missing_glyphs(output_root: Path, themed_assets: d
     """Generate scaffold-guided review candidates after 6 leave-one-out passes."""
     if "3" not in topology_report.get("targets", ()):
         return {}, {}
-    available = topology_report.get("glyphs", {})
     six_validation = topology_report.get("leaveOneOut", {}).get("targets", {}).get("6", {})
     if not six_validation.get("validationPassed", False):
         return {"3": []}, {}
-    if any(digit not in available for digit in ("8", "2", "9")):
-        return {"3": []}, {}
     style = topology_report.get("styleParameters", {})
-    g = lambda digit: available[digit]["geometry"]
-    hybrid_lower = g("6") if "6" in available else g("9")
-    hybrid_lower_source = "6" if "6" in available else "9"
+    base_grammar = dict(style.get("grammarParameters", {}))
+    if not base_grammar:
+        base_grammar = {"centerBridgeLength": 0.36, "upperLobeProportion": 0.50, "lowerLobeProportion": 0.50, "openingWidth": 0.18, "spineCurvature": 0.16}
     recipes = (
-        ("01", [], "generic_3_styled_scaffold"),
-        ("02", [(g("8"), "upper_right", "8")], "scaffold_plus_8_upper"),
-        ("03", [(g("2"), "upper_curve", "2")], "scaffold_plus_2_upper"),
-        ("04", [(g("9"), "upper_curve", "9")], "scaffold_plus_9_upper"),
-        ("05", [(g("8"), "lower_curve", "8")], "scaffold_plus_8_lower"),
-        ("06", [(hybrid_lower, "lower_curve", hybrid_lower_source)], "scaffold_plus_6_lower_hybrid"),
+        ("01", {**base_grammar}, "seed_fitted_grammar"),
+        ("02", {**base_grammar, "centerBridgeLength": base_grammar["centerBridgeLength"] * 0.85}, "short_center_bridge"),
+        ("03", {**base_grammar, "centerBridgeLength": base_grammar["centerBridgeLength"] * 1.15}, "long_center_bridge"),
+        ("04", {**base_grammar, "openingWidth": base_grammar["openingWidth"] * 0.85}, "narrow_left_opening"),
+        ("05", {**base_grammar, "openingWidth": base_grammar["openingWidth"] * 1.15}, "wide_left_opening"),
+        ("06", {**base_grammar, "upperLobeProportion": base_grammar["upperLobeProportion"] + 0.04, "lowerLobeProportion": base_grammar["lowerLobeProportion"] - 0.04}, "upper_heavy_lobes"),
+        ("07", {**base_grammar, "spineCurvature": base_grammar["spineCurvature"] * 0.75}, "straighter_spine"),
+        ("08", {**base_grammar, "spineCurvature": base_grammar["spineCurvature"] * 1.25}, "more_curved_spine"),
     )
-    confidence = {"01": 0.72, "02": 0.69, "03": 0.65, "04": 0.62, "05": 0.59, "06": 0.55}
+    confidence = {"01": 0.72, "02": 0.69, "03": 0.69, "04": 0.65, "05": 0.65, "06": 0.61, "07": 0.59, "08": 0.57}
     candidates: list[dict[str, Any]] = []
-    for candidate_id, parts, recipe in recipes:
-        provenance = [{"role": "target_scaffold", "target": "3", "scaffold": "GENERIC_SCAFFOLD_3", "operation": "style_parameter_render"}, {"role": "assembly", "operation": "single_high_resolution_rasterize", "recipe": recipe}]
-        candidate = _compose_scaffold_candidate("3", candidate_id, style, output_root, parts, provenance)
+    for candidate_id, grammar_parameters, recipe in recipes:
+        candidate_style = {**style, "grammarParameters": grammar_parameters}
+        provenance = [{"role": "target_grammar", "target": "3", "grammar": "continuous_right_backbone_upper_lobe_lower_lobe_open_left_terminals_center_bridge", "operation": "parametric_style_render"}, {"role": "style_fit", "source": style.get("report"), "humanSeed": bool(topology_report.get("humanSeed")), "parameters": grammar_parameters}, {"role": "assembly", "operation": "single_high_resolution_rasterize", "recipe": recipe}]
+        candidate = _compose_scaffold_candidate("3", candidate_id, candidate_style, output_root, [], provenance)
         candidate["rank"] = len(candidates) + 1
         candidate["confidence"] = confidence[candidate_id]
-        candidate["ranking"] = {"score": confidence[candidate_id], "method": "scaffold_style_recipe_prior", "autoApproved": False}
+        candidate["ranking"] = {"score": confidence[candidate_id], "method": "grammar_style_variation", "autoApproved": False}
         candidates.append(candidate)
     selected = candidates[0] if candidates else None
     themed: dict[str, dict[str, Any]] = {}
@@ -874,6 +961,7 @@ def extract_themed_glyph_set(
     synthesizer: GlyphSynthesizer | None = None,
     dial_completed_path: Path | None = None,
     reconstructed_mask_path: Path | None = None,
+    human_seed_path: Path | None = None,
 ) -> dict[str, Any]:
     """Extract observed glyphs from A1d dial completion at native resolution."""
     reference = Image.open(reference_path).convert("RGB")
@@ -1016,6 +1104,12 @@ def extract_themed_glyph_set(
         else:
             coverage[character] = "MISSING"
 
+    style_parameters = _estimate_style_parameters(output_root, themed_assets)
+    human_seed = _fit_human_seed(output_root, human_seed_path, style_parameters)
+    if human_seed:
+        style_parameters["grammarParameters"] = human_seed["fittedParameters"]
+        style_path = output_root / style_parameters["report"]
+        style_path.write_text(json.dumps(style_parameters, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     primitive_report: dict[str, Any] = {
         "version": "A2b.4",
         "grammar": "SCAFFOLD_GUIDED_GLYPH_RECONSTRUCTION",
@@ -1023,7 +1117,8 @@ def extract_themed_glyph_set(
         "targets": ["3"],
         "segmentKinds": list(TOPOLOGY_SEGMENT_KINDS),
         "orientationModel": _fit_global_orientation(),
-        "styleParameters": _estimate_style_parameters(output_root, themed_assets),
+        "styleParameters": style_parameters,
+        "humanSeed": human_seed,
         "glyphs": {},
         "status": "completed_with_review",
     }
@@ -1075,6 +1170,8 @@ def extract_themed_glyph_set(
         "topology": primitive_report,
         "leaveOneOut": leave_one_out,
         "grammar": "SCAFFOLD_GUIDED_GLYPH_RECONSTRUCTION",
+        "digitGrammar": DIGIT_GRAMMAR_SCHEMA,
+        "humanSeed": human_seed,
         "primitiveReport": str(primitive_report_path.relative_to(output_root)).replace("\\", "/"),
         "dateStyleRelation": relation,
         "adapters": adapter_status,

@@ -110,15 +110,18 @@ mask/reconstruction overlay, raw extraction, canonical asset, and source-space
 reprojection for every observed digit. Missing `3` remains deferred to A2b.2.
 
 A2b.3 retains that topology report and review infrastructure. A2b.4 changes
-the synthesis core to scaffold-guided reconstruction: generic/vector 6 and 3
-scaffolds provide structure, while clean reference glyphs provide shared
-stroke width, outline gap, proportions, curve tension, terminals, counters,
-and corner treatment. Leave-one-out validation creates generic styled 6,
-9-rotated-180, and geometry-corrected 9 candidates before any missing 3 is
-generated. Only after that gate passes are six review-only 3 candidates made,
-including scaffold-only and donor-assisted upper/lower variants. No
-synthesized `3` is added to the static dial, and Pretendard fallback remains
-the production path until a human selects a candidate.
+the synthesis core to parametric `DigitGrammar` reconstruction: the 3 grammar
+has a continuous right backbone, upper/lower lobes, open left terminals, and
+a center bridge. Clean reference glyphs provide shared style parameters
+(stroke/gap, proportions, curve tension, terminals, counters, and corner
+treatment); no raster fragment is cut from a donor glyph. Leave-one-out
+validation creates generic styled 6, 9-rotated-180, and geometry-corrected 9
+candidates before any missing 3 is generated. After that gate passes, eight
+review-only 3 candidates are rendered by varying bridge length, lobe balance,
+opening width, and spine curvature. An optional user-provided bitmap seed is
+fit to the grammar and shown beside all variants. No synthesized `3` is added
+to the static dial, and Pretendard fallback remains the production path until
+a human selects a candidate.
 
 The external and local model adapters are optional. When unavailable, the deterministic fallback adapter emits explicit review-only candidates and reports `external synthesis unavailable`; it does not claim model output. A2b writes `glyph-report.json`, `assets/glyphs/observed/raw/`, `assets/glyphs/observed/canonical/`, `assets/glyphs/synthesized/candidates/`, `assets/glyphs/themed/`, `project/`, `project-fallback/`, and glyph review sheets for canonical coverage, provenance, candidate 3, fallback-vs-themed dates, and full-watch themed renders. An unapproved synthesized glyph keeps the milestone at `completed_with_review`.
 
