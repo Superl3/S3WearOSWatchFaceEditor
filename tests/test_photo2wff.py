@@ -17,6 +17,7 @@ from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inv
 from photo2wff.model import SceneValidationError, apply_patches, validate_scene
 from photo2wff.occlusion import reconstruct_occluded_dial
 from photo2wff.render import render_scene
+from photo2wff.runtime_validation import run_runtime_gate
 from photo2wff.wff_validate import validate_wff_xml
 from photo2wff.wff_render import render_wff_xml
 
@@ -128,6 +129,20 @@ class Photo2WFFTests(unittest.TestCase):
             self.assertNotEqual(provided.read_bytes(), fallback.read_bytes())
             with Image.open(shutil_target) as copied:
                 self.assertEqual(copied.size, (13, 21))
+
+    def test_runtime_gate_reports_blocked_environment_without_faking_capture(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            scene = basic_scene()
+            scene_path = root / "scene.json"
+            scene_path.write_text(json.dumps(scene), encoding="utf-8")
+            xml_path = root / "watchface.xml"
+            xml_path.write_text(compile_watchface_xml(scene, {}), encoding="utf-8")
+            report = run_runtime_gate(scene_path, xml_path, root / "runtime-validation", adb=root / "missing-adb.exe")
+            self.assertEqual(report["status"], "blocked_by_runtime_environment")
+            self.assertEqual(report["caseCount"], 20)
+            self.assertTrue(all(case["status"] == "blocked_by_runtime_environment" for case in report["cases"]))
+            self.assertTrue((root / "runtime-validation" / "runtime-validation-report.json").exists())
 
     def test_wff_structural_validation(self):
         with tempfile.TemporaryDirectory() as temp:

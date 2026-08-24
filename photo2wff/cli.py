@@ -11,6 +11,7 @@ from .compiler import compile_project
 from .analog_validate import validate_dynamic_renders
 from .model import apply_patches, editable_yaml, load_scene, save_scene, validate_scene
 from .render import render_scene
+from .runtime_validation import run_runtime_gate
 from .wff_validate import validate_wff_xml
 from .wff_render import render_wff_xml
 from .human_review import generate_human_review_artifacts
@@ -168,6 +169,12 @@ def main() -> None:
     photo_parser.add_argument("--manual-glyph-dir", type=Path, help="optional directory containing user-supplied 0.png-9.png glyph overrides")
     review_parser = subparsers.add_parser("human-review")
     review_parser.add_argument("output", type=Path)
+    runtime_parser = subparsers.add_parser("runtime-gate")
+    runtime_parser.add_argument("scene", type=Path)
+    runtime_parser.add_argument("xml", type=Path, help="deterministic WFF XML, normally the manual-override-off project")
+    runtime_parser.add_argument("--out", type=Path, default=Path("runtime-validation"))
+    runtime_parser.add_argument("--manual-xml", type=Path, help="optional manual-override-on WFF XML")
+    runtime_parser.add_argument("--adb", type=Path, help="optional adb executable")
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -188,3 +195,5 @@ def main() -> None:
         product_photo(args.reference, args.out, args.generative_fallback, args.manual_glyph_dir)
     elif args.command == "human-review":
         human_review(args.output)
+    elif args.command == "runtime-gate":
+        print(json.dumps(run_runtime_gate(args.scene, args.xml, args.out, manual_xml=args.manual_xml, adb=args.adb), ensure_ascii=False, indent=2))

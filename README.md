@@ -106,6 +106,19 @@ the date slot; absent digits use the Pretendard fallback. No automatic glyph
 extraction, synthesis, style fitting, or topology reconstruction is performed
 on production `main`.
 
+A2.5 runtime validation is a separate gate and does not alter the production
+renderer. It renders the fixed matrix of four times (`00:00:00`, `03:15:45`,
+`06:30:00`, `10:08:30`), five dates (`1`, `8`, `11`, `20`, `31`), and manual
+override on/off, then compares runtime captures by static dial, hand, date,
+and global regions. Run it with:
+
+```powershell
+python -m photo2wff runtime-gate path\to\scene.json path\to\manual-off\watchface.xml --manual-xml path\to\manual-on\watchface.xml --out runtime-validation
+```
+
+The gate never labels a phone emulator as Wear OS and reports
+`blocked_by_runtime_environment` when no Wear OS runtime is available.
+
 `quick` creates:
 
 ```text
