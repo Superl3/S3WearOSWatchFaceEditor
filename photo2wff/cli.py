@@ -20,6 +20,8 @@ from .runtime_rendering_calibration import run_runtime_rendering_calibration
 from .production_port import create_production_port
 from .generic_fixtures import run_generic_fixtures
 from .perimeter_benchmark import run_perimeter_benchmark
+from .perimeter_boundary_review import serve_manual_boundary_review
+from .display_roi import generate_display_roi_review, serve_display_roi_review
 
 
 def _copy_wrapper(output_project: Path) -> None:
@@ -224,6 +226,25 @@ def main() -> None:
     benchmark_parser.add_argument("--no-capture", action="store_true")
     benchmark_parser.add_argument("--adb", type=Path)
     benchmark_parser.add_argument("--serial", type=str)
+    benchmark_parser.add_argument("--manual-boundary-dir", type=Path, help="review bundle containing user-painted manual-ownership.png files")
+    benchmark_parser.add_argument("--manual-boundary-pair", nargs=2, type=int, action="append", metavar=("SLOT_A", "SLOT_B"), help="generate a pixel editor for one adjacent slot pair; repeatable")
+    benchmark_parser.add_argument("--display-roi", type=Path, help="approved display-roi.json; without it the ROI gate blocks normalization")
+    boundary_editor_parser = subparsers.add_parser("perimeter-boundary-edit")
+    boundary_editor_parser.add_argument("review_root", type=Path, help="manual-boundary-review directory created by perimeter-benchmark")
+    boundary_editor_parser.add_argument("--host", default="127.0.0.1")
+    boundary_editor_parser.add_argument("--port", type=int, default=8765)
+    boundary_editor_parser.add_argument("--open", action="store_true", dest="open_browser")
+    roi_review_parser = subparsers.add_parser("display-roi-review")
+    roi_review_parser.add_argument("reference", type=Path)
+    roi_review_parser.add_argument("--out", type=Path, default=Path("display-roi-review"))
+    roi_review_parser.add_argument("--open", action="store_true", dest="open_browser")
+    roi_review_parser.add_argument("--host", default="127.0.0.1")
+    roi_review_parser.add_argument("--port", type=int, default=8766)
+    roi_editor_parser = subparsers.add_parser("display-roi-edit")
+    roi_editor_parser.add_argument("review_root", type=Path, help="display-roi-review directory")
+    roi_editor_parser.add_argument("--host", default="127.0.0.1")
+    roi_editor_parser.add_argument("--port", type=int, default=8766)
+    roi_editor_parser.add_argument("--open", action="store_true", dest="open_browser")
     args = parser.parse_args()
     if args.command == "quick":
         quick(args.reference, args.out)
@@ -271,4 +292,13 @@ def main() -> None:
     elif args.command == "perimeter-fixtures":
         print(json.dumps(run_generic_fixtures(args.out), ensure_ascii=False, indent=2))
     elif args.command == "perimeter-benchmark":
-        print(json.dumps(run_perimeter_benchmark(args.reference, args.out, build=not args.no_build, capture=not args.no_capture, adb=args.adb, serial=args.serial), ensure_ascii=False, indent=2))
+        print(json.dumps(run_perimeter_benchmark(args.reference, args.out, build=not args.no_build, capture=not args.no_capture, adb=args.adb, serial=args.serial, manual_boundary_root=args.manual_boundary_dir, manual_review_pairs=args.manual_boundary_pair, display_roi_path=args.display_roi), ensure_ascii=False, indent=2))
+    elif args.command == "perimeter-boundary-edit":
+        serve_manual_boundary_review(args.review_root, host=args.host, port=args.port, open_browser=args.open_browser)
+    elif args.command == "display-roi-review":
+        manifest = generate_display_roi_review(args.reference, args.out)
+        print(json.dumps(manifest, ensure_ascii=False, indent=2))
+        if args.open_browser:
+            serve_display_roi_review(args.out, host=args.host, port=args.port, open_browser=True)
+    elif args.command == "display-roi-edit":
+        serve_display_roi_review(args.review_root, host=args.host, port=args.port, open_browser=args.open_browser)

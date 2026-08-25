@@ -110,7 +110,7 @@ def validate_scene(scene: dict[str, Any]) -> dict[str, Any]:
     if display_geometry is not None:
         if not isinstance(display_geometry, dict):
             _fail("displayGeometry", "must be an object")
-        if display_geometry.get("mappingPolicy") not in {"CENTER_PRESERVING_BOUNDARY_NORMALIZED", "RASTER_WARP", "ELEMENT_PRESERVING"}:
+        if display_geometry.get("mappingPolicy") not in {"CENTER_PRESERVING_BOUNDARY_NORMALIZED", "RASTER_WARP", "ELEMENT_PRESERVING", "PERIMETER_SD_WARP", "LOCAL_SIMILARITY", "HYBRID_PERIMETER_MAPPING"}:
             _fail("displayGeometry.mappingPolicy", "must use a supported rounded-rectangle mapping mode")
         for key in ("source", "target"):
             value = display_geometry.get(key)

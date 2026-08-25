@@ -153,6 +153,26 @@ artifacts.
 The gate never labels a phone emulator as Wear OS and reports
 `blocked_by_runtime_environment` when no Wear OS runtime is available.
 
+For the general rounded-rectangle perimeter benchmark, confirm the display
+ROI before any normalization or benchmark work is started:
+
+```powershell
+python -m photo2wff display-roi-review path\to\reference.png --out roi-review
+python -m photo2wff display-roi-edit roi-review --open
+python -m photo2wff perimeter-benchmark path\to\reference.png `
+  --out perimeter-benchmark `
+  --display-roi roi-review\display-roi.json
+```
+
+The first command creates only an overlay, proposal JSON, and editable HTML.
+The benchmark remains blocked until `display-roi.json` is approved. The
+confirmed metadata is the only crop input; the original image is never
+modified. The perimeter path then uses `HYBRID_PERIMETER_MAPPING`: continuous
+perimeter artwork uses inverse `(s,d)` mapping, while compact markers use
+local-similarity placement with one affine transform. The review bundle
+contains `confirmed-source-roi.png`, the `(s,d)` unwrap, radial baseline,
+SD-warp, local-similarity, hybrid, clipping, and anchor diagnostics.
+
 A2.5c is retained as `partial_with_invalid_metrics` and tagged
 `experimental/a25c-invalid-metrics`. Its production-screen MAE, constrained
 hand detector, hardcoded pivot error, and framebuffer-derived transform must
@@ -214,6 +234,32 @@ keeps unknown perimeter content as `STATIC_ARTWORK`, extracts central weekday
 and day-of-month candidates, and reuses the existing analog-hand pipeline.
 Structural/runtime success and visual benchmark acceptance are reported
 separately; visual acceptance remains human-reviewed.
+
+When a visible adjacent-marker boundary needs correction, request only that
+slot pair. The benchmark then creates
+`perimeter-decomposition/manual-boundary-review/slot-XX-YY/editor.html`:
+
+```powershell
+photo2wff perimeter-benchmark reference.webp --out perimeter-benchmark-review --manual-boundary-pair 9 10 --no-build --no-capture
+```
+
+Start the built-in local editor server, open the shown page, and paint each
+source pixel as slot A, slot B, or background. The save button now writes
+`manual-ownership.png` directly into the matching review folder; no download or
+manual copy is needed:
+
+```powershell
+python -m photo2wff perimeter-boundary-edit perimeter-benchmark-review/perimeter-decomposition/manual-boundary-review --open
+```
+
+Re-run into a new output directory and pass the edited review root:
+
+```powershell
+photo2wff perimeter-benchmark reference.webp --out perimeter-benchmark-reviewed --manual-boundary-dir perimeter-benchmark/perimeter-decomposition/manual-boundary-review
+```
+
+Manual ownership is applied only to the reviewed adjacent pair. All other
+perimeter slots continue to use automatic decomposition.
 
 The legacy A2.5c command can still reproduce the invalidated research artifact:
 

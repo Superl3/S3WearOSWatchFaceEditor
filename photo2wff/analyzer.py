@@ -551,47 +551,88 @@ def _write_a1_assets(canvas: Image.Image, assets_dir: Path) -> tuple[dict[str, d
     return metadata, (center_x, center_y, center_confidence)
 
 
-def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fallback_path: Path | None = None, manual_glyph_dir: Path | None = None) -> dict[str, Any]:
+def analyze_product_photo(
+    reference_path: Path,
+    output_dir: Path,
+    generative_fallback_path: Path | None = None,
+    manual_glyph_dir: Path | None = None,
+    display_roi: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Extract a frontal dark display from a product photo and preserve it as static artwork."""
     source = Image.open(reference_path).convert("RGB")
     source_size = list(source.size)
-    body = _largest_dark_component(source)
-    if body is None:
-        raise ValueError("could not locate a dark watch display in the product photo")
-    min_x, min_y, max_x, max_y = body
-    body_width = max_x - min_x
-    body_height = max_y - min_y
-    # Remove the chrome around the black display while retaining the full dial vertically.
-    crop_box = (
-        min_x + round(body_width * 0.05),
-        min_y + round(body_height * 0.10),
-        max_x - round(body_width * 0.10),
-        max_y - round(body_height * 0.10),
-    )
-    crop = source.crop(crop_box)
-    scale = CANVAS_SIZE / crop.height
-    resized = crop.resize((round(crop.width * scale), CANVAS_SIZE), Image.Resampling.LANCZOS)
-    canvas = Image.new("RGB", (CANVAS_SIZE, CANVAS_SIZE), "#000000")
-    paste_x = max(0, (CANVAS_SIZE - resized.width) // 2)
-    if resized.width > CANVAS_SIZE:
-        resized = resized.crop(((resized.width - CANVAS_SIZE) // 2, 0, (resized.width + CANVAS_SIZE) // 2, CANVAS_SIZE))
-        paste_x = 0
-    # Keep the dial but remove the remaining bright bezel fragments at the crop edge.
-    display_mask = Image.new("L", resized.size, 0)
-    mask_draw = ImageDraw.Draw(display_mask)
-    inset = max(8, round(min(resized.size) * 0.025))
-    display_radius = min(round(resized.height * 0.10), (min(resized.width, resized.height) - 2 * inset) / 2)
-    mask_draw.rounded_rectangle((inset, inset, resized.width - inset - 1, resized.height - inset - 1), radius=round(display_radius), fill=255)
-    canvas.paste(resized, (paste_x, 0), display_mask)
-    source_display_geometry = {
-        "shape": "ROUNDED_RECT",
-        "width": float(resized.width - 2 * inset),
-        "height": float(resized.height - 2 * inset),
-        "radius": float(display_radius),
-        "centerX": float(paste_x + resized.width / 2),
-        "centerY": float(CANVAS_SIZE / 2),
-        "isCircleSpecialCase": False,
-    }
+    confirmed_roi: dict[str, int] | None = None
+    if display_roi is not None:
+        from .display_roi import _validate_roi
+
+        confirmed_roi = _validate_roi(display_roi, source.size)
+    if confirmed_roi is not None:
+        crop_box = (
+            confirmed_roi["x"],
+            confirmed_roi["y"],
+            confirmed_roi["x"] + confirmed_roi["width"],
+            confirmed_roi["y"] + confirmed_roi["height"],
+        )
+        crop = source.crop(crop_box)
+        scale = min(CANVAS_SIZE / crop.width, CANVAS_SIZE / crop.height)
+        resized = crop.resize((round(crop.width * scale), round(crop.height * scale)), Image.Resampling.LANCZOS)
+        canvas = Image.new("RGB", (CANVAS_SIZE, CANVAS_SIZE), "#000000")
+        paste_x = (CANVAS_SIZE - resized.width) // 2
+        paste_y = (CANVAS_SIZE - resized.height) // 2
+        display_mask = Image.new("L", resized.size, 0)
+        mask_draw = ImageDraw.Draw(display_mask)
+        display_radius = confirmed_roi["radius"] * scale
+        mask_draw.rounded_rectangle((0, 0, resized.width - 1, resized.height - 1), radius=round(display_radius), fill=255)
+        canvas.paste(resized, (paste_x, paste_y), display_mask)
+        source_display_geometry = {
+            "shape": "ROUNDED_RECT",
+            "width": float(resized.width),
+            "height": float(resized.height),
+            "radius": float(display_radius),
+            "centerX": float(paste_x + resized.width / 2),
+            "centerY": float(paste_y + resized.height / 2),
+            "isCircleSpecialCase": False,
+        }
+    else:
+        # Legacy automatic proposal remains available to non-perimeter callers.
+        # The perimeter benchmark itself requires a confirmed ROI before it enters
+        # this branch.
+        body = _largest_dark_component(source, threshold=75)
+        strict_display = _largest_dark_component(source, threshold=10)
+        if body is None or strict_display is None:
+            raise ValueError("could not locate a dark watch display in the product photo")
+        min_x, _, max_x, _ = body
+        _, min_y, _, max_y = strict_display
+        body_width = max_x - min_x
+        crop_box = (
+            min_x + round(body_width * 0.05),
+            min_y,
+            max_x - round(body_width * 0.10),
+            max_y,
+        )
+        crop = source.crop(crop_box)
+        scale = CANVAS_SIZE / crop.height
+        resized = crop.resize((round(crop.width * scale), CANVAS_SIZE), Image.Resampling.LANCZOS)
+        canvas = Image.new("RGB", (CANVAS_SIZE, CANVAS_SIZE), "#000000")
+        paste_x = max(0, (CANVAS_SIZE - resized.width) // 2)
+        if resized.width > CANVAS_SIZE:
+            resized = resized.crop(((resized.width - CANVAS_SIZE) // 2, 0, (resized.width + CANVAS_SIZE) // 2, CANVAS_SIZE))
+            paste_x = 0
+        display_mask = Image.new("L", resized.size, 0)
+        mask_draw = ImageDraw.Draw(display_mask)
+        inset = max(8, round(min(resized.size) * 0.025))
+        display_radius = min(round(resized.height * 0.10), (min(resized.width, resized.height) - 2 * inset) / 2)
+        mask_draw.rounded_rectangle((inset, inset, resized.width - inset - 1, resized.height - inset - 1), radius=round(display_radius), fill=255)
+        canvas.paste(resized, (paste_x, 0), display_mask)
+        source_display_geometry = {
+            "shape": "ROUNDED_RECT",
+            "width": float(resized.width - 2 * inset),
+            "height": float(resized.height - 2 * inset),
+            "radius": float(display_radius),
+            "centerX": float(paste_x + resized.width / 2),
+            "centerY": float(CANVAS_SIZE / 2),
+            "isCircleSpecialCase": False,
+        }
     target_display_geometry = {
         "shape": "CIRCLE",
         "width": float(CANVAS_SIZE),
@@ -712,8 +753,8 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
         "displayGeometry": {
             "source": source_display_geometry,
             "target": target_display_geometry,
-            "mappingPolicy": "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
-            "availableMappings": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING"],
+            "mappingPolicy": "HYBRID_PERIMETER_MAPPING" if confirmed_roi is not None else "CENTER_PRESERVING_BOUNDARY_NORMALIZED",
+            "availableMappings": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "PERIMETER_SD_WARP", "LOCAL_SIMILARITY", "HYBRID_PERIMETER_MAPPING", "INVERSE_RASTER_MAPPING"],
         },
         "normalization": {
             "inputType": "PHOTOGRAPH",
@@ -732,7 +773,7 @@ def analyze_product_photo(reference_path: Path, output_dir: Path, generative_fal
             "overallConfidence": 0.68,
             "requiresStaticAssetExtraction": True,
             "requiresHumanReview": True,
-            "method": "A1b dark-display crop + A1d occlusion completion + A2 dynamic date-window slot",
+            "method": "USER_CONFIRMED_DISPLAY_ROI + A1d occlusion completion + A2 dynamic date-window slot" if confirmed_roi is not None else "A1b dark-display crop + A1d occlusion completion + A2 dynamic date-window slot",
             "componentCount": 1,
             "groupCount": 5 if date_window_metadata else 4,
             "manualGlyphOverride": manual_glyphs,

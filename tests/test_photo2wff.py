@@ -13,7 +13,8 @@ from photo2wff.analog_validate import validate_dynamic_renders
 from photo2wff.compare import compare_images, suggest_patches
 from photo2wff.compiler import compile_watchface_xml
 from photo2wff.date_window import extract_date_day_of_month_window
-from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand, map_element_preserving
+from photo2wff.display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand, map_element_preserving, render_perimeter_raster_and_hybrid
+from photo2wff.display_roi import generate_display_roi_review, load_confirmed_display_roi, propose_display_roi
 from photo2wff.dynamic_text import extract_center_dynamic_text
 from photo2wff.generic_fixtures import run_generic_fixtures
 from photo2wff.model import SceneValidationError, apply_patches, load_scene, validate_scene
@@ -21,6 +22,7 @@ from photo2wff.measurement_correctness import FIDUCIALS, _fit_geometry
 from photo2wff.occlusion import _hand_masks, reconstruct_occluded_dial
 from photo2wff.production_port import _make_production_dial, _production_scene
 from photo2wff.perimeter_artwork import decompose_perimeter_artwork
+from photo2wff.perimeter_boundary_review import generate_manual_boundary_review, load_manual_boundary_ownership
 from photo2wff.render import render_scene
 from photo2wff.runtime_validation import _region_masks, run_runtime_gate
 from photo2wff.wff_validate import WffValidationError, lint_wff_xml, validate_wff_xml
@@ -412,6 +414,36 @@ class Photo2WFFTests(unittest.TestCase):
         self.assertEqual(mapped.getpixel((0, 0))[3], 0)
         self.assertGreater(mapped.getpixel((219, 219))[3], 0)
 
+    def test_perimeter_raster_and_hybrid_candidates_use_geometry_only(self):
+        source = RoundedRect(388, 418, 44, 219, 219)
+        target = RoundedRect(438, 438, 219, 219, 219)
+        image = Image.new("RGBA", (438, 438), (0, 0, 0, 255))
+        ImageDraw.Draw(image).rectangle((20, 20, 80, 80), fill=(255, 255, 255, 255))
+        perimeter, hybrid = render_perimeter_raster_and_hybrid(image, source, target)
+        self.assertEqual(perimeter.size, (438, 438))
+        self.assertEqual(hybrid.size, (438, 438))
+        self.assertEqual(perimeter.getpixel((219, 219))[3], 0)
+        self.assertGreater(hybrid.getpixel((219, 219))[3], 0)
+        self.assertEqual(perimeter.getpixel((0, 0))[3], 0)
+
+    def test_display_roi_gate_stores_metadata_before_normalization(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            image = Image.new("RGB", (120, 100), "white")
+            ImageDraw.Draw(image).rounded_rectangle((20, 10, 100, 90), radius=12, fill="black")
+            reference = root / "reference.png"
+            image.save(reference)
+            proposal = propose_display_roi(reference)
+            self.assertFalse(proposal["confirmed"])
+            manifest = generate_display_roi_review(reference, root / "review")
+            self.assertTrue((root / "review" / "editor.html").exists())
+            approved = {**proposal, "confirmed": True, "displayRoi": {"x": 20, "y": 10, "width": 80, "height": 80, "radius": 12}}
+            roi_path = root / "review" / "display-roi.json"
+            roi_path.write_text(json.dumps(approved), encoding="utf-8")
+            loaded = load_confirmed_display_roi(roi_path, image.size)
+            self.assertEqual(loaded["displayRoi"]["radius"], 12)
+            self.assertEqual(manifest["status"], "awaiting_display_roi_confirmation")
+
     def test_generic_perimeter_fixtures_pass_without_target_reference(self):
         with tempfile.TemporaryDirectory() as temp:
             report = run_generic_fixtures(Path(temp))
@@ -446,9 +478,33 @@ class Photo2WFFTests(unittest.TestCase):
             self.assertEqual(report["elementCount"], 1)
             element = report["elements"][0]
             self.assertEqual(element["type"], "STATIC_ARTWORK")
-            self.assertEqual(element["mappingMode"], "ELEMENT_PRESERVING")
+            self.assertEqual(element["mappingMode"], "LOCAL_SIMILARITY")
             for key in ("bbox", "anchor", "sourceAngleDeg", "perimeterPosition", "rotation", "scale", "confidence", "asset"):
                 self.assertIn(key, element)
+
+    def test_manual_perimeter_boundary_review_round_trip(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            image = Image.new("RGB", (24, 20), "black")
+            slots = {9: [(8, 8), (8, 9)], 10: [(9, 8), (9, 9)]}
+            reports = generate_manual_boundary_review(
+                image,
+                slots,
+                [{"slotA": 9, "slotB": 10, "disputedPixelCount": 2, "disputedRatio": 0.5}],
+                root,
+                padding=2,
+            )
+            self.assertEqual(len(reports), 1)
+            pair_root = root / "slot-09-10"
+            self.assertTrue((pair_root / "editor.html").exists())
+            ownership = Image.new("RGB", image.size, "black")
+            ownership.putpixel((8, 8), (255, 0, 0))
+            ownership.putpixel((9, 8), (0, 255, 255))
+            ownership.save(pair_root / "manual-ownership.png")
+            loaded = load_manual_boundary_ownership(root, image.size)
+            self.assertEqual(len(loaded), 1)
+            self.assertEqual(loaded[0]["slotA"], 9)
+            self.assertEqual(loaded[0]["image"].getpixel((9, 8)), (0, 255, 255))
 
     def test_hand_mask_reprojects_canonical_alpha_asset_at_observed_angle(self):
         with tempfile.TemporaryDirectory() as temp:

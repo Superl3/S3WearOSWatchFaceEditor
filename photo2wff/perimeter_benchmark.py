@@ -10,13 +10,14 @@ from PIL import Image, ImageDraw, ImageFont
 
 from .analyzer import analyze_product_photo
 from .compiler import compile_project
-from .display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, map_analog_hand, map_element_preserving
+from .display_geometry import RoundedRect, boundary_normalized_map, inverse_raster_map, inverse_sd_perimeter_map, inverse_uniform_core_map, map_analog_hand, map_element_preserving, map_local_similarity, render_perimeter_raster_and_hybrid
+from .display_roi import generate_display_roi_review, load_confirmed_display_roi
 from .dynamic_text import extract_center_dynamic_text
 from .generic_fixtures import run_generic_fixtures
 from .human_review import REVIEW_TIMES
 from .model import save_scene, validate_scene
 from .occlusion import _hand_masks, _source_foreground_mask
-from .perimeter_artwork import decompose_perimeter_artwork, draw_perimeter_overlay, remove_perimeter_artwork
+from .perimeter_artwork import decompose_perimeter_artwork, draw_perimeter_overlay, remove_perimeter_artwork, transform_asset_with_single_affine
 from .production_port import _build_project, _copy_gradle_wrapper, _panel_atlas
 from .render import render_scene
 from .runtime_validation import capture_runtime_cases, detect_runtime
@@ -57,13 +58,33 @@ def _artwork_sheet(asset_root: Path, destination: Path) -> None:
     sheet.save(destination)
 
 
-def _mapping_comparison(raster: Image.Image, preserved: Image.Image, destination: Path) -> None:
+def _mapping_comparison(
+    raster: Image.Image,
+    preserved: Image.Image,
+    destination: Path,
+    *,
+    left_title: str = "A. RASTER_WARP",
+    right_title: str = "B. ELEMENT_PRESERVING",
+) -> None:
     sheet = Image.new("RGB", (900, 480), "#151515")
     sheet.paste(raster.convert("RGB"), (4, 36))
     sheet.paste(preserved.convert("RGB"), (458, 36))
     draw = ImageDraw.Draw(sheet)
-    draw.text((8, 10), "A. RASTER_WARP", fill="white", font=ImageFont.load_default())
-    draw.text((462, 10), "B. ELEMENT_PRESERVING", fill="white", font=ImageFont.load_default())
+    draw.text((8, 10), left_title, fill="white", font=ImageFont.load_default())
+    draw.text((462, 10), right_title, fill="white", font=ImageFont.load_default())
+    sheet.save(destination)
+
+
+def _mapping_four_way(images: list[tuple[str, Image.Image]], destination: Path) -> None:
+    tile_width, tile_height = 438, 478
+    sheet = Image.new("RGB", (tile_width * 2, tile_height * 2), "#151515")
+    draw = ImageDraw.Draw(sheet)
+    for index, (label, image) in enumerate(images[:4]):
+        left = (index % 2) * tile_width
+        top = (index // 2) * tile_height
+        sheet.paste(image.convert("RGB"), (left, top + 36))
+        draw.text((left + 8, top + 10), label, fill="white", font=ImageFont.load_default())
+    destination.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(destination)
 
 
@@ -75,34 +96,44 @@ def _materialize_artwork(
     asset_root = output_root / "assets" / "perimeter"
     asset_root.mkdir(parents=True, exist_ok=True)
     for index, element in enumerate(elements):
-        mapping = map_element_preserving(element, source, target)
+        if element.get("mappingMode") == "PERIMETER_SD_WARP":
+            continue
+        mapping = map_local_similarity(element, source, target)
         original = Image.open(source_root / element["asset"]).convert("RGBA")
         scale = float(mapping["uniformScale"])
-        scaled = original.resize((max(1, round(original.width * scale)), max(1, round(original.height * scale))), Image.Resampling.LANCZOS)
-        transformed = scaled.rotate(-float(mapping["rotation"]), expand=True, resample=Image.Resampling.BICUBIC)
+        asset_anchor_value = element.get("assetAnchor") or {"x": original.width / 2.0, "y": original.height / 2.0}
         anchor = mapping["targetAnchor"]
-        left = round(anchor["x"] - transformed.width / 2)
-        top = round(anchor["y"] - transformed.height / 2)
-        visible_left = max(0, left)
-        visible_top = max(0, top)
-        visible_right = min(438, left + transformed.width)
-        visible_bottom = min(438, top + transformed.height)
-        if visible_left >= visible_right or visible_top >= visible_bottom:
+        transformed = transform_asset_with_single_affine(
+            original,
+            (float(asset_anchor_value["x"]), float(asset_anchor_value["y"])),
+            (float(anchor["x"]), float(anchor["y"])),
+            scale,
+            float(mapping["rotation"]),
+            (438, 438),
+        )
+        if transformed["image"] is None:
             continue
-        if (visible_left, visible_top, visible_right, visible_bottom) != (left, top, left + transformed.width, top + transformed.height):
-            transformed = transformed.crop((visible_left - left, visible_top - top, visible_right - left, visible_bottom - top))
-            left, top = visible_left, visible_top
         asset = f"assets/perimeter/artwork_{index:02d}.png"
-        transformed.save(output_root / asset)
-        preview.alpha_composite(transformed, (left, top))
+        transformed["image"].save(output_root / asset)
+        preview.alpha_composite(transformed["image"], (transformed["left"], transformed["top"]))
         mapped_elements.append(
             {
                 **copy.deepcopy(element),
-                "bbox": {"x": left, "y": top, "width": transformed.width, "height": transformed.height},
+                "bbox": {"x": transformed["left"], "y": transformed["top"], "width": transformed["image"].width, "height": transformed["image"].height},
                 "anchor": {"x": round(anchor["x"], 4), "y": round(anchor["y"], 4)},
                 "asset": asset,
-                "mappingMode": "ELEMENT_PRESERVING",
-                "relationships": {**element.get("relationships", {}), "sourceAsset": element["asset"], "mappedUniformScale": round(scale, 6)},
+                "mappingMode": "LOCAL_SIMILARITY",
+                "relationships": {
+                    **element.get("relationships", {}),
+                    "sourceAsset": element["asset"],
+                    "mappedUniformScale": round(scale, 6),
+                    "transformedAnchor": transformed["transformedAnchor"],
+                    "anchorResidualPx": round(transformed["anchorResidualPx"], 6),
+                    "clippedPixelCount": transformed["clippedPixelCount"],
+                    "transformedAlphaPixelCount": transformed["transformedAlphaPixelCount"],
+                    "clippingRatio": round(transformed["clippingRatio"], 8),
+                    "pixelRetentionRatio": round(transformed["pixelRetentionRatio"], 8),
+                },
                 "zIndex": 2,
             }
         )
@@ -191,8 +222,8 @@ def _scene(source_scene: dict[str, Any], static_elements: list[dict[str, Any]], 
     scene["clock"] = {**scene["clock"], "centerX": round(target_center[0], 4), "centerY": round(target_center[1], 4)}
     scene["elements"] = static_elements + dynamic + hands + [cap]
     scene["displayGeometry"]["mappingPolicy"] = mode
-    scene["displayGeometry"]["availableMappings"] = ["RASTER_WARP", "ELEMENT_PRESERVING"]
-    scene["analysis"]["method"] = "generic perimeter decomposition + existing analog pipeline"
+    scene["displayGeometry"]["availableMappings"] = ["PERIMETER_SD_WARP", "LOCAL_SIMILARITY", "HYBRID_PERIMETER_MAPPING", "RASTER_WARP"]
+    scene["analysis"]["method"] = "confirmed display ROI + SD perimeter warp + local similarity artwork + existing analog pipeline"
     scene["analysis"]["requiresHumanReview"] = True
     validate_scene(scene)
     return scene
@@ -221,16 +252,37 @@ def _render_review(scene: dict[str, Any], root: Path, review: Path, prefix: str)
     return {"timeAtlas": str(atlas), "dateAtlas": str(date_atlas), "entries": entries}
 
 
-def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool = True, capture: bool = True, adb: Path | None = None, serial: str | None = None) -> dict[str, Any]:
+def run_perimeter_benchmark(
+    reference: Path,
+    output_root: Path,
+    *,
+    build: bool = True,
+    capture: bool = True,
+    adb: Path | None = None,
+    serial: str | None = None,
+    manual_boundary_root: Path | None = None,
+    manual_review_pairs: list[tuple[int, int]] | None = None,
+    display_roi_path: Path | None = None,
+) -> dict[str, Any]:
     if output_root.exists() and any(output_root.iterdir()):
         raise ValueError(f"output directory is not empty: {output_root}")
     output_root.mkdir(parents=True)
+    if display_roi_path is None:
+        gate = generate_display_roi_review(reference, output_root / "display-roi-review")
+        report = {
+            "status": "blocked_by_display_roi_confirmation",
+            "displayRoiGate": gate,
+            "message": "Normalization and perimeter benchmark were not executed. Approve display-roi.json first.",
+        }
+        _write_json(output_root / "perimeter-benchmark-report.json", report)
+        return report
+    confirmed_display_roi = load_confirmed_display_roi(display_roi_path, Image.open(reference).size)
     fixtures = run_generic_fixtures(output_root / "generic-fixtures")
     if not fixtures["systemPass"]:
         raise RuntimeError("generic fixture gate failed; target benchmark was not started")
 
     raw = output_root / "raw-analysis"
-    source_scene = analyze_product_photo(reference, raw)
+    source_scene = analyze_product_photo(reference, raw, display_roi=confirmed_display_roi)
     save_scene(source_scene, raw / "scene.json")
     source = RoundedRect.from_dict(source_scene["displayGeometry"]["source"])
     target = RoundedRect.from_dict(source_scene["displayGeometry"]["target"])
@@ -242,6 +294,9 @@ def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool =
 
     normalized = Image.open(raw / "reference.png").convert("RGB")
     normalized.save(review / "source-normalized.png")
+    if (raw / "assets" / "display_crop.png").exists():
+        shutil.copy2(raw / "assets" / "display_crop.png", review / "confirmed-source-roi.png")
+    shutil.copy2(display_roi_path, review / "confirmed-display-roi.json")
     completed_path = raw / "assets" / "dial-completed.png"
     completed = Image.open(completed_path if completed_path.exists() else raw / "assets" / "dial_clean.png").convert("RGB")
     hand_mask_path = raw / "assets" / "hand-occlusion-mask.png"
@@ -249,7 +304,13 @@ def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool =
     dynamic_report = extract_center_dynamic_text(normalized, output_root / "dynamic-text", exclusion_mask=hand_mask, reconstruction_image=completed)
     dynamic_removed = Image.open(dynamic_report["cleanBackground"]).convert("RGB")
     dynamic_removed.save(review / "dynamic-text-removal-result.png")
-    perimeter_report = decompose_perimeter_artwork(dynamic_removed, source, output_root / "perimeter-decomposition")
+    perimeter_report = decompose_perimeter_artwork(
+        dynamic_removed,
+        source,
+        output_root / "perimeter-decomposition",
+        manual_boundary_root=manual_boundary_root,
+        manual_review_pairs=manual_review_pairs,
+    )
     hand_cleanup = _hand_cleanup_checks(source_scene, raw)
     draw_perimeter_overlay(normalized, perimeter_report["elements"], review / "detected-perimeter-elements-overlay.png")
     if (raw / "assets" / "hand-mask-overlay.png").exists():
@@ -257,27 +318,52 @@ def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool =
     shutil.copy2(perimeter_report["unwrap"], review / "perimeter-sd-unwrap.png")
 
     raster_dial = inverse_raster_map(dynamic_removed, source, target).convert("RGBA")
+    perimeter_raster_dial, hybrid_dial = render_perimeter_raster_and_hybrid(dynamic_removed, source, target)
+    perimeter_raster_dial.save(assets / "dial-perimeter-raster-warp.png")
+    hybrid_dial.save(assets / "dial-hybrid.png")
     raster_dial.save(assets / "dial-raster-warp.png")
-    perimeter_mask = Image.open(perimeter_report["mask"]).convert("L")
-    base_without_perimeter = remove_perimeter_artwork(dynamic_removed, perimeter_mask)
-    element_base = inverse_raster_map(base_without_perimeter, source, target).convert("RGBA")
-    element_base.save(assets / "dial-element-base.png")
+    local_similarity_mask = Image.open(perimeter_report["localSimilarityMask"]).convert("L")
+    base_without_local_artwork = remove_perimeter_artwork(dynamic_removed, local_similarity_mask)
+    element_base = inverse_uniform_core_map(base_without_local_artwork, source, target).convert("RGBA")
+    sd_layer = inverse_sd_perimeter_map(base_without_local_artwork, source, target, supersample=4)
+    element_base.alpha_composite(sd_layer)
+    element_base.save(assets / "dial-hybrid-base.png")
+    element_base.convert("RGB").save(review / "sd-warp-result.png")
     mapped_artwork, artwork_preview = _materialize_artwork(perimeter_report["elements"], output_root / "perimeter-decomposition", output_root, source, target)
     combined = element_base.copy()
     combined.alpha_composite(artwork_preview)
     combined.convert("RGB").save(review / "element-preserving-result.png")
+    combined.convert("RGB").save(review / "local-similarity-hybrid-result.png")
     raster_dial.convert("RGB").save(review / "raster-warp-result.png")
+    perimeter_raster_dial.convert("RGB").save(review / "perimeter-raster-warp-result.png")
+    hybrid_dial.convert("RGB").save(review / "hybrid-result.png")
     combined.convert("RGB").save(review / "hands-off-static-dial.png")
     _artwork_sheet(output_root / "perimeter-decomposition" / "assets" / "perimeter", review / "extracted-artwork-sheet.png")
     _mapping_comparison(raster_dial, combined, review / "mapping-mode-side-by-side.png")
+    _mapping_comparison(
+        perimeter_raster_dial,
+        hybrid_dial,
+        review / "perimeter-raster-vs-hybrid.png",
+        left_title="A. PERIMETER_RASTER_WARP",
+        right_title="B. HYBRID",
+    )
+    _mapping_four_way(
+        [
+            ("RADIAL BASELINE", raster_dial),
+            ("PERIMETER SD WARP", element_base),
+            ("LOCAL SIMILARITY", artwork_preview),
+            ("HYBRID FINAL", combined),
+        ],
+        review / "mapping-four-way.png",
+    )
 
     dynamic = _mapped_dynamic_elements(dynamic_report["elements"], source, target)
     hands, target_center = _mapped_hands(source_scene, raw, output_root, source, target)
     cap = _mapped_center_cap(source_scene, raw, output_root, target_center)
     raster_static = [{"id": "dial_raster_warp", "type": "STATIC_IMAGE", "dynamic": False, "bbox": {"x": 0, "y": 0, "width": 438, "height": 438}, "asset": "assets/dial-raster-warp.png", "confidence": 1.0, "zIndex": 0, "mappingMode": "RASTER_WARP"}]
-    element_static = [{"id": "dial_element_base", "type": "STATIC_IMAGE", "dynamic": False, "bbox": {"x": 0, "y": 0, "width": 438, "height": 438}, "asset": "assets/dial-element-base.png", "confidence": 1.0, "zIndex": 0, "mappingMode": "RASTER_WARP"}] + mapped_artwork
+    element_static = [{"id": "dial_hybrid_base", "type": "STATIC_IMAGE", "dynamic": False, "bbox": {"x": 0, "y": 0, "width": 438, "height": 438}, "asset": "assets/dial-hybrid-base.png", "confidence": 1.0, "zIndex": 0, "mappingMode": "HYBRID_PERIMETER_MAPPING"}] + mapped_artwork
     raster_scene = _scene(source_scene, raster_static, dynamic, hands, cap, target_center, "RASTER_WARP")
-    element_scene = _scene(source_scene, element_static, dynamic, hands, cap, target_center, "ELEMENT_PRESERVING")
+    element_scene = _scene(source_scene, element_static, dynamic, hands, cap, target_center, "HYBRID_PERIMETER_MAPPING")
     save_scene(raster_scene, output_root / "scene.raster-warp.json")
     save_scene(element_scene, output_root / "scene.element-preserving.json")
 
@@ -316,16 +402,29 @@ def run_perimeter_benchmark(reference: Path, output_root: Path, *, build: bool =
         else:
             runtime = {"status": "blocked_by_runtime_environment", "environment": environment}
 
+    marker_records = [element.get("relationships", {}) for element in mapped_artwork]
+    marker_mapping = {
+        "slotCount": len(marker_records),
+        "maxAnchorResidualPx": round(max((float(record.get("anchorResidualPx", 999.0)) for record in marker_records), default=999.0), 6),
+        "minPixelRetentionRatio": round(min((float(record.get("pixelRetentionRatio", 0.0)) for record in marker_records), default=0.0), 8),
+        "clippedPixelCount": sum(int(record.get("clippedPixelCount", 0)) for record in marker_records),
+        "maxClippingRatio": round(max((float(record.get("clippingRatio", 1.0)) for record in marker_records), default=1.0), 8),
+    }
+    marker_mapping["pass"] = (
+        marker_mapping["maxAnchorResidualPx"] <= 0.5
+        and marker_mapping["minPixelRetentionRatio"] >= 0.99
+        and marker_mapping["clippedPixelCount"] == 0
+    )
     official_pass = all("PASSED" in record["officialValidation"] for record in projects.values())
     build_pass = all(record["build"].get("success") for record in projects.values()) if build else True
-    automated_pipeline_pass = len(perimeter_report["elements"]) > 0 and dynamic_report["detected"] and len(hands) == 3 and official_pass and build_pass and runtime.get("status") == "runtime_verified"
+    automated_pipeline_pass = len(perimeter_report["elements"]) > 0 and dynamic_report["detected"] and len(hands) == 3 and marker_mapping["pass"] and official_pass and build_pass and runtime.get("status") == "runtime_verified"
     benchmark_pass = automated_pipeline_pass and hand_cleanup["redResidualPass"] and hand_cleanup["whiteForegroundRatioPass"]
     report = {
         "milestone": "General Rounded-Rectangle Perimeter Analog Support",
         "system": {"pass": fixtures["systemPass"], "fixtures": fixtures, "officialValidatorPass": official_pass, "buildPass": build_pass},
-        "benchmark": {"pass": benchmark_pass, "automatedPipelinePass": automated_pipeline_pass, "humanReviewStatus": "required", "reference": str(reference), "perimeterElements": perimeter_report["elementCount"], "dynamicText": dynamic_report, "handCleanup": hand_cleanup, "hands": [element["role"] for element in hands], "runtime": runtime},
+        "benchmark": {"pass": benchmark_pass, "automatedPipelinePass": automated_pipeline_pass, "humanReviewStatus": "required", "reference": str(reference), "displayRoi": str(display_roi_path), "perimeterElements": perimeter_report["elementCount"], "markerMapping": marker_mapping, "dynamicText": dynamic_report, "handCleanup": hand_cleanup, "hands": [element["role"] for element in hands], "runtime": runtime},
         "projects": projects,
-        "humanReview": {"sourceNormalized": str(review / "source-normalized.png"), "sourceHandMaskOverlay": str(review / "source-hand-mask-overlay.png"), "perimeterOverlay": str(review / "detected-perimeter-elements-overlay.png"), "perimeterSdUnwrap": str(review / "perimeter-sd-unwrap.png"), "extractedArtworkSheet": str(review / "extracted-artwork-sheet.png"), "rasterWarp": str(review / "raster-warp-result.png"), "elementPreserving": str(review / "element-preserving-result.png"), "mappingSideBySide": str(review / "mapping-mode-side-by-side.png"), "handsOff": str(review / "hands-off-static-dial.png"), "dynamicTextRemoval": str(review / "dynamic-text-removal-result.png"), "nineTimeAtlas": review_report["timeAtlas"], "weekdayDateAtlas": review_report["dateAtlas"], "runtimeNineTimeAtlas": runtime.get("nineTimeAtlas"), "finalPreview": str(review / "final-full-watch-preview.png")},
+        "humanReview": {"confirmedSourceRoi": str(review / "confirmed-source-roi.png"), "confirmedDisplayRoi": str(review / "confirmed-display-roi.json"), "sourceNormalized": str(review / "source-normalized.png"), "sourceHandMaskOverlay": str(review / "source-hand-mask-overlay.png"), "perimeterOverlay": str(review / "detected-perimeter-elements-overlay.png"), "perimeterSdUnwrap": str(review / "perimeter-sd-unwrap.png"), "extractedArtworkSheet": str(review / "extracted-artwork-sheet.png"), "rasterWarp": str(review / "raster-warp-result.png"), "perimeterRasterWarp": str(review / "perimeter-raster-warp-result.png"), "sdWarp": str(review / "sd-warp-result.png"), "localSimilarity": str(review / "local-similarity-hybrid-result.png"), "hybrid": str(review / "hybrid-result.png"), "elementPreserving": str(review / "element-preserving-result.png"), "mappingSideBySide": str(review / "mapping-mode-side-by-side.png"), "perimeterRasterVsHybrid": str(review / "perimeter-raster-vs-hybrid.png"), "mappingFourWay": str(review / "mapping-four-way.png"), "handsOff": str(review / "hands-off-static-dial.png"), "dynamicTextRemoval": str(review / "dynamic-text-removal-result.png"), "nineTimeAtlas": review_report["timeAtlas"], "weekdayDateAtlas": review_report["dateAtlas"], "runtimeNineTimeAtlas": runtime.get("nineTimeAtlas"), "finalPreview": str(review / "final-full-watch-preview.png"), "manualBoundaryReviews": perimeter_report.get("manualBoundaryReviews", [])},
         "overfittingGuard": {"targetReferenceUsedForFixtureCalibration": False, "referenceSpecificCoordinatesInImplementation": False},
     }
     _write_json(output_root / "perimeter-benchmark-report.json", report)

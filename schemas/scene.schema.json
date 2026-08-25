@@ -110,10 +110,10 @@
       "properties": {
         "source": { "$ref": "#/$defs/displayShape" },
         "target": { "$ref": "#/$defs/displayShape" },
-        "mappingPolicy": { "enum": ["CENTER_PRESERVING_BOUNDARY_NORMALIZED", "RASTER_WARP", "ELEMENT_PRESERVING"] },
+        "mappingPolicy": { "enum": ["CENTER_PRESERVING_BOUNDARY_NORMALIZED", "RASTER_WARP", "ELEMENT_PRESERVING", "PERIMETER_SD_WARP", "LOCAL_SIMILARITY", "HYBRID_PERIMETER_MAPPING"] },
         "availableMappings": {
           "type": "array",
-          "items": { "enum": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING", "RASTER_WARP", "ELEMENT_PRESERVING"] },
+          "items": { "enum": ["NAIVE_XY_STRETCH", "CENTER_PRESERVING_BOUNDARY_NORMALIZED", "INVERSE_RASTER_MAPPING", "RASTER_WARP", "ELEMENT_PRESERVING", "PERIMETER_SD_WARP", "LOCAL_SIMILARITY", "HYBRID_PERIMETER_MAPPING"] },
           "minItems": 1
         }
       }
@@ -199,6 +199,7 @@
       "properties": {
         "id": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
         "type": { "enum": ["TIME", "HOUR", "MINUTE", "SECOND", "DATE", "DYNAMIC_SLOT", "WEEKDAY", "TEXT", "BATTERY", "STEPS", "HEART_RATE", "COMPLICATION", "ICON", "IMAGE", "STATIC_IMAGE", "STATIC_ARTWORK", "ANALOG_HAND", "RING", "LINE", "RECTANGLE", "CIRCLE"] },
+        "representation": { "const": "PERIMETER_MARKER_SLOT" },
         "dynamic": { "type": "boolean" },
         "bbox": { "$ref": "#/$defs/bbox" },
         "rotation": { "type": "number", "minimum": -360, "maximum": 360 },
@@ -208,10 +209,16 @@
           "required": ["x", "y"],
           "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
         },
+        "assetAnchor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y"],
+          "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+        },
         "sourceAngleDeg": { "type": "number", "minimum": 0, "maximum": 360 },
         "perimeterPosition": { "type": "number", "minimum": 0, "maximum": 1 },
         "scale": { "type": "number", "exclusiveMinimum": 0 },
-        "mappingMode": { "enum": ["RASTER_WARP", "ELEMENT_PRESERVING"] },
+        "mappingMode": { "enum": ["RASTER_WARP", "ELEMENT_PRESERVING", "PERIMETER_SD_WARP", "LOCAL_SIMILARITY", "HYBRID_PERIMETER_MAPPING"] },
         "opticalOffsetX": { "type": "number" },
         "opticalOffsetY": { "type": "number" },
         "opticalScale": { "type": "number", "exclusiveMinimum": 0 },
